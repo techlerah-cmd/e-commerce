@@ -1,0 +1,42 @@
+# LèRah Royal Elegance - Robots.txt
+# https://www.lerah.com/robots.txt
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow admin and checkout pages from indexing
+Disallow: /admin/
+Disallow: /checkout/
+Disallow: /cart
+Disallow: /login
+Disallow: /forgot-password
+
+# Specific bot permissions
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Disallow: /checkout/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /checkout/
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Pinterestbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+# Sitemap location
+Sitemap: https://www.lerah.com/sitemap.xml
+
+# Crawl-delay (optional, adjust as needed)
+Crawl-delay: 1
