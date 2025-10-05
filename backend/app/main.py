@@ -5,11 +5,25 @@ from app.core.database import Base, engine
 from app.api.v1 import routes_users,routes_cart,routes_order,routes_product
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
+from fastapi.middleware.cors import CORSMiddleware
+
 # Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Lerah FastAPI Backend")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost",
+        "http://localhost:8000",
+        "http://localhost:8080",  # if your frontend runs on port 3000
+        "https://lerah.in"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.include_router(
   routes_users.app,
   prefix="/api/v1/user",
