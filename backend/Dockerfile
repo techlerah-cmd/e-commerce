@@ -1,6 +1,6 @@
 FROM python:3.12-slim
 
-# Set workdir to /app
+# Set working directory to /app
 WORKDIR /app
 
 # Copy requirements first for caching
@@ -8,10 +8,10 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy all files (including app/)
+# Copy entire project into /app
 COPY . .
 
-# Set environment variable to ensure Python finds modules
+# Set PYTHONPATH to /app
 ENV PYTHONPATH=/app
 
 # Run FastAPI
