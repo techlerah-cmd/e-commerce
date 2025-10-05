@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from app.core.database import Base, engine
 from app.api.v1 import routes_users,routes_cart,routes_order,routes_product
 from fastapi.middleware.cors import CORSMiddleware
-
+from app.core.config import settings
 # Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(bind=engine)
 
@@ -40,7 +40,8 @@ app.include_router(
   prefix="/api/v1/admin",
   tags=["admin"],
 )
-app.mount("/media", StaticFiles(directory="media"), name="media")
+if settings.PRODUCTION == 'false':
+  app.mount("/media", StaticFiles(directory="media"), name="media")
 
 app.add_middleware(
   CORSMiddleware,
