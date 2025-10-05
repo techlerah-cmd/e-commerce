@@ -206,7 +206,7 @@ Cards: Rich previews on Twitter/X ✅ Image tags: Optimized for 1200x630 (OG) an
 
 2. **Update Domain URLs**
 
-   - [ ] Replace `https://www.lerah.com` with your actual domain
+   - [ ] Replace `https://www.lerah.in` with your actual domain
    - [ ] Files to update: `index.html`, `sitemap.xml`, `robots.txt`
    - [ ] Use Find & Replace in your code editor
 

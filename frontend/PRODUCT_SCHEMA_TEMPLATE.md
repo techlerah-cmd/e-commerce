@@ -18,9 +18,9 @@ Add this script to the `<head>` section of each product page. Replace the placeh
     "name": "Beige & Blush Handcrafted Silk Saree",
     "description": "Exquisite handcrafted silk saree in beige and blush tones. Featuring intricate traditional weaving by master artisans. Perfect for weddings and special occasions.",
     "image": [
-      "https://www.lerah.com/images/products/saree-001-main.jpg",
-      "https://www.lerah.com/images/products/saree-001-detail.jpg",
-      "https://www.lerah.com/images/products/saree-001-drape.jpg"
+      "https://www.lerah.in/images/products/saree-001-main.jpg",
+      "https://www.lerah.in/images/products/saree-001-detail.jpg",
+      "https://www.lerah.in/images/products/saree-001-drape.jpg"
     ],
     "brand": {
       "@type": "Brand",
@@ -30,7 +30,7 @@ Add this script to the `<head>` section of each product page. Replace the placeh
     "mpn": "SAREE-001",
     "offers": {
       "@type": "Offer",
-      "url": "https://www.lerah.com/product/beige-blush-silk-saree",
+      "url": "https://www.lerah.in/product/beige-blush-silk-saree",
       "priceCurrency": "INR",
       "price": "15000",
       "priceValidUntil": "2025-12-31",
@@ -59,9 +59,9 @@ If you have customer reviews, use this enhanced version:
     "name": "Beige & Blush Handcrafted Silk Saree",
     "description": "Exquisite handcrafted silk saree in beige and blush tones. Featuring intricate traditional weaving by master artisans. Perfect for weddings and special occasions.",
     "image": [
-      "https://www.lerah.com/images/products/saree-001-main.jpg",
-      "https://www.lerah.com/images/products/saree-001-detail.jpg",
-      "https://www.lerah.com/images/products/saree-001-drape.jpg"
+      "https://www.lerah.in/images/products/saree-001-main.jpg",
+      "https://www.lerah.in/images/products/saree-001-detail.jpg",
+      "https://www.lerah.in/images/products/saree-001-drape.jpg"
     ],
     "brand": {
       "@type": "Brand",
@@ -110,7 +110,7 @@ If you have customer reviews, use this enhanced version:
     ],
     "offers": {
       "@type": "Offer",
-      "url": "https://www.lerah.com/product/beige-blush-silk-saree",
+      "url": "https://www.lerah.in/product/beige-blush-silk-saree",
       "priceCurrency": "INR",
       "price": "15000",
       "priceValidUntil": "2025-12-31",
@@ -166,10 +166,10 @@ For premium products with more details:
     "name": "Royal Heritage Banarasi Silk Saree",
     "description": "Luxurious Banarasi silk saree handwoven by master artisans in Varanasi. Features intricate gold zari work and traditional motifs. A timeless piece for weddings and grand celebrations.",
     "image": [
-      "https://www.lerah.com/images/products/saree-premium-001-main.jpg",
-      "https://www.lerah.com/images/products/saree-premium-001-detail.jpg",
-      "https://www.lerah.com/images/products/saree-premium-001-drape.jpg",
-      "https://www.lerah.com/images/products/saree-premium-001-border.jpg"
+      "https://www.lerah.in/images/products/saree-premium-001-main.jpg",
+      "https://www.lerah.in/images/products/saree-premium-001-detail.jpg",
+      "https://www.lerah.in/images/products/saree-premium-001-drape.jpg",
+      "https://www.lerah.in/images/products/saree-premium-001-border.jpg"
     ],
     "brand": {
       "@type": "Brand",
@@ -228,7 +228,7 @@ For premium products with more details:
     },
     "offers": {
       "@type": "Offer",
-      "url": "https://www.lerah.com/product/royal-heritage-banarasi-silk-saree",
+      "url": "https://www.lerah.in/product/royal-heritage-banarasi-silk-saree",
       "priceCurrency": "INR",
       "price": "85000",
       "priceValidUntil": "2025-12-31",
@@ -398,9 +398,9 @@ Use these standard values for `availability`:
 
 ```json
 "image": [
-  "https://www.lerah.com/images/products/saree-001-main.jpg",
-  "https://www.lerah.com/images/products/saree-001-detail.jpg",
-  "https://www.lerah.com/images/products/saree-001-drape.jpg"
+  "https://www.lerah.in/images/products/saree-001-main.jpg",
+  "https://www.lerah.in/images/products/saree-001-detail.jpg",
+  "https://www.lerah.in/images/products/saree-001-drape.jpg"
 ]
 ```
 
@@ -505,8 +505,8 @@ export const ProductSchema: React.FC<ProductSchemaProps> = ({
   name="Beige & Blush Handcrafted Silk Saree"
   description="Exquisite handcrafted silk saree..."
   images={[
-    "https://www.lerah.com/images/products/saree-001-main.jpg",
-    "https://www.lerah.com/images/products/saree-001-detail.jpg",
+    "https://www.lerah.in/images/products/saree-001-main.jpg",
+    "https://www.lerah.in/images/products/saree-001-detail.jpg",
   ]}
   price={15000}
   sku="LERAH-SAREE-001"
@@ -531,25 +531,25 @@ Add this along with product schema:
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://www.lerah.com/"
+        "item": "https://www.lerah.in/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Collections",
-        "item": "https://www.lerah.com/collections"
+        "item": "https://www.lerah.in/collections"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": "Silk Sarees",
-        "item": "https://www.lerah.com/collections/silk-sarees"
+        "item": "https://www.lerah.in/collections/silk-sarees"
       },
       {
         "@type": "ListItem",
         "position": 4,
         "name": "Beige & Blush Silk Saree",
-        "item": "https://www.lerah.com/product/beige-blush-silk-saree"
+        "item": "https://www.lerah.in/product/beige-blush-silk-saree"
       }
     ]
   }

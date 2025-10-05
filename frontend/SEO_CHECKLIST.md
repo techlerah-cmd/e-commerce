@@ -290,9 +290,9 @@
 
 **Your Website:**
 
-- Homepage: https://www.lerah.com
-- Sitemap: https://www.lerah.com/sitemap.xml
-- Robots.txt: https://www.lerah.com/robots.txt
+- Homepage: https://www.lerah.in
+- Sitemap: https://www.lerah.in/sitemap.xml
+- Robots.txt: https://www.lerah.in/robots.txt
 
 **Google Tools:**
 

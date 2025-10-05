@@ -48,7 +48,7 @@ Create these images and place them in the `public/` folder:
 
 ### Step 2: Update Domain URLs (5 minutes)
 
-Replace `https://www.lerah.com` with your actual domain in:
+Replace `https://www.lerah.in` with your actual domain in:
 
 - `index.html` (lines 17, 21, 28, 29, 42, 62-80, 88-97, 106-112)
 - `sitemap.xml` (all `<loc>` tags)
@@ -57,7 +57,7 @@ Replace `https://www.lerah.com` with your actual domain in:
 **Find and Replace:**
 
 ```
-Find: https://www.lerah.com
+Find: https://www.lerah.in
 Replace: https://your-actual-domain.com
 ```
 

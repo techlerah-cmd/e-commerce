@@ -26,13 +26,13 @@ You have two options:
 
 #### Option A: Domain Property (Recommended)
 
-- Enter: `lerah.com`
+- Enter: `lerah.in`
 - This covers all subdomains and protocols (http, https, www, non-www)
 - **Verification Method**: DNS record (TXT record)
 
 #### Option B: URL Prefix Property
 
-- Enter: `https://www.lerah.com`
+- Enter: `https://www.lerah.in`
 - Only covers the exact URL entered
 - **Verification Methods**: Multiple options available
 
@@ -50,7 +50,7 @@ You have two options:
    ```
 4. After deployment, the file should be accessible at:
    ```
-   https://www.lerah.com/google1234567890abcdef.html
+   https://www.lerah.in/google1234567890abcdef.html
    ```
 5. Click **"Verify"** in Google Search Console
 
@@ -90,7 +90,7 @@ If you already have Google Analytics installed:
 After deployment, ensure your sitemap is accessible at:
 
 ```
-https://www.lerah.com/sitemap.xml
+https://www.lerah.in/sitemap.xml
 ```
 
 ### 3.2 Submit to Google Search Console
@@ -112,11 +112,11 @@ https://www.lerah.com/sitemap.xml
 ### 4.1 URL Inspection Tool
 
 1. In Google Search Console, use the **"URL Inspection"** tool (top search bar)
-2. Enter your homepage URL: `https://www.lerah.com`
+2. Enter your homepage URL: `https://www.lerah.in`
 3. Click **"Request Indexing"**
 4. Repeat for important pages:
-   - `https://www.lerah.com/collections`
-   - `https://www.lerah.com/contact`
+   - `https://www.lerah.in/collections`
+   - `https://www.lerah.in/contact`
    - Key product pages
 
 ### 4.2 Bulk Indexing
@@ -140,7 +140,7 @@ Your website already includes structured data (Schema.org) for:
 To test:
 
 1. Use [Google's Rich Results Test](https://search.google.com/test/rich-results)
-2. Enter your URL: `https://www.lerah.com`
+2. Enter your URL: `https://www.lerah.in`
 3. Fix any errors shown
 
 ### 5.2 Submit Product Pages
@@ -357,7 +357,7 @@ Use a tool like [RealFaviconGenerator](https://realfavicongenerator.net/)
 
 **Solution:**
 
-- Verify sitemap is accessible at `https://www.lerah.com/sitemap.xml`
+- Verify sitemap is accessible at `https://www.lerah.in/sitemap.xml`
 - Check XML syntax (no errors)
 - Ensure proper XML declaration at the top
 
@@ -425,4 +425,4 @@ If you encounter issues:
 
 **Last Updated**: January 2025  
 **Version**: 1.0  
-**Website**: LèRah Royal Elegance (https://www.lerah.com)
+**Website**: LèRah Royal Elegance (https://www.lerah.in)

@@ -41,7 +41,7 @@ This document summarizes all SEO optimizations implemented for the LèRah e-comm
   property="og:description"
   content="Walk with the majesty of a lioness..."
 />
-<meta property="og:image" content="https://www.lerah.com/og-image.jpg" />
+<meta property="og:image" content="https://www.lerah.in/og-image.jpg" />
 ```
 
 **Benefits:**
@@ -55,7 +55,7 @@ This document summarizes all SEO optimizations implemented for the LèRah e-comm
 ```html
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="LèRah - Handcrafted Luxury Sarees..." />
-<meta name="twitter:image" content="https://www.lerah.com/twitter-image.jpg" />
+<meta name="twitter:image" content="https://www.lerah.in/twitter-image.jpg" />
 ```
 
 **Benefits:**
@@ -121,7 +121,7 @@ This document summarizes all SEO optimizations implemented for the LèRah e-comm
   "@type": "WebSite",
   "potentialAction": {
     "@type": "SearchAction",
-    "target": "https://www.lerah.com/search?q={search_term_string}"
+    "target": "https://www.lerah.in/search?q={search_term_string}"
   }
 }
 ```
@@ -159,7 +159,7 @@ This document summarizes all SEO optimizations implemented for the LèRah e-comm
 ```xml
 <!-- Add new products like this: -->
 <url>
-  <loc>https://www.lerah.com/product/[slug]</loc>
+  <loc>https://www.lerah.in/product/[slug]</loc>
   <lastmod>2025-01-15</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.7</priority>
@@ -179,7 +179,7 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /checkout/
-Sitemap: https://www.lerah.com/sitemap.xml
+Sitemap: https://www.lerah.in/sitemap.xml
 ```
 
 **Benefits:**
@@ -316,7 +316,7 @@ Complete overview of all SEO work done
 
 3. **Update URLs**
 
-   - [ ] Replace `https://www.lerah.com` with your actual domain
+   - [ ] Replace `https://www.lerah.in` with your actual domain
    - [ ] Update in: index.html, sitemap.xml, robots.txt
 
 4. **SSL Certificate**

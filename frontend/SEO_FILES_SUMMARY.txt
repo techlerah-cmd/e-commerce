@@ -155,7 +155,7 @@ PRIORITY 1: Critical (This Week)
   └─ logo.png (512x512px) → Place in public/
 
 ☐ Update domain URLs:
-  ├─ Replace https://www.lerah.com with your actual domain
+  ├─ Replace https://www.lerah.in with your actual domain
   └─ Files: index.html, sitemap.xml, robots.txt
 
 ☐ Enable HTTPS:
