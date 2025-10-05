@@ -1,4 +1,4 @@
-# Google Search Console Setup Guide for LèRah
+# Google Search Console Setup Guide for Lerah
 
 This guide will help you submit your website to Google Search Console and optimize it for search engines.
 
@@ -291,7 +291,7 @@ Create optimized images for social sharing:
 - Size: 1200 x 630 pixels
 - Format: JPG or PNG
 - Location: `frontend/public/og-image.jpg`
-- Content: Beautiful saree image with LèRah branding
+- Content: Beautiful saree image with Lerah branding
 
 **Twitter Image** (`twitter-image.jpg`)
 
@@ -381,7 +381,7 @@ Use a tool like [RealFaviconGenerator](https://realfavicongenerator.net/)
 
 ---
 
-## 🎯 SEO Best Practices for LèRah
+## 🎯 SEO Best Practices for Lerah
 
 ### Content Strategy
 
@@ -425,4 +425,4 @@ If you encounter issues:
 
 **Last Updated**: January 2025  
 **Version**: 1.0  
-**Website**: LèRah Royal Elegance (https://www.lerah.in)
+**Website**: Lerah Royal Elegance (https://www.lerah.in)

@@ -1,4 +1,4 @@
-# LèRah Royal Elegance - Robots.txt
+# Lerah Royal Elegance - Robots.txt
 # https://www.lerah.in/robots.txt
 
 # Allow all crawlers

@@ -1,6 +1,6 @@
-# LèRah Royal Elegance — Frontend
+# Lerah Royal Elegance — Frontend
 
-This is the frontend for LèRah Royal Elegance built with React, Vite, TypeScript, Tailwind CSS, and shadcn-ui.
+This is the frontend for Lerah Royal Elegance built with React, Vite, TypeScript, Tailwind CSS, and shadcn-ui.
 
 ## Getting started
 
@@ -31,4 +31,4 @@ npm run dev
 
 ## License
 
-All content © LèRah Royal Elegance.
+All content © Lerah Royal Elegance.

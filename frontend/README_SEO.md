@@ -2,7 +2,7 @@
 
 ## 📦 What's Been Done
 
-Your LèRah website is now fully optimized for search engines! Here's everything that's been implemented:
+Your Lerah website is now fully optimized for search engines! Here's everything that's been implemented:
 
 ### ✅ Files Modified
 
@@ -28,7 +28,7 @@ Create these images and place them in the `public/` folder:
 
 1. **og-image.jpg** (1200 x 630 pixels)
 
-   - Beautiful saree image with LèRah branding
+   - Beautiful saree image with Lerah branding
    - For Facebook, LinkedIn, WhatsApp previews
 
 2. **twitter-image.jpg** (1200 x 675 pixels)
@@ -410,7 +410,7 @@ Before you consider SEO "done":
 
 ## 🎉 You're Ready!
 
-Your LèRah website is now SEO-optimized and ready to rank in search engines!
+Your Lerah website is now SEO-optimized and ready to rank in search engines!
 
 **Next Steps:**
 
@@ -432,4 +432,4 @@ Your LèRah website is now SEO-optimized and ready to rank in search engines!
 **Last Updated**: January 2025  
 **Version**: 1.0  
 **Status**: Ready for Launch  
-**Website**: LèRah Royal Elegance
+**Website**: Lerah Royal Elegance

@@ -1,4 +1,4 @@
-# Product Schema Template for LèRah
+# Product Schema Template for Lerah
 
 This template shows how to add structured data (Schema.org) to your product pages for better SEO and rich search results.
 
@@ -24,7 +24,7 @@ Add this script to the `<head>` section of each product page. Replace the placeh
     ],
     "brand": {
       "@type": "Brand",
-      "name": "LèRah Royal Elegance"
+      "name": "Lerah Royal Elegance"
     },
     "sku": "LERAH-SAREE-001",
     "mpn": "SAREE-001",
@@ -38,7 +38,7 @@ Add this script to the `<head>` section of each product page. Replace the placeh
       "itemCondition": "https://schema.org/NewCondition",
       "seller": {
         "@type": "Organization",
-        "name": "LèRah Royal Elegance"
+        "name": "Lerah Royal Elegance"
       }
     }
   }
@@ -65,7 +65,7 @@ If you have customer reviews, use this enhanced version:
     ],
     "brand": {
       "@type": "Brand",
-      "name": "LèRah Royal Elegance"
+      "name": "Lerah Royal Elegance"
     },
     "sku": "LERAH-SAREE-001",
     "mpn": "SAREE-001",
@@ -145,7 +145,7 @@ If you have customer reviews, use this enhanced version:
       },
       "seller": {
         "@type": "Organization",
-        "name": "LèRah Royal Elegance"
+        "name": "Lerah Royal Elegance"
       }
     }
   }
@@ -173,7 +173,7 @@ For premium products with more details:
     ],
     "brand": {
       "@type": "Brand",
-      "name": "LèRah Royal Elegance"
+      "name": "Lerah Royal Elegance"
     },
     "sku": "LERAH-PREMIUM-001",
     "mpn": "PREMIUM-001",
@@ -270,7 +270,7 @@ For premium products with more details:
       },
       "seller": {
         "@type": "Organization",
-        "name": "LèRah Royal Elegance"
+        "name": "Lerah Royal Elegance"
       }
     }
   }
@@ -465,7 +465,7 @@ export const ProductSchema: React.FC<ProductSchemaProps> = ({
     image: images,
     brand: {
       "@type": "Brand",
-      name: "LèRah Royal Elegance",
+      name: "Lerah Royal Elegance",
     },
     sku,
     ...(rating && {
@@ -487,7 +487,7 @@ export const ProductSchema: React.FC<ProductSchemaProps> = ({
       itemCondition: "https://schema.org/NewCondition",
       seller: {
         "@type": "Organization",
-        name: "LèRah Royal Elegance",
+        name: "Lerah Royal Elegance",
       },
     },
   };
@@ -566,7 +566,7 @@ Add this along with product schema:
 - [ ] Price is accurate and up-to-date
 - [ ] SKU is unique for each product
 - [ ] Availability status is correct
-- [ ] Brand name is "LèRah Royal Elegance"
+- [ ] Brand name is "Lerah Royal Elegance"
 - [ ] Schema tested with Rich Results Test
 - [ ] No errors in Schema Validator
 - [ ] Images are optimized (under 500KB each)
@@ -610,4 +610,4 @@ Add this along with product schema:
 
 **Last Updated**: January 2025  
 **Version**: 1.0  
-**For**: LèRah Royal Elegance Product Pages
+**For**: Lerah Royal Elegance Product Pages

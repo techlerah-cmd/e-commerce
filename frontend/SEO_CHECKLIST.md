@@ -1,4 +1,4 @@
-# SEO Checklist for LèRah - Quick Reference
+# SEO Checklist for Lerah - Quick Reference
 
 ## ✅ Pre-Launch Checklist
 
