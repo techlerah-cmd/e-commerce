@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   fastapi:
-    build: ./app
+    build: ./
     container_name: fastapi
     restart: always
     env_file:
