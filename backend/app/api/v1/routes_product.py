@@ -1,4 +1,4 @@
-from fastapi import APIRouter,Form,Depends,File,UploadFile,HTTPException,Query
+from fastapi import APIRouter,Form,Depends,File,UploadFile,HTTPException,Query,Response
 from app.app_product.schemas import *
 from app.app_users.schemas import *
 from app.core.deps import is_admin,get_db,get_current_user
@@ -206,3 +206,53 @@ def get_product_list(
     user:User=Depends(is_admin)
     ):
     return crud_product.get_list_of_product(db,page,size,sort_by_price,search,is_admin=True)
+
+@app.get('/feed/products.tsv')
+def get_products_feed(db:Session=Depends(get_db),):
+    products =  crud_product.get_all_products(db)
+    headers = [
+        "id",
+        "title",
+        "description",
+        "link",
+        "image_link",
+        "availability",
+        "price",
+        "condition"
+    ]
+    lines = ["\t".join(headers)]
+
+    for product in products:
+        if not product.active:
+            continue  # skip inactive products
+
+        # Use first image if exists
+        image_url = product.images[0].url if product.images else "https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png"
+
+        # Google Merchant price format: "12.00 USD"
+        price_str = f"{product.price:.2f} USD" if product.price else "0 INR"
+
+        # Product link (adjust your frontend URL structure)
+        link = f"{settings.BASE_URL}/product/{product.id}"
+
+        availability = "in stock" if product.stock > 0 else "out of stock"
+
+        # Condition is usually 'new'
+        condition = "new"
+
+        # Add row
+        row = [
+            str(product.id),
+            product.title,
+            product.description or "",
+            link,
+            image_url,
+            availability,
+            price_str,
+            condition
+        ]
+        lines.append("\t".join(row))
+
+    tsv_content = "\n".join(lines)
+
+    return Response(content=tsv_content, media_type="text/tab-separated-values")

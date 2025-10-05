@@ -142,3 +142,9 @@ def get_list_of_product(db:Session,page,size,filter,search,is_admin=False):
     has_prev=has_prev,
     total=total,
   )
+
+
+def get_all_products(db:Session):
+  query = db.query(Product)
+  products = query.all()
+  return products
