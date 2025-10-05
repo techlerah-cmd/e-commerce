@@ -133,7 +133,7 @@ const AppRouters = () => {
           </ProtectedRoute>
         }
       />
-\
+
       <Route
         path="/checkout/payment-verification"
         element={
