@@ -12,7 +12,7 @@ from app.lib.resend import send_reset_link
 from app.app_users.models import User
 import resend
 from fastapi_limiter.depends import RateLimiter
-from datetime import datetime,timedelta
+from datetime import timedelta
 from app.core.security import create_access_token,decode_token
 app = APIRouter()
 
