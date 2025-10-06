@@ -139,7 +139,7 @@ def get_orders_list(
     sort_by_date:str =Query("desc",regex="^(asc|desc)$"),
     db:Session=Depends(get_db),
     search: Optional[str] = Query(None, description="Search in order"),
-    user:User=Depends(is_admin)
+    user:User=Depends(get_current_user)
     ):
     return crud_order.get_list_of_orders(db,user.id,page,size,sort_by_date,search)
 
