@@ -2,7 +2,21 @@
   "headers": [
     {
       "source": "/sitemap.xml",
-      "headers": [{ "key": "Content-Type", "value": "application/xml" }]
+      "headers": [
+        { "key": "Content-Type", "value": "application/xml; charset=utf-8" }
+      ]
     }
+  ],
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+
+    { "source": "/_next/static/(.*)", "destination": "/_next/static/$1" },
+    { "source": "/static/(.*)", "destination": "/static/$1" },
+    { "source": "/public/(.*)", "destination": "/public/$1" },
+    { "source": "/assets/(.*)", "destination": "/assets/$1" },
+    { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
+    { "source": "/sitemap-:rest(.*).xml", "destination": "/sitemap-:rest.xml" },
+    { "source": "/robots.txt", "destination": "/robots.txt" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
