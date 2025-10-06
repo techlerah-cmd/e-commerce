@@ -66,28 +66,23 @@ const Footer = () => {
                   Home
                 </Link>
                 <Link
-                  to="/#collections"
+                  to="/collections"
                   className="block font-sans-clean text-primary-foreground/80 hover:text-accent transition-colors duration-300"
                 >
                   Collections
                 </Link>
-                <Link
-                  to="/#new"
-                  className="block font-sans-clean text-primary-foreground/80 hover:text-accent transition-colors duration-300"
-                >
-                  New Arrivals
-                </Link>
-                <Link
-                  to="/#story"
-                  className="block font-sans-clean text-primary-foreground/80 hover:text-accent transition-colors duration-300"
-                >
-                  Our Story
-                </Link>
+
                 <Link
                   to="/contact"
                   className="block font-sans-clean text-primary-foreground/80 hover:text-accent transition-colors duration-300"
                 >
                   Contact
+                </Link>
+                <Link
+                  to="/policy"
+                  className="block font-sans-clean text-primary-foreground/80 hover:text-accent transition-colors duration-300"
+                >
+                  Policy
                 </Link>
               </nav>
             </div>

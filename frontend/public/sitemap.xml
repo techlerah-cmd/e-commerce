@@ -21,22 +21,6 @@
     <priority>0.9</priority>
   </url>
 
-  <!-- About/Story Section -->
-  <url>
-    <loc>https://www.lerah.in/#story</loc>
-    <lastmod>2025-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- New Arrivals Section -->
-  <url>
-    <loc>https://www.lerah.in/#new</loc>
-    <lastmod>2025-01-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
   <!-- Contact Page -->
   <url>
     <loc>https://www.lerah.in/contact</loc>
@@ -64,6 +48,12 @@
   <!-- My Orders Page -->
   <url>
     <loc>https://www.lerah.in/my-orders</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.lerah.in/policy</loc>
     <lastmod>2025-01-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

@@ -3,48 +3,6 @@ import { IProductList } from "@/types/apiTypes";
 import { Heart, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const products = [
-  {
-    id: 1,
-    name: "Royal Purple Silk",
-    price: "₹24,999",
-    originalPrice: "₹29,999",
-    image:
-      "https://i0.wp.com/siahbyahadishika.com/wp-content/uploads/2025/07/MATH5652-scaled.jpeg?fit=600%2C899&ssl=1",
-    isNew: true,
-    isFavorite: false,
-  },
-  {
-    id: 2,
-    name: "Golden Heritage",
-    price: "₹32,999",
-    originalPrice: "₹37,999",
-    image:
-      "https://i0.wp.com/siahbyahadishika.com/wp-content/uploads/2025/07/MATH5693-scaled.jpeg?fit=600%2C899&ssl=1",
-    isNew: false,
-    isFavorite: false,
-  },
-  {
-    id: 3,
-    name: "Emerald Dreams",
-    price: "₹19,999",
-    originalPrice: "₹23,999",
-    image:
-      "https://i0.wp.com/siahbyahadishika.com/wp-content/uploads/2025/07/MATH5656-scaled.jpeg?fit=600%2C899&ssl=1",
-    isNew: true,
-    isFavorite: false,
-  },
-  {
-    id: 4,
-    name: "Classic Elegance",
-    price: "₹27,999",
-    originalPrice: "₹31,999",
-    image:
-      "https://i0.wp.com/siahbyahadishika.com/wp-content/uploads/2025/07/MATH5639-scaled.jpeg?fit=600%2C899&ssl=1",
-    isNew: false,
-    isFavorite: false,
-  },
-];
 
 import { Link, useNavigate } from "react-router-dom";
 import { Loading } from "./ui/Loading";
@@ -75,7 +33,7 @@ const ProductGrid = ({ hideViewAllButton = false }: ProductGridProps) => {
       setProducts(response.data.items);
     }
   }
-  if(isFetched && products.length == 0){
+  if(isFetched &&  (!products || products.length == 0)){
     return null
   }
   return (

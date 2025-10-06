@@ -19,8 +19,9 @@ const Header = () => {
     { to: "/", label: "Home" },
     { to: "/collections", label: "Collections" },
     // { to: "#new", label: "New Arrivals" },
-    { to: "#story", label: "Our Story" },
+    // { to: "#story", label: "Our Story" },
     { to: "/contact", label: "Contact" },
+    { to: "/policy", label: "Policies" },
     ...(user?.is_admin ? [{ to: "/admin", label: "Dashboard" }] : []),
   ];
   return (

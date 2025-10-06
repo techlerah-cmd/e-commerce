@@ -91,14 +91,14 @@ const Contact = () => {
           "Message sent successfully! We'll get back to you within 24 hours."
         );
         // Reset form
-        setFormData({
-          firstName: "",
-          lastName: "",
-          email: "",
-          phone: "",
-          subject: "",
-          message: "",
-        });
+        // setFormData({
+        //   firstName: "",
+        //   lastName: "",
+        //   email: "",
+        //   phone: "",
+        //   subject: "",
+        //   message: "",
+        // });
       } else {
         toast.error(
           "Failed to send message. Please try again."

@@ -32,6 +32,9 @@ import { LoadingScreen } from "./components/ui/LoadingScreen";
 import LoginPage from "./pages/Login";
 import MyOrders from "./pages/MyOrders";
 import CheckoutPage from "./pages/checkout/CheckoutPage";
+import TooManyRequest from "./pages/TooManyRequest";
+import InternalServerError from "./pages/InternalServerError";
+import Policy from "./pages/Policy";
 
 const queryClient = new QueryClient();
 
@@ -56,6 +59,17 @@ const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
   return <>{children}</>;
 };
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
+
 const UserVerification = ({ children }) => {
   const navigate = useNavigate();
   const { makeApiCall } = useAPICall();
@@ -119,8 +133,11 @@ const AppRouters = () => {
     <Routes>
       <Route path="/" element={<Index />} />
       <Route path="/contact" element={<Contact />} />
+      <Route path="/policy" element={<Policy />} />
       <Route path="/collections" element={<Collections />} />
       <Route path="/product/:id" element={<ProductDetail />} />
+      <Route path="/too-many-requests" element={<TooManyRequest />} />
+      <Route path="/internal-server-error" element={<InternalServerError />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/my-orders" element={<MyOrders />} />
       <Route path="/login" element={<LoginPage />} />
@@ -133,7 +150,6 @@ const AppRouters = () => {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/checkout/payment-verification"
         element={
@@ -186,6 +202,7 @@ const App = () => (
       <Sonner />
       <AuthProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <UserVerification>
             <AppRouters />
           </UserVerification>
