@@ -17,6 +17,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useAPICall } from "@/hooks/useApiCall";
 import toast from "react-hot-toast";
 import { API_ENDPOINT } from "@/config/backend";
+import { Header } from "@radix-ui/react-accordion";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -95,6 +96,7 @@ const LoginPage = () => {
   };
   return (
     <div className="container px-4 max-w-md mx-auto py-12">
+      <Header />
       <Card>
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold">Login</CardTitle>
