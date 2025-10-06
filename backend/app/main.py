@@ -1,4 +1,4 @@
-from fastapi import FastAPI,Depends,Request
+from fastapi import FastAPI,Depends,Request,Response
 from fastapi.responses import JSONResponse
 
 
@@ -43,7 +43,7 @@ rate_limiter = RateLimiter(times=10, seconds=60)
 
 @app.middleware("http")
 async def global_rate_limit(request: Request, call_next):
-    limiter_response = JSONResponse()
+    limiter_response = Response()
     try:
         await rate_limiter(request, limiter_response)
     except Exception as e:
