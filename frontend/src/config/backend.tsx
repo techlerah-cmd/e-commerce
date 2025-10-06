@@ -38,4 +38,6 @@ export const API_ENDPOINT = {
   ORDER_LIST:(page,size,search)=>`${API_URL}/order/list?page=${page}&size=${size}&search=${search}`,
   UPDATE_ORDER_STATUS:(id)=>`${API_URL}/order/status/${id}`,
   CONTACT_US:`${API_URL}/user/contact-us`,
+  FORGOT_PASSWORD:`${API_URL}/user/forgot-password`,
+  RESET_PASSWORD:`${API_URL}/user/reset-password`,
 };

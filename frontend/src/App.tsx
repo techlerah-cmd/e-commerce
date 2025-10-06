@@ -35,6 +35,7 @@ import CheckoutPage from "./pages/checkout/CheckoutPage";
 import TooManyRequest from "./pages/TooManyRequest";
 import InternalServerError from "./pages/InternalServerError";
 import Policy from "./pages/Policy";
+import ResetPasswordPage from "./pages/ForgotPassword";
 
 const queryClient = new QueryClient();
 
@@ -148,6 +149,7 @@ const AppRouters = () => {
         }
       />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
       Checkout routes
       <Route
         path="/checkout"
