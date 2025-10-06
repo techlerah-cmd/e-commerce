@@ -37,7 +37,7 @@ async def startup():
     await FastAPILimiter.init(redis)
 
 
-rate_limiter = RateLimiter(times=5, seconds=60)
+rate_limiter = RateLimiter(times=10, seconds=60)
 
 @app.middleware("http")
 async def global_rate_limit(request: Request, call_next):
