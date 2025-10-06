@@ -9,7 +9,7 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 from app.core.config import settings
 from app.common.utils import generate_otp
-from app.lib.resend import send_otp_email
+from app.lib.resend import send_reset_link
 from app.app_users.models import User
 from typing import List
 from app.common.schemas import PaginationResponse

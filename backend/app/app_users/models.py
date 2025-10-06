@@ -2,10 +2,10 @@ from sqlalchemy import Column, Integer, String,UUID,Boolean,Enum,ForeignKey,JSON
 
 from app.core.database import Base
 from app.common.mixin import CreatedUpdatedAtMixin,IDMixin
-import uuid
 import enum
 from sqlalchemy.orm import relationship
-
+import uuid
+import secrets
 class AuthProvider(str, enum.Enum):
     local = "local"
     google = "google"
@@ -23,12 +23,6 @@ class User(Base,CreatedUpdatedAtMixin,IDMixin):
   cart = relationship("Cart", back_populates="user", uselist=False)
   address = relationship("Address",back_populates="user",uselist=False)
 
-class ForgotPassword(Base):
-  __tablename__ = "forgot_password"
-  email = Column(String,unique=True,primary_key=True)
-  ref = Column(UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False)
-  otp = Column(String)
-  verified = Column(Boolean,default=False)
 
 class Address(Base,IDMixin):
     __tablename__ = "addresses"

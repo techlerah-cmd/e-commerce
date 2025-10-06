@@ -8,11 +8,12 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 from app.core.config import settings
 from app.common.utils import generate_otp
-from app.lib.resend import send_otp_email
+from app.lib.resend import send_reset_link
 from app.app_users.models import User
 import resend
 from fastapi_limiter.depends import RateLimiter
-
+from datetime import datetime,timedelta
+from app.core.security import create_access_token,decode_token
 app = APIRouter()
 
 
@@ -45,51 +46,28 @@ def google_login(data:GoogleLoginRequest,db:Session=Depends(get_db)):
   token = create_access_token(data={'sub':user_email})
   return {'token':token,'user':user} 
 
-@app.post('/forgot-password/request-otp',response_model=ForgotPasswordResponse,dependencies=[Depends(RateLimiter(times=10, seconds=60))])
+@app.post('/forgot-password',response_model=ForgotPasswordResponse,dependencies=[Depends(RateLimiter(times=10, seconds=60))])
 def forgot_password(data:ForgotPassword,background_tasks: BackgroundTasks,db:Session=Depends(get_db)):
   """
   Used to sent new otp and also resend otp
   """
   email = data.email
-  db_forgot = None
-  # Case when try to make resend otp
-  if data.ref:
-    db_forgot = crud_auth.get_forgot_password_by_ref(db,data.ref)
-    if not db_forgot:
-      raise HTTPException(status_code=404,detail="Ref is invalid")
-    email = db_forgot.email
-
-  user = crud_auth.get_user_by_email(email)
+  user:User = crud_auth.get_user_by_email(email)
   if not user:
     raise HTTPException(status_code=404,detail="User not found")
-  generate_otp = generate_otp()
-  db_forgot = crud_auth.get_forgot_password_by_email(db,user.email) if not db_forgot else db_forgot
-  if not db_forgot:
-    db_forgot = crud_auth.create_forgot_password(db,user.email,generate_otp)
-  else:
-    db_forgot = crud_auth.update_forgot_password(db,db_forgot,{'otp':generate_otp})
-  background_tasks.add_task(send_otp_email, user.email, generate_otp)
-  return db_forgot
+  token = create_access_token({'sub':user.email},expires_delta=timedelta(minutes=30))
+  background_tasks.add_task(send_reset_link,email,token)
+  return {'token':token}
+  
 
-@app.post('/forgot-password/verify-otp',dependencies=[Depends(RateLimiter(times=10, seconds=60))])
-def verify_otp(data:ForgotPasswordOTPVerify,db:Session=Depends(get_db)):
-  # check exist the forgot password with this ref
-  db_forgot = crud_auth.get_forgot_password_by_ref(db,data.ref)
-  if not db_forgot:
-    raise HTTPException(detail="Ref is invalid",status_code=404)
-  if not db_forgot.otp == data.otp:
-    raise HTTPException(status_code=400,detail="OTP is invalid")
-  crud_auth.update_forgot_password(db,db_forgot,{'verified':True})
-  return {'detail':"OTP Verified"}
-
-@app.post('/forgot-password/reset-password',dependencies=[Depends(RateLimiter(times=10, seconds=60))])
+@app.post('/reset-password',dependencies=[Depends(RateLimiter(times=10, seconds=60))])
 def reset_password(data:ForgotPasswordPasswordReset,db:Session=Depends(get_db)):
-  db_forgot = crud_auth.get_forgot_password_by_ref(db,data.ref)
-  if not db_forgot:
-    raise HTTPException(detail="Ref is invalid",status_code=404)
-  if not db_forgot.verified:
-    raise HTTPException(status_code=403, detail="OTP not verified")
-  user = crud_auth.get_user_by_email(db,db_forgot.email)
+  email = decode_token(data.token)
+  if not email:
+    raise HTTPException(detail='Token is expired or Invalid',status_code=400)
+  user = crud_auth.get_user_by_email(db,email)
+  if not user:
+    raise HTTPException(detail="User Not Found",status_code=404)
   # update password
   crud_auth.update_user_password(db,user,data.password)
   return {'detail':"Password updated"} 

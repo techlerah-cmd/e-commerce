@@ -5,6 +5,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str
     ACCESS_TOKEN_EXPIRE_DAYS:int = 30
     SECRET_KEY:str
+    FRONTEND_URL:str
     ALGORITHM: str = "HS256"
     GOOGLE_CLIENT_ID:str
     RESEND_FROM_ADDRESS:str

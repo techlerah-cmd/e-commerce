@@ -50,7 +50,7 @@ class ForgotPasswordOTPVerify(BaseModel):
   otp :str
 
 class ForgotPasswordPasswordReset(BaseModel):
-  ref : str
+  token : str
   password :str
 
 
