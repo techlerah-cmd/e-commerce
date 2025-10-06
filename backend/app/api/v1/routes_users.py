@@ -52,7 +52,7 @@ def forgot_password(data:ForgotPassword,background_tasks: BackgroundTasks,db:Ses
   Used to sent new otp and also resend otp
   """
   email = data.email
-  user:User = crud_auth.get_user_by_email(email)
+  user:User = crud_auth.get_user_by_email(db,email)
   if not user:
     raise HTTPException(status_code=404,detail="User not found")
   token = create_access_token({'sub':user.email},expires_delta=timedelta(minutes=30))
