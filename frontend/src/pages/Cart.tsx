@@ -37,7 +37,7 @@ const Cart = () => {
   const [appliedCode, setAppliedCode] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
   const { fetchType, fetching, isFetched, makeApiCall } = useAPICall();
-  const { authToken } = useAuth();
+  const { authToken , user } = useAuth();
   const [cart, setCart] = useState<ICart>({
     coupon: null,
     items: [],
@@ -47,7 +47,7 @@ const Cart = () => {
     discount: 0,
   });
   useEffect(() => {
-    fetchCart();
+    if (user) fetchCart();
   }, []);
   const fetchCart = async () => {
     const response = await makeApiCall(

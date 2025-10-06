@@ -139,7 +139,14 @@ const AppRouters = () => {
       <Route path="/too-many-requests" element={<TooManyRequest />} />
       <Route path="/internal-server-error" element={<InternalServerError />} />
       <Route path="/cart" element={<Cart />} />
-      <Route path="/my-orders" element={<MyOrders />} />
+      <Route
+        path="/my-orders"
+        element={
+          <ProtectedRoute>
+            <MyOrders />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/login" element={<LoginPage />} />
       Checkout routes
       <Route
