@@ -1,4 +1,6 @@
-from fastapi import FastAPI,Depends,Request,Response
+from fastapi import FastAPI,Depends,Request
+from fastapi.responses import JSONResponse
+
 
 from fastapi.staticfiles import StaticFiles
 
@@ -41,21 +43,20 @@ rate_limiter = RateLimiter(times=10, seconds=60)
 
 @app.middleware("http")
 async def global_rate_limit(request: Request, call_next):
-    limiter_response = Response()
+    limiter_response = JSONResponse()
     try:
         await rate_limiter(request, limiter_response)
     except Exception as e:
-        return Response(
+        return JSONResponse(
             status_code=429,
             content={"detail": f"Too many request, please try again later"},
-            media_type="application/json",
         )
     try:
         # Proceed with request if not limited
         response = await call_next(request)
     except Exception as e:
         traceback.print_exc()
-        return Response(status_code=500, content={"detail": str(e)}, media_type="application/json",)
+        return JSONResponse(status_code=500, content={"detail": str(e)},)
 
     # Copy limiter headers (optional, for rate-limit info)
     for k, v in limiter_response.headers.items():
