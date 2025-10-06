@@ -12,12 +12,12 @@ import { GoogleLogin } from "@react-oauth/google";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Header from "@/components/Header";
 
 import { useAuth } from "@/contexts/AuthContext";
 import { useAPICall } from "@/hooks/useApiCall";
 import toast from "react-hot-toast";
 import { API_ENDPOINT } from "@/config/backend";
-import { Header } from "@radix-ui/react-accordion";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -95,76 +95,78 @@ const LoginPage = () => {
     }
   };
   return (
-    <div className="container px-4 max-w-md mx-auto py-12">
+    <>
       <Header />
-      <Card>
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Login</CardTitle>
-          <CardDescription>
-            Enter your credentials to access your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="name@example.com"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="flex items-center justify-between mb-2">
-              <span></span>
-              <button
-                type="button"
-                className="text-sm text-blue-600 hover:underline flex items-center cursor-pointer"
+      <div className="container px-4 max-w-md mx-auto py-12">
+        <Card>
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl font-bold">Login</CardTitle>
+            <CardDescription>
+              Enter your credentials to access your account
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="name@example.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="flex items-center justify-between mb-2">
+                <span></span>
+                <button
+                  type="button"
+                  className="text-sm text-blue-600 hover:underline flex items-center cursor-pointer"
+                  disabled={fetching}
+                  onClick={handleForgotPassword}
+                >
+                  Forgot Password?
+                  {fetching && fetchType == "forgotPassword" && (
+                    <div className="pl-2 flex items-center justify-center h-full">
+                      <div className="animate-spin rounded-full h-3 w-3 border-t-2 border-b-2 border-primary"></div>
+                    </div>
+                  )}
+                </button>
+              </div>
+              <Button
+                type="submit"
+                className="w-full"
                 disabled={fetching}
-                onClick={handleForgotPassword}
+                loading={fetching && fetchType == "login"}
               >
-                Forgot Password?
-                {fetching && fetchType == "forgotPassword" && (
-                  <div className="pl-2 flex items-center justify-center h-full">
-                    <div className="animate-spin rounded-full h-3 w-3 border-t-2 border-b-2 border-primary"></div>
-                  </div>
-                )}
-              </button>
-            </div>
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={fetching}
-              loading={fetching && fetchType == "login"}
-            >
-              Login
-            </Button>
-            <GoogleLogin
-              onSuccess={handleGoogleLogin}
-              onError={() => console.log("Login Failed")}
-              useOneTap={false}
-              theme="outline"
-              size="large"
-              shape="rectangular"
-            />
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+                Login
+              </Button>
+              <GoogleLogin
+                onSuccess={handleGoogleLogin}
+                onError={() => console.log("Login Failed")}
+                useOneTap={false}
+                theme="outline"
+                size="large"
+                shape="rectangular"
+              />
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    </>
   );
 };
 
