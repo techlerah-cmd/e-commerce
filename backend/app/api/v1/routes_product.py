@@ -94,7 +94,6 @@ def create_product(
   return db_product
 
 
-
 @app.put("/{product_id}", response_model=ProductResponse)
 def update_product(
     product_id: str,
@@ -182,8 +181,6 @@ def delete_product(
 
     return {"detail": f"Product {product_id} deleted successfully"}
 
-
-
 @app.get("/list",response_model=PaginationResponse[ProductListResponse])
 def get_product_list(
     page:int = Query(1,ge=1),
@@ -194,7 +191,6 @@ def get_product_list(
     ):
     print(size,page,search,filter)
     return crud_product.get_list_of_product(db,page,size,filter,search)
-
 
 @app.get("/list/admin",response_model=PaginationResponse[ProductAdminListResponse])
 def get_product_list(

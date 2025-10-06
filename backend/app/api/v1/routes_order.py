@@ -11,11 +11,13 @@ from app.core.config import settings
 from typing import List,Optional
 from app.app_order.schemas import OrderResponse,TransactionUpdate,OrderUserResponse,OrderStatusUpdate
 from app.common.schemas import PaginationResponse
+from fastapi_limiter.depends import RateLimiter
+
 razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_SECRET))
 
 app = APIRouter()
 
-@app.post('/checkout/verify')
+@app.post('/checkout/verify',dependencies=[Depends(RateLimiter(times=20, seconds=60))])
 def verify_cart_before_checkout(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     db_cart = get_cart_by_user_id(db, user.id)
     if not crud_order.verify_cart_stock(db, db_cart):
@@ -25,7 +27,7 @@ def verify_cart_before_checkout(db: Session = Depends(get_db), user: User = Depe
         )
     return {'detail':"Verified your cart proceed to checkout page"}
 
-@app.post('/place-order/payment-request')
+@app.post('/place-order/payment-request',dependencies=[Depends(RateLimiter(times=10, seconds=60))])
 def create_razorpay_transaction(db:Session=Depends(get_db),user:User=Depends(get_current_user)):
   
   db_cart = get_cart_by_user_id(db, user.id)

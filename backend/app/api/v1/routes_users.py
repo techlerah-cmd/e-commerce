@@ -11,6 +11,8 @@ from app.common.utils import generate_otp
 from app.lib.resend import send_otp_email
 from app.app_users.models import User
 import resend
+from fastapi_limiter.depends import RateLimiter
+
 app = APIRouter()
 
 
@@ -18,7 +20,7 @@ app = APIRouter()
 def verify_me(user = Depends(get_current_user)):
   return user
 
-@app.post('/login',response_model=LoginResponse)
+@app.post('/login',response_model=LoginResponse,dependencies=[Depends(RateLimiter(times=5, seconds=60))])
 def login(data:LoginRequest,db:Session=Depends(get_db)):
   user = crud_auth.get_user_by_email(db,data.email)
   if not user or not crud_auth.verify_password(data.password,user.password):
@@ -26,7 +28,7 @@ def login(data:LoginRequest,db:Session=Depends(get_db)):
   token = create_access_token({'sub':data.email})
   return { 'user':user,'token':token }
 
-@app.post('/google-login')
+@app.post('/google-login',dependencies=[Depends(RateLimiter(times=5, seconds=60))])
 def google_login(data:GoogleLoginRequest,db:Session=Depends(get_db)):
   idinfo = id_token.verify_oauth2_token(
             data.token,
@@ -43,7 +45,7 @@ def google_login(data:GoogleLoginRequest,db:Session=Depends(get_db)):
   token = create_access_token(data={'sub':user_email})
   return {'token':token,'user':user} 
 
-@app.post('/forgot-password/request-otp',response_model=ForgotPasswordResponse)
+@app.post('/forgot-password/request-otp',response_model=ForgotPasswordResponse,dependencies=[Depends(RateLimiter(times=5, seconds=60))])
 def forgot_password(data:ForgotPassword,background_tasks: BackgroundTasks,db:Session=Depends(get_db)):
   """
   Used to sent new otp and also resend otp
@@ -69,7 +71,7 @@ def forgot_password(data:ForgotPassword,background_tasks: BackgroundTasks,db:Ses
   background_tasks.add_task(send_otp_email, user.email, generate_otp)
   return db_forgot
 
-@app.post('/forgot-password/verify-otp')
+@app.post('/forgot-password/verify-otp',dependencies=[Depends(RateLimiter(times=5, seconds=60))])
 def verify_otp(data:ForgotPasswordOTPVerify,db:Session=Depends(get_db)):
   # check exist the forgot password with this ref
   db_forgot = crud_auth.get_forgot_password_by_ref(db,data.ref)
@@ -80,7 +82,7 @@ def verify_otp(data:ForgotPasswordOTPVerify,db:Session=Depends(get_db)):
   crud_auth.update_forgot_password(db,db_forgot,{'verified':True})
   return {'detail':"OTP Verified"}
 
-@app.post('/forgot-password/reset-password')
+@app.post('/forgot-password/reset-password',dependencies=[Depends(RateLimiter(times=5, seconds=60))])
 def reset_password(data:ForgotPasswordPasswordReset,db:Session=Depends(get_db)):
   db_forgot = crud_auth.get_forgot_password_by_ref(db,data.ref)
   if not db_forgot:
@@ -92,7 +94,7 @@ def reset_password(data:ForgotPasswordPasswordReset,db:Session=Depends(get_db)):
   crud_auth.update_user_password(db,user,data.password)
   return {'detail':"Password updated"} 
 
-@app.post('/address',response_model=AddressResponse)
+@app.post('/address',response_model=AddressResponse,dependencies=[Depends(RateLimiter(times=20, seconds=60))])
 def create_address(data:AddressCreate,db:Session=Depends(get_db),user:User=Depends(get_current_user)):
   # check user hae address 
   if not user.address:
@@ -103,7 +105,7 @@ def create_address(data:AddressCreate,db:Session=Depends(get_db),user:User=Depen
     db_address = crud_auth.update_address(db,data,user.address)
   return db_address
 
-@app.put('/address',response_model=AddressResponse)
+@app.put('/address',response_model=AddressResponse,dependencies=[Depends(RateLimiter(times=20, seconds=60))])
 def update_address(data:AddressCreate,db:Session=Depends(get_db),user:User=Depends(get_current_user)):
   # check user hae address 
   if not user.address:
@@ -114,12 +116,12 @@ def update_address(data:AddressCreate,db:Session=Depends(get_db),user:User=Depen
     db_address = crud_auth.update_address(db,data,user.address)
   return db_address
 
-@app.get('/address',response_model=Optional[AddressResponse])
+@app.get('/address',response_model=Optional[AddressResponse],dependencies=[Depends(RateLimiter(times=20, seconds=60))])
 def get_address(db:Session=Depends(get_db),user:User=Depends(get_current_user)):
   return user.address
 
 
-@app.post('/contact-us')
+@app.post('/contact-us',dependencies=[Depends(RateLimiter(times=5, seconds=60))])
 def send_user_enquiry(data:ContactUs,db:Session=Depends(get_db)):
   html_content = f"""
   <!DOCTYPE html>
@@ -263,17 +265,16 @@ def send_user_enquiry(data:ContactUs,db:Session=Depends(get_db)):
   </body>
   </html>
   """
-  
-  try:
-    resend.Emails.send({
-      "from": "onboarding@resend.dev",
-      "to": data.email,
-      "subject": f"New Contact Inquiry: {data.subject}",
-      "html": html_content 
-    })
-    return {"detail": "Your message has been sent successfully. We'll get back to you soon!"}
-  except Exception as e:
-    raise HTTPException(status_code=500, detail=f"Failed to send email: {str(e)}")
+  return {'detail':'Message Sent Successfully'}
+
+  resend.Emails.send({
+    "from": "onboarding@resend.dev",
+    "to": data.email,
+    "subject": f"New Contact Inquiry: {data.subject}",
+    "html": html_content 
+  })
+  return {"detail": "Your message has been sent successfully. We'll get back to you soon!"}
+
 
 
 

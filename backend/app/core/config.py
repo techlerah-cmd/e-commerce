@@ -9,8 +9,11 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_ID:str
     RESEND_FROM_ADDRESS:str
     RESEND_API_KEY : str
+    DEV_DATABASE_URL:str
+    REDIS_PASSWORD:str
     POSTGRES_USER:str
     PRODUCTION:str
+    REDIS_URL:str
     POSTGRES_DB : str
     POSTGRES_PASSWORD :str
     BASE_URL:str = "http:localhost:8000"
