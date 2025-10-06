@@ -47,14 +47,15 @@ async def global_rate_limit(request: Request, call_next):
     except Exception as e:
         return Response(
             status_code=429,
-            content={"detail": f"Too many request, please try again later"}
+            content={"detail": f"Too many request, please try again later"},
+            media_type="application/json",
         )
     try:
         # Proceed with request if not limited
         response = await call_next(request)
     except Exception as e:
         traceback.print_exc()
-        return Response(status_code=500, content={"detail": str(e)})
+        return Response(status_code=500, content={"detail": str(e)}, media_type="application/json",)
 
     # Copy limiter headers (optional, for rate-limit info)
     for k, v in limiter_response.headers.items():
@@ -62,6 +63,9 @@ async def global_rate_limit(request: Request, call_next):
             response.headers[k] = v
 
     return response
+
+
+
 app.include_router(
   routes_users.app,
   prefix="/api/v1/user",
