@@ -38,29 +38,29 @@ async def startup():
 
 rate_limiter = RateLimiter(times=10, seconds=60)
 
-# @app.middleware("http")
-# async def global_rate_limit(request: Request, call_next):
-#     limiter_response = Response()
-#     try:
-#         await rate_limiter(request, limiter_response)
-#     except Exception as e:
-#         return JSONResponse(
-#             status_code=429,
-#             content={"detail": f"Too many request, please try again later"},
-#         )
-#     try:
-#         # Proceed with request if not limited
-#         response = await call_next(request)
-#     except Exception as e:
-#         traceback.print_exc()
-#         return JSONResponse(status_code=500, content=e,)
+@app.middleware("http")
+async def global_rate_limit(request: Request, call_next):
+    limiter_response = Response()
+    try:
+        await rate_limiter(request, limiter_response)
+    except Exception as e:
+        return JSONResponse(
+            status_code=429,
+            content={"detail": f"Too many request, please try again later"},
+        )
+    try:
+        # Proceed with request if not limited
+        response = await call_next(request)
+    except Exception as e:
+        traceback.print_exc()
+        return JSONResponse(status_code=500, content=e,)
 
-#     # Copy limiter headers (optional, for rate-limit info)
-#     for k, v in limiter_response.headers.items():
-#         if k not in response.headers:
-#             response.headers[k] = v
+    # Copy limiter headers (optional, for rate-limit info)
+    for k, v in limiter_response.headers.items():
+        if k not in response.headers:
+            response.headers[k] = v
 
-#     return response
+    return response
 
 
 
