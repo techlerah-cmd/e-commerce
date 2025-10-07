@@ -12,7 +12,7 @@ const Index = () => {
   return (
     <>
       <Header />
-      <main className="min-h-screen">
+      <main className="min-h-screen overflow-x-hidden">
         <HeroSection />
         <section id="collections">
           <FeaturedCollections />
