@@ -37,7 +37,7 @@ const HeroSection = () => {
           <Button className="btn-luxury text-lg px-8 py-4 w-full sm:w-auto">
             Explore Collection
           </Button>
-          <Button variant="outline" className="btn-outline-luxury text-lg px-8 py-4 w-full sm:w-auto border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
+          <Button variant="outline" className="btn-outline-luxury text-lg px-8 py-4 w-full sm:w-auto border-primary-foreground text-primary-foreground hover:bg-primary-foreground text-primary">
             Our Story
           </Button>
         </div>
