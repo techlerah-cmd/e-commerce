@@ -154,15 +154,21 @@ const LoginPage = () => {
               >
                 Login
               </Button>
-              <GoogleLogin
-                onSuccess={handleGoogleLogin}
-                onError={() => console.log("Login Failed")}
-                useOneTap={false}
-                theme="outline"
-                size="large"
-                shape="rectangular"
-                width={"100%"}
-              />
+              <div className="w-full sm:w-auto">
+                <div className="w-full">
+                  {" "}
+                  {/* container forces the width */}
+                  <GoogleLogin
+                    onSuccess={handleGoogleLogin}
+                    onError={() => console.log("Login Failed")}
+                    useOneTap={false}
+                    theme="outline"
+                    size="large"
+                    shape="rectangular"
+                    /* remove width prop or use a px number: width={320} */
+                  />
+                </div>
+              </div>
             </form>
           </CardContent>
         </Card>
