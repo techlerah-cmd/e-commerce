@@ -132,7 +132,7 @@ const Header = () => {
             </Button>
           ) : (
             <Link to="/login">
-              <Button variant="outline" className="hidden sm:inline-flex">
+              <Button variant="outline" className="inline-flex sm:hidden">
                 Login
               </Button>
             </Link>
