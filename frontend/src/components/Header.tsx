@@ -120,7 +120,7 @@ const Header = () => {
               <ShoppingBag className="h-5 w-5" />
             </Button>
           </Link>
-          {isAuthenticated && (
+          {isAuthenticated ? (
             <Button
               variant="ghost"
               size="icon"
@@ -130,6 +130,12 @@ const Header = () => {
             >
               <LogOut className="h-5 w-5" />
             </Button>
+          ) : (
+            <Link to="/login">
+              <Button variant="outline" className="hidden sm:inline-flex">
+                Login
+              </Button>
+            </Link>
           )}
         </div>
       </div>
