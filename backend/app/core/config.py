@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     MEDIA_FOLDER:str = "media"
     RAZORPAY_KEY_ID:str
     RAZORPAY_SECRET:str
+    RAZORPAY_SECRET_PASSWORD:str
     class Config:
         env_file = ".env"
 

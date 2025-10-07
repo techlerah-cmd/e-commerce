@@ -1,6 +1,6 @@
 
 
-from fastapi import APIRouter, Depends, HTTPException, status,Query,Path
+from fastapi import APIRouter, Depends, HTTPException, status,Request,Query,Path
 from sqlalchemy.orm import Session
 from app.core.deps import get_db, is_admin,get_current_user
 from app.app_users.models import User
@@ -12,6 +12,9 @@ from typing import List,Optional
 from app.app_order.schemas import OrderResponse,TransactionUpdate,OrderUserResponse,OrderStatusUpdate
 from app.common.schemas import PaginationResponse
 from fastapi_limiter.depends import RateLimiter
+import hmac
+import hashlib
+
 
 razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_SECRET))
 
@@ -48,7 +51,7 @@ def create_razorpay_transaction(db:Session=Depends(get_db),user:User=Depends(get
         )
   
   subtotal, tax, discount, total = crud_order.calculate_cart_totals(db,db_cart)
-  shipping_charge = 0 if subtotal >= 2000 else 200
+  shipping_charge = 0
   total = shipping_charge + total
   data = {
     "subtotal":subtotal,
@@ -110,19 +113,40 @@ def update_transaction_status(transaction_id:str,data:TransactionUpdate,db:Sessi
     return {'detail':'Transaction Verified'}
 
 
-@app.post('/razorpay-webhook')
-def razorpay_webhook(payload: dict, db: Session = Depends(get_db)):
-    """Step 2: Razorpay Webhook → confirm payment or mark failed"""
+@app.post("/razorpay-webhook")
+async def razorpay_webhook(request: Request, db: Session = Depends(get_db)):
+    """Step 2: Razorpay Webhook → verify signature, confirm payment or mark failed"""
     try:
+        # 1️⃣ Get raw body and headers
+        body = await request.body()
+        signature = request.headers.get("x-razorpay-signature")
+
+        if not signature:
+            raise HTTPException(status_code=400, detail="Missing Razorpay signature")
+
+        # 2️⃣ Verify signature with secret
+        expected_signature = hmac.new(
+            bytes(settings.RAZORPAY_SECRET_PASSWORD, "utf-8"),
+            body,
+            hashlib.sha256
+        ).hexdigest()
+
+        if not hmac.compare_digest(expected_signature, signature):
+            raise HTTPException(status_code=400, detail="Invalid signature")
+
+        # 3️⃣ Parse JSON body after verification
+        payload = await request.json()
         event = payload.get("event")
         data = payload.get("payload", {})
 
+        # 4️⃣ Handle Razorpay events
         if event == "payment.captured":
             razorpay_order_id = data["payment"]["entity"]["order_id"]
             payment_id = data["payment"]["entity"]["id"]
 
             crud_order.mark_payment_success(db, razorpay_order_id, payment_id)
-            crud_order.clear_cart(db,razorpay_order_id)
+            crud_order.clear_cart(db, razorpay_order_id)
+
         elif event == "payment.failed":
             razorpay_order_id = data["payment"]["entity"]["order_id"]
             crud_order.mark_payment_failed(db, razorpay_order_id)
@@ -132,7 +156,6 @@ def razorpay_webhook(payload: dict, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail=f"Webhook handling failed: {str(e)}")
 
     return {"status": "ok"}
-
 
 @app.get('/list',response_model=PaginationResponse[OrderUserResponse])
 def get_orders_list(
