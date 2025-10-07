@@ -228,7 +228,7 @@ def get_products_feed(db:Session=Depends(get_db),):
         image_url = product.images[0].url if product.images else "https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png"
 
         # Google Merchant price format: "12.00 USD"
-        price_str = f"{product.price:.2f} USD" if product.price else "0 INR"
+        price_str = f"{product.price:.2f} INR" if product.price else "0 INR"
 
         # Product link (adjust your frontend URL structure)
         link = f"{settings.BASE_URL}/product/{product.id}"
