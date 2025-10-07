@@ -46,7 +46,9 @@ def create_product(
       ):
   #  check any other product the same code
   try:
+        print(product_metadata)
         product_metadata_obj = json.loads(product_metadata)
+        print(type(product_metadata_obj),(product_metadata_obj))
   except json.JSONDecodeError:
         raise HTTPException(status_code=400, detail="Invalid product_metadata JSON")
   db_product = crud_product.get_product_by_code(db,code)
