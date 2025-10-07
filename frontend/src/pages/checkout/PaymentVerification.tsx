@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAPICall } from "@/hooks/useApiCall";
 import { API_ENDPOINT } from "@/config/backend";
@@ -19,6 +19,8 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 
+const MAX_ATTEMPTS = 8;
+
 const PaymentVerification = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,9 +35,23 @@ const PaymentVerification = () => {
   const [orderId, setOrderId] = useState<string>("");
   const [attemptCount, setAttemptCount] = useState(0);
 
+  // refs for timers so we can clear reliably
+  const pollTimeoutRef = useRef<number | null>(null);
+  const mountedRef = useRef(true);
+  const countdownRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      if (pollTimeoutRef.current) window.clearTimeout(pollTimeoutRef.current);
+      if (countdownRef.current) window.clearInterval(countdownRef.current);
+    };
+  }, []);
+
   // Get transaction ID from location state
   useEffect(() => {
-    const state = location.state as { transaction_id?: string };
+    const state = location.state as { transaction_id?: string } | null;
 
     if (!state || !state.transaction_id) {
       toast.error("No transaction found");
@@ -46,15 +62,32 @@ const PaymentVerification = () => {
     setTransactionId(state.transaction_id);
   }, [location.state, navigate]);
 
-  // Polling function
+  // Polling function (recursive setTimeout)
   useEffect(() => {
     if (!transactionId || verificationStatus !== "verifying") return;
 
-    let isCancelled = false;
-    let timeoutId: NodeJS.Timeout | null = null;
+    let attempts = 0;
 
-    const pollPayment = async () => {
-      if (isCancelled) return;
+    const pollPayment = async (delayMs = 0) => {
+      if (!mountedRef.current) return;
+
+      // stop if we exceeded attempts
+      if (attempts >= MAX_ATTEMPTS) {
+        if (mountedRef.current) {
+          setVerificationStatus("failed");
+          toast.error("Unable to verify payment. Please contact support.");
+        }
+        return;
+      }
+
+      // wait delay if provided
+      if (delayMs > 0) {
+        await new Promise((res) => {
+          pollTimeoutRef.current = window.setTimeout(res, delayMs);
+        });
+      }
+
+      if (!mountedRef.current) return;
 
       try {
         const response = await makeApiCall(
@@ -66,53 +99,74 @@ const PaymentVerification = () => {
           "verifyPayment"
         );
 
-        if (isCancelled) return;
+        if (!mountedRef.current) return;
 
-        if (response.status === 200) {
+        if (response?.status === 200) {
           setVerificationStatus("success");
-          setOrderId(response.data.order_id || "");
+          setOrderId(response.data?.order_id || "");
           toast.success("Payment verified successfully!");
+          // optional: navigate after a short delay
+          window.setTimeout(() => navigate("/my-orders"), 2000);
           return;
-        } else if (response.status === 404) {
+        } else if (response?.status === 404) {
           setVerificationStatus("failed");
-          toast.error("Payment verification failed");
+          toast.error("Payment not found — verification failed.");
           return;
         } else {
-          setAttemptCount((prev) => prev + 1);
+          // treat other codes as retryable
+          attempts += 1;
+          setAttemptCount((p) => p + 1);
         }
-      } catch (error) {
-        console.error("Verification error:", error);
-        if (!isCancelled) setAttemptCount((prev) => prev + 1);
+      } catch (err) {
+        console.error("Verification error:", err);
+        attempts += 1;
+        setAttemptCount((p) => p + 1);
       }
 
-      if (!isCancelled) {
-        timeoutId = setTimeout(pollPayment, 10000);
-      }
+      // exponential-ish backoff: base 10s, + attempts*1s
+      const nextDelay = 10000 + attempts * 1000;
+      pollTimeoutRef.current = window.setTimeout(() => {
+        pollPayment(0);
+      }, nextDelay);
     };
 
     pollPayment();
 
     return () => {
-      isCancelled = true;
-      if (timeoutId) clearTimeout(timeoutId);
+      if (pollTimeoutRef.current) {
+        window.clearTimeout(pollTimeoutRef.current);
+        pollTimeoutRef.current = null;
+      }
     };
-  }, [transactionId, verificationStatus, makeApiCall, authToken]);
+    // intentionally not including makeApiCall/authToken in deps to avoid retriggering polling loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [transactionId, verificationStatus]);
 
   // Countdown timer
   useEffect(() => {
     if (verificationStatus !== "verifying") return;
 
-    const timerId = setInterval(() => {
+    countdownRef.current = window.setInterval(() => {
       setTimeRemaining((prev) => {
         if (prev <= 1) {
+          // timeout
           setVerificationStatus("timeout");
+          if (countdownRef.current) {
+            window.clearInterval(countdownRef.current);
+            countdownRef.current = null;
+          }
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
 
-    return () => clearInterval(timerId);
+    return () => {
+      if (countdownRef.current) {
+        window.clearInterval(countdownRef.current);
+        countdownRef.current = null;
+      }
+    };
   }, [verificationStatus]);
 
   const formatTime = (seconds: number) => {
@@ -121,16 +175,17 @@ const PaymentVerification = () => {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  const copyTransactionId = () => {
-    navigator.clipboard.writeText(transactionId);
-    toast.success("Transaction ID copied to clipboard");
+  const copyTransactionId = async () => {
+    try {
+      await navigator.clipboard.writeText(transactionId);
+      toast.success("Transaction ID copied to clipboard");
+    } catch (err) {
+      console.error("Clipboard error:", err);
+      toast.error("Unable to copy. Please copy manually.");
+    }
   };
 
-  // Styles use your design system variables:
-  // page bg: --background, card: --card, foreground: --foreground, primary: --primary, accent: --accent
-  // Buttons: .btn-luxury, .btn-outline-luxury
-
-  // Verifying State
+  // Render different UIs based on verificationStatus
   if (verificationStatus === "verifying") {
     return (
       <>
@@ -139,7 +194,6 @@ const PaymentVerification = () => {
           <Card className="max-w-md w-full bg-[hsl(var(--card))] border-[hsl(var(--border))] shadow-card">
             <CardContent className="pt-6 p-6">
               <div className="text-center space-y-6">
-                {/* Animated Loader */}
                 <div className="flex justify-center">
                   <div className="relative">
                     <Loader2 className="h-16 w-16 text-[hsl(var(--primary))] animate-spin" />
@@ -149,7 +203,6 @@ const PaymentVerification = () => {
                   </div>
                 </div>
 
-                {/* Status Text */}
                 <div>
                   <h2 className="text-2xl font-serif-elegant text-[hsl(var(--primary))] mb-2">
                     Verifying Payment
@@ -159,7 +212,6 @@ const PaymentVerification = () => {
                   </p>
                 </div>
 
-                {/* Countdown Timer */}
                 <div className="bg-[hsl(var(--muted))]/30 rounded-lg p-4 border border-[hsl(var(--border))]">
                   <div className="flex items-center justify-center gap-2 mb-2">
                     <Clock className="h-5 w-5 text-[hsl(var(--primary))]" />
@@ -180,7 +232,6 @@ const PaymentVerification = () => {
                   </div>
                 </div>
 
-                {/* Transaction Info */}
                 <div className="bg-[hsl(var(--muted))]/20 rounded-lg p-4 text-left border border-[hsl(var(--border))]">
                   <p className="text-xs text-[hsl(var(--muted-foreground))] mb-1">
                     Transaction ID
@@ -200,12 +251,10 @@ const PaymentVerification = () => {
                   </div>
                 </div>
 
-                {/* Attempt Counter */}
                 <p className="text-xs text-[hsl(var(--muted-foreground))]">
                   Verification attempt: {attemptCount + 1}
                 </p>
 
-                {/* Info Message */}
                 <div className="flex items-start gap-2 text-left bg-[hsl(var(--primary))]/10 p-3 rounded-lg border border-[hsl(var(--primary))]/20">
                   <AlertCircle className="h-5 w-5 text-[hsl(var(--primary))]" />
                   <p className="text-xs text-[hsl(var(--primary))]">
@@ -222,7 +271,6 @@ const PaymentVerification = () => {
     );
   }
 
-  // Success State
   if (verificationStatus === "success") {
     return (
       <>
@@ -231,7 +279,6 @@ const PaymentVerification = () => {
           <Card className="max-w-md w-full bg-[hsl(var(--card))] border-[hsl(var(--border))] shadow-luxury">
             <CardContent className="pt-6 p-6">
               <div className="text-center space-y-6">
-                {/* Success Icon */}
                 <div className="flex justify-center">
                   <div className="relative">
                     <div
@@ -244,7 +291,6 @@ const PaymentVerification = () => {
                   </div>
                 </div>
 
-                {/* Success Message */}
                 <div>
                   <h2 className="text-2xl font-serif-elegant text-[hsl(var(--primary))] mb-2">
                     Thank You for Your Order!
@@ -254,7 +300,6 @@ const PaymentVerification = () => {
                   </p>
                 </div>
 
-                {/* Order Details */}
                 <div className="bg-[hsl(var(--muted))]/20 rounded-lg p-4 border border-[hsl(var(--border))]">
                   <div className="space-y-2 text-sm">
                     {orderId && (
@@ -278,14 +323,12 @@ const PaymentVerification = () => {
                   </div>
                 </div>
 
-                {/* Success Info */}
                 <div className="bg-[hsl(var(--primary))]/8 rounded-lg p-4 border border-[hsl(var(--primary))]/20 text-muted-foreground">
                   <p className="text-sm text-muted-foreground">
                     📦 You can track your order from the Orders page.
                   </p>
                 </div>
 
-                {/* Action Buttons */}
                 <div className="space-y-3">
                   <Button
                     className="w-full btn-luxury"
@@ -318,14 +361,12 @@ const PaymentVerification = () => {
         <Card className="max-w-md w-full bg-[hsl(var(--card))] border-[hsl(var(--border))] shadow-card">
           <CardContent className="pt-6 p-6">
             <div className="text-center space-y-6">
-              {/* Error Icon */}
               <div className="flex justify-center">
                 <div className="bg-[hsl(var(--destructive))]/10 rounded-full p-4">
                   <XCircle className="h-16 w-16 text-[hsl(var(--destructive))]" />
                 </div>
               </div>
 
-              {/* Error Message */}
               <div>
                 <h2 className="text-2xl font-serif-elegant text-[hsl(var(--primary))] mb-2">
                   {verificationStatus === "timeout"
@@ -339,7 +380,6 @@ const PaymentVerification = () => {
                 </p>
               </div>
 
-              {/* Transaction Info */}
               <div className="bg-[hsl(var(--muted))]/20 rounded-lg p-4 text-left border border-[hsl(var(--border))]">
                 <p className="text-xs text-[hsl(var(--muted-foreground))] mb-2">
                   Transaction ID
@@ -362,7 +402,6 @@ const PaymentVerification = () => {
                 </p>
               </div>
 
-              {/* Important Notice */}
               <div className="bg-[hsl(var(--accent))]/8 rounded-lg p-4 border border-[hsl(var(--accent))]/20 text-left">
                 <div className="flex items-start gap-2">
                   <AlertCircle className="h-5 w-5 text-[hsl(var(--accent))] shrink-0 mt-0.5" />
@@ -378,7 +417,6 @@ const PaymentVerification = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
               <div className="space-y-3">
                 <Button
                   variant="outline"
@@ -397,7 +435,6 @@ const PaymentVerification = () => {
                 </Button>
               </div>
 
-              {/* Support Info */}
               <div className="text-xs text-[hsl(var(--muted-foreground))]">
                 <p>Need help? Email us at support@lerahsaree.com</p>
                 <p>or call +91-XXXXXXXXXX</p>
