@@ -17,7 +17,7 @@ router_coupon = APIRouter()
 router_cart = APIRouter()
 router_admin= APIRouter()
 
-@router_coupon.post("/", response_model=CouponResponse, dependencies=[Depends(is_admin)])
+@router_coupon.post("", response_model=CouponResponse, dependencies=[Depends(is_admin)])
 def create_coupon(data: CouponCreate, db: Session = Depends(get_db)):
     return crud_cart.create_coupon(db, data)
 
