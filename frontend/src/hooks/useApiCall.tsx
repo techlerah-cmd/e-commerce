@@ -20,7 +20,7 @@ export const useAPICall = () => {
   const [fetching, setIsFetching] = useState(false);
   const [fetchType, setFetchType] = useState<string>("");
   const [isFetched, setIsFetched] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   async function makeApiCall(
     method: string,
     endpoint: string,
@@ -87,13 +87,13 @@ export const useAPICall = () => {
     //   );
     //   console.log(responseData.error);
     // }
-    if(responseData.status == 500){
-      navigate('/internal-server-error')
-      return
-    }
-    if(responseData.status == 429){
-      navigate('/too-many-requests')
-      return
+    // if(responseData.status == 500){
+    //   navigate('/internal-server-error')
+    //   return
+    // }
+    if (responseData.status == 429) {
+      navigate("/too-many-requests");
+      return;
     }
     setIsFetched(true);
     return responseData;

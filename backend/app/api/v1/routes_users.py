@@ -69,6 +69,7 @@ def reset_password(data:ForgotPasswordPasswordReset,db:Session=Depends(get_db)):
   if not user:
     raise HTTPException(detail="User Not Found",status_code=404)
   # update password
+  print('password ->',data.password)
   crud_auth.update_user_password(db,user,data.password)
   return {'detail':"Password updated"} 
 

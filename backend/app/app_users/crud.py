@@ -2,7 +2,10 @@ from app.app_users.models import User,Address
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 from app.app_users.schemas import *
-pwd_context = CryptContext(schemes=['bcrypt'],deprecated='auto')
+pwd_context = CryptContext(
+    schemes=["bcrypt"], 
+    deprecated="auto"
+)
 
 
 def get_user_by_email(db:Session,email):
@@ -30,7 +33,9 @@ def update_user_data(db:Session,user,update_data:dict):
     db.refresh(user)
     return user
 def update_user_password(db:Session,user,password):
+    print("password is",password,len(password))
     hashed_password = pwd_context.hash(password)
+    print(hashed_password)
     user.password = hashed_password
     db.commit()
     db.refresh(user)

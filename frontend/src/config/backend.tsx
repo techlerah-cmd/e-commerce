@@ -3,7 +3,7 @@ import { get } from "http";
 export const API_URL = `${"https://backend.lerah.in"}/api/v1`;
 export const API_ENDPOINT = {
   VERIFY_USER: `${API_URL}/user/verify-me `,
-  LOGIN: `${API_URL}/user/login/hustly`,
+  LOGIN: `${API_URL}/user/login`,
   GOOGLE_LOGIN: `${API_URL}/user/google-login`,
   ADD_PRODUCT: `${API_URL}/product`,
   LIST_PRODUCTS: (page, size, search) =>
@@ -32,12 +32,15 @@ export const API_ENDPOINT = {
   UPDATE_ADDRESS: (id) => `${API_URL}/address/${id}`,
   DELETE_ADDRESS: (id) => `${API_URL}/address/${id}`,
   CREATE_RAZORPAY_ORDER: `${API_URL}/order/place-order/payment-request`,
-  VERIFY_RAZORPAY_PAYMENT: (transaction_id)=>`${API_URL}/order/transaction/${transaction_id}/verify}`,
-  UPDATE_TRANSACTION_STATUS: (transaction_id)=>`${API_URL}/order/transaction/${transaction_id}}`,
-  DELETE_ORDER : (id)=>`${API_URL}/order/${id}`,
-  ORDER_LIST:(page,size,search)=>`${API_URL}/order/list?page=${page}&size=${size}&search=${search}`,
-  UPDATE_ORDER_STATUS:(id)=>`${API_URL}/order/status/${id}`,
-  CONTACT_US:`${API_URL}/user/contact-us`,
-  FORGOT_PASSWORD:`${API_URL}/user/forgot-password`,
-  RESET_PASSWORD:`${API_URL}/user/reset-password`,
+  VERIFY_RAZORPAY_PAYMENT: (transaction_id) =>
+    `${API_URL}/order/transaction/${transaction_id}/verify}`,
+  UPDATE_TRANSACTION_STATUS: (transaction_id) =>
+    `${API_URL}/order/transaction/${transaction_id}}`,
+  DELETE_ORDER: (id) => `${API_URL}/order/${id}`,
+  ORDER_LIST: (page, size, search) =>
+    `${API_URL}/order/list?page=${page}&size=${size}&search=${search}`,
+  UPDATE_ORDER_STATUS: (id) => `${API_URL}/order/status/${id}`,
+  CONTACT_US: `${API_URL}/user/contact-us`,
+  FORGOT_PASSWORD: `${API_URL}/user/forgot-password`,
+  RESET_PASSWORD: `${API_URL}/user/reset-password`,
 };

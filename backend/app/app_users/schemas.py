@@ -34,16 +34,10 @@ class LoginResponse(BaseModel):
 
 class ForgotPassword(BaseModel):
   email: str | None = None
-  ref: str | None = None
-
-  def __init__(self, **data):
-    super().__init__(**data)
-    if not (self.email or self.ref):
-      raise ValueError("Either 'email' or 'ref' must be provided.")
+  
 
 class ForgotPasswordResponse(BaseModel):
-  email :set
-  ref : str
+  token : str
 
 class ForgotPasswordOTPVerify(BaseModel):
   ref : str
