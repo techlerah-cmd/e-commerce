@@ -179,7 +179,7 @@ const Policy = () => {
       id: "exchange",
       title: "Exchange Policy",
       content: (
-        <div className="space-y-4 ">
+        <div className="space-y-4 text-muted-foreground">
           <p>
             At Lerah Royal Elegance, we want you to be satisfied with your
             purchase. Our exchange policy allows you to exchange items for a

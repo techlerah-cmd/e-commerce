@@ -44,13 +44,13 @@ const MyOrders = () => {
     total: 0,
   });
   const { authToken } = useAuth();
-
   const [searchQuery, setSearchQuery] = useState("");
   const [query, setQuery] = useState("");
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
   const { fetchType, fetching, isFetched, makeApiCall } = useAPICall();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const navigate = useNavigate();
+
   useEffect(() => {
     fetchOrders();
   }, [currentPage, query]);
@@ -72,112 +72,98 @@ const MyOrders = () => {
     }
   };
 
-  const handleSearch = () => {
-    setQuery(searchQuery);
-  };
-
+  const handleSearch = () => setQuery(searchQuery);
   const handleSearchKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      setQuery(searchQuery);
-    }
+    if (e.key === "Enter") setQuery(searchQuery);
   };
 
-  const goToPreviousPage = () => {
-    setCurrentPage(currentPage - 1);
-  };
-
-  const goToNextPage = () => {
-    setCurrentPage(currentPage + 1);
-  };
+  const goToPreviousPage = () => setCurrentPage(currentPage - 1);
+  const goToNextPage = () => setCurrentPage(currentPage + 1);
 
   const getStatusBadge = (status: ICustomerOrder["status"]) => {
     const statusConfig = {
       payment_pending: {
         label: "Payment Pending",
-        className: "bg-amber-100 text-amber-800 border border-amber-200",
-        icon: Clock, // waiting
+        color: "bg-amber-100 text-amber-800",
+        icon: Clock,
       },
       created: {
         label: "Created",
-        className: "bg-gray-100 text-gray-800 border border-gray-200",
-        icon: Clock, // just created
+        color: "bg-gray-200 text-gray-900",
+        icon: Clock,
       },
       payment_paid: {
         label: "Processing",
-        className: "bg-blue-100 text-blue-800 border border-blue-200",
-        icon: Package, // package ready
+        color: "bg-purple-100 text-primary",
+        icon: Package,
       },
       shipped: {
         label: "Shipped",
-        className: "bg-green-100 text-green-800 border border-green-200",
-        icon: Truck, // delivery truck
+        color: "bg-green-100 text-green-800",
+        icon: Truck,
       },
       cancelled: {
         label: "Cancelled",
-        className: "bg-red-100 text-red-800 border border-red-200",
-        icon: XCircle, // cancelled ❌
+        color: "bg-red-100 text-red-800",
+        icon: XCircle,
       },
       canceled: {
         label: "Cancelled",
-        className: "bg-red-100 text-red-800 border border-red-200",
-        icon: XCircle, // cancelled ❌
+        color: "bg-red-100 text-red-800",
+        icon: XCircle,
       },
       payment_failed: {
         label: "Payment Failed",
-        className: "bg-red-100 text-red-800 border border-red-200",
-        icon: XCircle, // failed ❌
+        color: "bg-red-100 text-red-800",
+        icon: XCircle,
       },
     };
-
     const config = statusConfig[status];
     const Icon = config.icon;
-
     return (
       <span
-        className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${config.className}`}
+        className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${config.color}`}
       >
         <Icon className="h-3 w-3" />
         {config.label}
       </span>
     );
   };
-const getPaymentStatusBadge = (status: string) => {
-  const statusConfig = {
-    created: {
-      label: "Pending",
-      className: "bg-amber-100 text-amber-800 border border-amber-200",
-      icon: Clock, // waiting
-    },
-    paid: {
-      label: "Completed",
-      className: "bg-green-100 text-green-800 border border-green-200",
-      icon: CheckCircle, // success ✅
-    },
-    failed: {
-      label: "Failed",
-      className: "bg-red-100 text-red-800 border border-red-200",
-      icon: XCircle, // failed ❌
-    },
-    cancelled: {
-      label: "Cancelled",
-      className: "bg-red-100 text-red-800 border border-red-200",
-      icon: XCircle, // cancelled ❌
-    },
+
+  const getPaymentStatusBadge = (status: string) => {
+    const statusConfig = {
+      created: {
+        label: "Pending",
+        color: "bg-amber-100 text-amber-800",
+        icon: Clock,
+      },
+      paid: {
+        label: "Completed",
+        color: "bg-green-100 text-green-800",
+        icon: CheckCircle,
+      },
+      failed: {
+        label: "Failed",
+        color: "bg-red-100 text-red-800",
+        icon: XCircle,
+      },
+      cancelled: {
+        label: "Cancelled",
+        color: "bg-red-100 text-red-800",
+        icon: XCircle,
+      },
+    };
+    const config = statusConfig[status];
+    const Icon = config.icon;
+    return (
+      <span
+        className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${config.color}`}
+      >
+        <Icon className="h-3 w-3" />
+        {config.label}
+      </span>
+    );
   };
-
-  const config = statusConfig[status];
-  const Icon = config.icon;
-
-  return (
-    <span
-      className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${config.className}`}
-    >
-      <Icon className="h-3 w-3" />
-      {config.label}
-    </span>
-  );
-};
-
 
   const openDetailsDialog = (order: ICustomerOrder) => {
     setSelectedOrder(order);
@@ -187,10 +173,10 @@ const getPaymentStatusBadge = (status: string) => {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-gray-50/50">
+      <main className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
         <div className="container mx-auto px-4 py-8 max-w-6xl">
           <div className="flex items-center justify-between mb-8">
-            <h1 className="font-serif-elegant text-3xl text-primary">
+            <h1 className="font-serif-elegant text-3xl text-[hsl(var(--primary))]">
               My Orders
             </h1>
           </div>
@@ -198,33 +184,31 @@ const getPaymentStatusBadge = (status: string) => {
           {/* Search Bar */}
           <div className="mb-6">
             <div className="flex gap-2 max-w-md">
-              <div className="relative flex-1">
-                <Input
-                  type="text"
-                  placeholder="Search orders by number "
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={handleSearchKeyPress}
-                  className="pr-10"
-                />
-              </div>
+              <Input
+                type="text"
+                placeholder="Search orders by number"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyPress={handleSearchKeyPress}
+                className="pr-10"
+              />
               <Button
                 onClick={handleSearch}
-                className="flex items-center gap-2"
+                className="btn-luxury flex items-center gap-2"
               >
-                <Search className="w-4 h-4" />
-                Search
+                <Search className="w-4 h-4" /> Search
               </Button>
             </div>
           </div>
+
           {!fetching && (
             <>
               {orders.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-16 text-center">
-                  <div className="mb-6 rounded-full bg-muted p-6">
-                    <Box className="h-12 w-12 text-muted-foreground" />
+                  <div className="mb-6 rounded-full bg-[hsl(var(--muted))] p-6">
+                    <Box className="h-12 w-12 text-[hsl(var(--muted-foreground))]" />
                   </div>
-                  <h3 className="font-serif-elegant text-2xl font-semibold text-primary mb-2">
+                  <h3 className="font-serif-elegant text-2xl font-semibold text-[hsl(var(--primary))] mb-2">
                     No Orders Found
                   </h3>
                 </div>
@@ -235,15 +219,13 @@ const getPaymentStatusBadge = (status: string) => {
                     {orders.map((order) => (
                       <Card
                         key={order.id}
-                        className="hover:shadow-md transition-shadow bg-[#f0ecd3]"
+                        className="hover:shadow-luxury transition-shadow bg-[hsl(var(--card))]"
                       >
                         <CardHeader>
                           <div className="flex items-center justify-between">
-                            <div className="space-y-1">
-                              <CardTitle className="text-primary">
-                                Order #{order.order_number}
-                              </CardTitle>
-                            </div>
+                            <CardTitle className="text-[hsl(var(--primary))]">
+                              Order #{order.order_number}
+                            </CardTitle>
                             {getStatusBadge(order.status)}
                           </div>
                         </CardHeader>
@@ -252,21 +234,25 @@ const getPaymentStatusBadge = (status: string) => {
                             {/* Order Summary */}
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                               <div>
-                                <p className="text-muted-foreground">Items</p>
+                                <p className="text-[hsl(var(--muted-foreground))]">
+                                  Items
+                                </p>
                                 <p className="font-medium">
                                   {order.items.length} item(s)
                                 </p>
                               </div>
                               <div>
-                                <p className="text-muted-foreground">
+                                <p className="text-[hsl(var(--muted-foreground))]">
                                   Total Amount
                                 </p>
-                                <p className="font-semibold text-green-500">
+                                <p className="font-semibold text-[hsl(var(--accent))]">
                                   ₹{order.total.toLocaleString("en-IN")}
                                 </p>
                               </div>
                               <div>
-                                <p className="text-muted-foreground">Payment</p>
+                                <p className="text-[hsl(var(--muted-foreground))]">
+                                  Payment
+                                </p>
                                 <p className="font-medium capitalize">
                                   {getPaymentStatusBadge(
                                     order.transaction?.status
@@ -274,7 +260,7 @@ const getPaymentStatusBadge = (status: string) => {
                                 </p>
                               </div>
                               <div>
-                                <p className="text-muted-foreground">
+                                <p className="text-[hsl(var(--muted-foreground))]">
                                   Shipping Address
                                 </p>
                                 <p className="font-medium">
@@ -290,10 +276,9 @@ const getPaymentStatusBadge = (status: string) => {
                                 variant="outline"
                                 size="sm"
                                 onClick={() => openDetailsDialog(order)}
-                                className="flex items-center gap-2"
+                                className="btn-outline-luxury flex items-center gap-2"
                               >
-                                <Eye className="h-4 w-4" />
-                                View Details
+                                <Eye className="h-4 w-4" /> View Details
                               </Button>
                             </div>
                           </div>
@@ -305,22 +290,25 @@ const getPaymentStatusBadge = (status: string) => {
               )}
             </>
           )}
+
           {fetching && (
             <div className="py-4">
               <Loading />
             </div>
           )}
+
           {/* Pagination */}
           {!fetching && orders.length != 0 && (
-            <div className="flex justify-center items-center gap-4 mt-6">
+            <div className="flex flex-row justify-center items-center gap-3 sm:gap-4 mt-6">
               <Button
                 variant="outline"
                 onClick={goToPreviousPage}
                 disabled={!pagination.has_prev}
-                className="flex items-center gap-2"
+                className="flex items-center justify-center gap-2 w-auto sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-4 sm:py-2"
+                aria-label="Previous page"
               >
                 <svg
-                  className="w-4 h-4"
+                  className="w-3 h-3 sm:w-4 sm:h-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -332,10 +320,13 @@ const getPaymentStatusBadge = (status: string) => {
                     d="M15 19l-7-7 7-7"
                   />
                 </svg>
-                Previous
+                <span className="hidden xs:inline-block">Previous</span>
               </Button>
 
-              <span className="text-sm text-muted-foreground">
+              <span
+                style={{ color: "hsl(var(--muted-foreground))" }}
+                className="text-xs sm:text-sm mt-2 sm:mt-0"
+              >
                 Page {pagination.page} of{" "}
                 {Math.ceil(pagination.total / pagination.size)}
               </span>
@@ -344,11 +335,12 @@ const getPaymentStatusBadge = (status: string) => {
                 variant="outline"
                 onClick={goToNextPage}
                 disabled={!pagination.has_next}
-                className="flex items-center gap-2"
+                className="flex items-center justify-center gap-2 w-auto sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-4 sm:py-2"
+                aria-label="Next page"
               >
-                Next
+                <span className="hidden xs:inline-block">Next</span>
                 <svg
-                  className="w-4 h-4"
+                  className="w-3 h-3 sm:w-4 sm:h-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -363,48 +355,66 @@ const getPaymentStatusBadge = (status: string) => {
               </Button>
             </div>
           )}
-          {/* Order Details Modal */}
+
           <Dialog open={detailsDialogOpen} onOpenChange={setDetailsDialogOpen}>
-            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle className="font-serif-elegant text-xl text-primary">
+            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto p-6 rounded-2xl bg-[hsl(var(--card))] text-[hsl(var(--foreground))] shadow-luxury">
+              <DialogHeader className="relative">
+                <DialogTitle className="font-serif-elegant text-xl text-[hsl(var(--primary))]">
                   Order Details - #{selectedOrder?.order_number}
                 </DialogTitle>
+
+                {/* Close button */}
+                {/* <button
+                  onClick={() => setDetailsDialogOpen(false)}
+                  aria-label="Close"
+                  className="absolute right-4 top-4 rounded-md p-1 hover:bg-[hsl(var(--input))]/40 transition"
+                >
+                  <XCircle className="h-5 w-5 text-[hsl(var(--muted-foreground))]" />
+                </button> */}
               </DialogHeader>
 
               {selectedOrder && (
-                <div className="space-y-6">
+                <div className="space-y-6 mt-4">
                   {/* Order Info */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <h4 className="font-medium mb-2">Order Information</h4>
+                      <h4 className="font-medium mb-2 text-[hsl(var(--foreground))]">
+                        Order Information
+                      </h4>
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">orders</span>
-                          <span className="font-medium">
+                          <span className="text-[hsl(var(--muted-foreground))]">
+                            Order #
+                          </span>
+                          <span className="font-medium text-[hsl(var(--foreground))]">
                             {selectedOrder.order_number}
                           </span>
                         </div>
+
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Status:</span>
-                          {getStatusBadge(selectedOrder.status)}
+                          <span className="text-[hsl(var(--muted-foreground))]">
+                            Status:
+                          </span>
+                          <div>{getStatusBadge(selectedOrder.status)}</div>
                         </div>
+
                         {selectedOrder.delivery_tracking_id && (
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">
+                            <span className="text-[hsl(var(--muted-foreground))]">
                               Tracking ID:
                             </span>
-                            <span className="font-mono text-xs">
+                            <span className="font-mono text-xs text-[hsl(var(--foreground))]">
                               {selectedOrder.delivery_tracking_id}
                             </span>
                           </div>
                         )}
+
                         {selectedOrder.delivery_partner && (
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">
+                            <span className="text-[hsl(var(--muted-foreground))]">
                               Delivery Partner:
                             </span>
-                            <span className="font-medium">
+                            <span className="font-medium text-[hsl(var(--foreground))]">
                               {selectedOrder.delivery_partner}
                             </span>
                           </div>
@@ -414,61 +424,67 @@ const getPaymentStatusBadge = (status: string) => {
 
                     {/* Shipping Address */}
                     <div>
-                      <h4 className="font-medium mb-2">Shipping Address</h4>
-                      <div className="bg-muted/30 p-3 rounded-lg text-sm">
-                        <p className="font-medium">
+                      <h4 className="font-medium mb-2 text-[hsl(var(--foreground))]">
+                        Shipping Address
+                      </h4>
+                      <div className="bg-[hsl(var(--muted))]/30 p-3 rounded-lg text-sm">
+                        <p className="font-medium text-[hsl(var(--foreground))]">
                           {selectedOrder.shipping_address.full_name}
                         </p>
-                        <p className="text-muted-foreground">
+                        <p className="text-[hsl(var(--muted-foreground))]">
                           {selectedOrder.shipping_address.phone}
                         </p>
-                        <p className="mt-1">
+                        <p className="mt-1 text-[hsl(var(--foreground))]">
                           {selectedOrder.shipping_address.street}
                         </p>
                         {selectedOrder.shipping_address.landmark && (
-                          <p className="text-muted-foreground">
+                          <p className="text-[hsl(var(--muted-foreground))]">
                             {selectedOrder.shipping_address.landmark}
                           </p>
                         )}
-                        <p>
+                        <p className="text-[hsl(var(--foreground))]">
                           {selectedOrder.shipping_address.city},{" "}
                           {selectedOrder.shipping_address.state}{" "}
                           {selectedOrder.shipping_address.postcode}
                         </p>
-                        <p>{selectedOrder.shipping_address.country}</p>
+                        <p className="text-[hsl(var(--foreground))]">
+                          {selectedOrder.shipping_address.country}
+                        </p>
                       </div>
                     </div>
                   </div>
 
                   {/* Order Items */}
                   <div>
-                    <h4 className="font-medium mb-2">Order Items</h4>
+                    <h4 className="font-medium mb-2 text-[hsl(var(--foreground))]">
+                      Order Items
+                    </h4>
                     <div className="space-y-3">
                       {selectedOrder.items.map((item, index) => (
                         <div
                           key={item.id || index}
-                          className="flex items-center gap-3 p-3 border rounded-lg"
+                          className="flex items-center gap-3 p-3 border rounded-lg border-[hsl(var(--border))] bg-[hsl(var(--card))]/50"
                         >
                           <div className="flex-1">
                             <p
                               onClick={() => {
                                 navigate(`/product/${item.product_id}`);
                               }}
-                              className="font-medium hover:underline cursor-pointer text-blue-500"
+                              className="font-medium hover:underline cursor-pointer text-[hsl(var(--primary))]"
                             >
                               {item.name}
                             </p>
 
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-sm text-[hsl(var(--muted-foreground))]">
                               Quantity: {item.qty}
                             </p>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-sm text-[hsl(var(--muted-foreground))]">
                               Unit Price: ₹
                               {item.unit_price?.toLocaleString("en-IN")}
                             </p>
                           </div>
                           <div className="text-right">
-                            <p className="font-semibold">
+                            <p className="font-semibold text-[hsl(var(--foreground))]">
                               ₹{item.total_price?.toLocaleString("en-IN")}
                             </p>
                           </div>
@@ -476,29 +492,33 @@ const getPaymentStatusBadge = (status: string) => {
                       ))}
                     </div>
                   </div>
+
+                  {/* Delivery Tracking Info */}
                   {(selectedOrder.delivery_tracking_id ||
                     selectedOrder.delivery_partner) && (
                     <div>
-                      <h4 className="font-medium mb-2">
+                      <h4 className="font-medium mb-2 text-[hsl(var(--foreground))]">
                         Delivery Tracking Information
                       </h4>
-                      <div className="bg-muted/50 p-3 rounded-lg text-sm space-y-2">
+                      <div className="bg-[hsl(var(--muted))]/10 p-3 rounded-lg text-sm space-y-2">
                         {selectedOrder.delivery_tracking_id && (
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">
+                            <span className="text-[hsl(var(--muted-foreground))]">
                               Tracking ID:
                             </span>
-                            <span className="font-mono">
+                            <span className="font-mono text-[hsl(var(--foreground))]">
                               {selectedOrder.delivery_tracking_id}
                             </span>
                           </div>
                         )}
                         {selectedOrder.delivery_partner && (
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">
+                            <span className="text-[hsl(var(--muted-foreground))]">
                               Delivery Partner:
                             </span>
-                            <span>{selectedOrder.delivery_partner}</span>
+                            <span className="text-[hsl(var(--foreground))]">
+                              {selectedOrder.delivery_partner}
+                            </span>
                           </div>
                         )}
                       </div>
@@ -507,39 +527,56 @@ const getPaymentStatusBadge = (status: string) => {
 
                   {/* Payment Summary */}
                   <div>
-                    <h4 className="font-medium mb-2">Payment Summary</h4>
-                    <div className="bg-muted/50 p-4 rounded-lg space-y-2">
+                    <h4 className="font-medium mb-2 text-[hsl(var(--foreground))]">
+                      Payment Summary
+                    </h4>
+                    <div className="bg-[hsl(var(--muted))]/10 p-4 rounded-lg space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span>Subtotal:</span>
-                        <span>
+                        <span className="text-[hsl(var(--muted-foreground))]">
+                          Subtotal:
+                        </span>
+                        <span className="text-[hsl(var(--foreground))]">
                           ₹{selectedOrder.subtotal.toLocaleString("en-IN")}
                         </span>
                       </div>
+
                       <div className="flex justify-between text-sm">
-                        <span>Tax:</span>
-                        <span>
+                        <span className="text-[hsl(var(--muted-foreground))]">
+                          Tax:
+                        </span>
+                        <span className="text-[hsl(var(--foreground))]">
                           ₹{selectedOrder.tax.toLocaleString("en-IN")}
                         </span>
                       </div>
+
                       <div className="flex justify-between text-sm">
-                        <span>Shipping Charge:</span>
-                        <span>
+                        <span className="text-[hsl(var(--muted-foreground))]">
+                          Shipping Charge:
+                        </span>
+                        <span className="text-[hsl(var(--foreground))]">
                           ₹
                           {selectedOrder.shipping_charge.toLocaleString(
                             "en-IN"
                           )}
                         </span>
                       </div>
-                      <div className="flex justify-between text-sm text-green-600">
-                        <span>Discount:</span>
-                        <span>
+
+                      <div className="flex justify-between text-sm">
+                        <span className="text-[hsl(var(--muted-foreground))]">
+                          Discount:
+                        </span>
+                        <span className="font-semibold text-[hsl(var(--accent))]">
                           -₹{selectedOrder.discount.toLocaleString("en-IN")}
                         </span>
                       </div>
+
                       <Separator />
+
                       <div className="flex justify-between font-semibold">
-                        <span>Total:</span>
-                        <span className="text-accent">
+                        <span className="text-[hsl(var(--foreground))]">
+                          Total:
+                        </span>
+                        <span className="text-[hsl(var(--accent))]">
                           ₹{selectedOrder.total.toLocaleString("en-IN")}
                         </span>
                       </div>
@@ -549,42 +586,49 @@ const getPaymentStatusBadge = (status: string) => {
                   {/* Transaction Details */}
                   {selectedOrder.transaction && (
                     <div>
-                      <h4 className="font-medium mb-2">Payment Details</h4>
-                      <div className="bg-muted/50 p-3 rounded-lg text-sm space-y-2">
+                      <h4 className="font-medium mb-2 text-[hsl(var(--foreground))]">
+                        Payment Details
+                      </h4>
+                      <div className="bg-[hsl(var(--muted))]/10 p-3 rounded-lg text-sm space-y-2">
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">
+                          <span className="text-[hsl(var(--muted-foreground))]">
                             Transaction ID:
                           </span>
-                          <span className="font-mono">
+                          <span className="font-mono text-[hsl(var(--foreground))]">
                             {selectedOrder.transaction.transaction_id}
                           </span>
                         </div>
+
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">
+                          <span className="text-[hsl(var(--muted-foreground))]">
                             Payment Method:
                           </span>
-                          <span>
+                          <span className="text-[hsl(var(--foreground))]">
                             {selectedOrder.transaction.payment_method}
                           </span>
                         </div>
+
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">
+                          <span className="text-[hsl(var(--muted-foreground))]">
                             Amount Paid:
                           </span>
-                          <span>
+                          <span className="text-[hsl(var(--foreground))]">
                             ₹
                             {selectedOrder.transaction.amount.toLocaleString(
                               "en-IN"
                             )}
                           </span>
                         </div>
+
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">
+                          <span className="text-[hsl(var(--muted-foreground))]">
                             Payment Status:
                           </span>
-                          {getPaymentStatusBadge(
-                            selectedOrder.transaction.status
-                          )}
+                          <div>
+                            {getPaymentStatusBadge(
+                              selectedOrder.transaction.status
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>

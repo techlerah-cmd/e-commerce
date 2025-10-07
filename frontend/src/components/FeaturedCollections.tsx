@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const collections = [
   {
@@ -36,7 +37,7 @@ const collections = [
 const FeaturedCollections = () => {
   const [headerRef, isHeaderVisible] = useScrollAnimation(0.2);
   const [bannerVisible, setBannerVisible] = useState<boolean[]>([]);
-
+  const navigate = useNavigate()
   useEffect(() => {
     const observers = collections.map((_, index) => {
       const observer = new IntersectionObserver(
@@ -133,7 +134,7 @@ const FeaturedCollections = () => {
                       {collection.description}
                     </p>
                     <div className="flex gap-3">
-                      <Button className="btn-luxury transition-all duration-300 hover:scale-105">Explore</Button>
+                      <Button className="btn-luxury transition-all duration-300 hover:scale-105" onClick={()=>navigate('/collections')}>Explore</Button>
                       <Button variant="outline" className="transition-all duration-300 hover:scale-105 hover:bg-primary hover:text-primary-foreground">Learn more</Button>
                     </div>
                   </div>

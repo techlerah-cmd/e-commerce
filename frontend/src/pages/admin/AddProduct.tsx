@@ -44,6 +44,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import toast from "react-hot-toast";
 import { Loading } from "@/components/ui/Loading";
 import { IPagination, IProduct } from "@/types/apiTypes";
+import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -58,7 +59,7 @@ const AddProduct = () => {
     has_next: false,
     has_prev: false,
     page: 0,
-    size: 5,
+    size: 20,
     total: 0,
   }); // Assuming pagination data has a 'total' property
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
@@ -73,10 +74,10 @@ const AddProduct = () => {
     stock: 0,
     active: true,
     featured: false,
-
   });
   const { fetchType, fetching, isFetched, makeApiCall } = useAPICall();
   const [deletedImages, setDeletedImages] = useState<string[]>([]);
+  const navigate = useNavigate();
   useEffect(() => {
     fetchProducts();
   }, [currentPage, query]);
@@ -456,7 +457,14 @@ const AddProduct = () => {
                               className="w-12 h-12 object-cover rounded"
                             />
                             <div>
-                              <div className="font-medium">{product.title}</div>
+                              <div
+                                onClick={() =>
+                                  navigate(`/product/${product.id}`)
+                                }
+                                className="font-medium hover:cursor-pointer hover:underline"
+                              >
+                                {product.title}
+                              </div>
                               <div className="text-sm text-muted-foreground">
                                 {product.code && (
                                   <span className="text-primary font-medium">
@@ -661,15 +669,16 @@ const AddProduct = () => {
 
         {/* Pagination */}
         {!fetching && products.length > 0 && (
-          <div className="flex justify-center items-center gap-4 mt-6">
+          <div className="flex flex-row justify-center items-center gap-3 sm:gap-4 mt-6">
             <Button
               variant="outline"
               onClick={goToPreviousPage}
               disabled={!pagination.has_prev}
-              className="flex items-center gap-2"
+              className="flex items-center justify-center gap-2 w-auto sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-4 sm:py-2"
+              aria-label="Previous page"
             >
               <svg
-                className="w-4 h-4"
+                className="w-3 h-3 sm:w-4 sm:h-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -681,10 +690,13 @@ const AddProduct = () => {
                   d="M15 19l-7-7 7-7"
                 />
               </svg>
-              Previous
+              <span className="hidden xs:inline-block">Previous</span>
             </Button>
 
-            <span className="text-sm text-muted-foreground">
+            <span
+              style={{ color: "hsl(var(--muted-foreground))" }}
+              className="text-xs sm:text-sm mt-2 sm:mt-0"
+            >
               Page {pagination.page} of{" "}
               {Math.ceil(pagination.total / pagination.size)}
             </span>
@@ -693,11 +705,12 @@ const AddProduct = () => {
               variant="outline"
               onClick={goToNextPage}
               disabled={!pagination.has_next}
-              className="flex items-center gap-2"
+              className="flex items-center justify-center gap-2 w-auto sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-4 sm:py-2"
+              aria-label="Next page"
             >
-              Next
+              <span className="hidden xs:inline-block">Next</span>
               <svg
-                className="w-4 h-4"
+                className="w-3 h-3 sm:w-4 sm:h-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -779,7 +792,6 @@ const ProductForm: React.FC<ProductFormProps> = ({
   removeImage,
   loading,
 }) => {
-  
   return (
     <form className="space-y-4" onSubmit={onSubmit}>
       <div>

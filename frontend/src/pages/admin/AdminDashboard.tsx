@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getProductsWithStock, getOrders, getCoupons } from "@/lib/adminStore";
 import {
   AreaChart,
   Area,
@@ -24,7 +24,14 @@ import { useAPICall } from "@/hooks/useApiCall";
 import { useAuth } from "@/contexts/AuthContext";
 import { API_ENDPOINT } from "@/config/backend";
 import { Loading } from "@/components/ui/Loading";
-import { LoadingScreen } from "@/components/ui/LoadingScreen";
+
+/**
+ * AdminDashboard — themed to the deep purple + warm gold design system.
+ *
+ * Notes:
+ * - Uses CSS variables from your theme: --background, --card, --border, --primary, --accent, --foreground, --muted-foreground, --gradient-accent, --shadow-luxury
+ * - Recharts SVG props accept CSS color strings like "hsl(var(--primary))", so we use those directly.
+ */
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -35,7 +42,7 @@ const AdminDashboard = () => {
   });
   const { fetchType, fetching, isFetched, makeApiCall } = useAPICall();
   const { authToken } = useAuth();
-  const [salesData, setSalesData] = useState();
+  const [salesData, setSalesData] = useState<any[] | undefined>(undefined);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-IN", {
@@ -44,9 +51,12 @@ const AdminDashboard = () => {
       maximumFractionDigits: 0,
     }).format(amount);
   };
+
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const fetchData = async () => {
     try {
       const response = await makeApiCall(
@@ -64,140 +74,169 @@ const AdminDashboard = () => {
           total_sales: response.data.total_sales,
           total_users: response.data.total_users,
         });
-        setSalesData(response.data.sales_overview);
+        setSalesData(response.data.sales_overview || []);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
   const StatCard = ({
     title,
     value,
     icon: Icon,
-    color,
+    bgToken = "--primary",
     format = "number",
   }: {
     title: string;
     value: number;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     icon: any;
-    color: string;
+    bgToken?: string; // CSS variable token name (e.g. --accent or --primary)
     format?: "number" | "currency";
-  }) => (
-    <Card className="hover:shadow-md transition-shadow">
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">{title}</p>
-            <p className="text-2xl font-bold text-primary">
-              {format === "currency" ? formatCurrency(value) : value}
-            </p>
+  }) => {
+    // Use CSS variables for background; fallback to primary if missing
+    const circleStyle = {
+      backgroundImage: `linear-gradient(135deg, hsl(var(${bgToken})) , hsla(0 0% 100% / 0.02))`,
+      boxShadow: `0 8px 24px -12px hsla(276 62% 26% / 0.18)`,
+    } as React.CSSProperties;
+
+    return (
+      <Card className="bg-[hsl(var(--card))] border-[hsl(var(--border))] shadow-card hover:shadow-luxury transition-shadow">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-[hsl(var(--muted-foreground))]">
+                {title}
+              </p>
+              <p className="text-2xl font-bold text-[hsl(var(--primary))]">
+                {format === "currency" ? formatCurrency(value) : value}
+              </p>
+            </div>
+
+            <div
+              className="p-3 rounded-full w-12 h-12 flex items-center justify-center"
+              style={circleStyle}
+            >
+              <Icon className="h-6 w-6 text-[hsl(var(--foreground))]" />
+            </div>
           </div>
-          <div className={`p-3 rounded-full ${color}`}>
-            <Icon className="h-6 w-6 text-white" />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-  if (fetching) {
-    return <Loading />;
-  }
+        </CardContent>
+      </Card>
+    );
+  };
+
   return (
     <AdminLayout>
-      <div className="space-y-8">
-        <div className="flex items-center justify-between">
-          <h1 className="font-serif-elegant text-3xl text-primary">
-            Admin Dashboard
-          </h1>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <TrendingUp className="h-4 w-4" />
-            <span>Overview</span>
-          </div>
-        </div>
+      {fetching && !isFetched ? (
+        <Loading />
+      ) : (
+        <div className="space-y-8">
+          <div className="flex items-center justify-between">
+            <h1 className="font-serif-elegant text-3xl text-[hsl(var(--primary))]">
+              Admin Dashboard
+            </h1>
 
-        {/* Statistics Cards */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard
-            title="Total Products"
-            value={stats.total_products}
-            icon={Package}
-            color="bg-blue-500"
-          />
-          <StatCard
-            title="Total Orders"
-            value={stats.total_orders}
-            icon={ShoppingCart}
-            color="bg-green-500"
-          />
-          <StatCard
-            title="Total Sales"
-            value={stats.total_sales}
-            icon={IndianRupee}
-            color="bg-purple-500"
-            format="currency"
-          />
-          <StatCard
-            title="Total Users"
-            value={stats.total_users}
-            icon={Users}
-            color="bg-orange-500"
-          />
-        </div>
-
-        {/* Sales Chart */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-serif-elegant text-xl text-primary">
-              Sales Overview
-            </CardTitle>
-            <p className="text-sm text-muted-foreground">
-              Monthly sales performance for the current year
-            </p>
-          </CardHeader>
-          <CardContent>
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={salesData}>
-                  <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
-                  <XAxis
-                    dataKey="month"
-                    axisLine={false}
-                    tickLine={false}
-                    className="text-xs"
-                  />
-                  <YAxis
-                    axisLine={false}
-                    tickLine={false}
-                    className="text-xs"
-                    tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
-                  />
-                  <Tooltip
-                    formatter={(value: number) => [
-                      formatCurrency(value),
-                      "Sales",
-                    ]}
-                    labelStyle={{ color: "#374151" }}
-                    contentStyle={{
-                      backgroundColor: "white",
-                      border: "1px solid #e5e7eb",
-                      borderRadius: "8px",
-                    }}
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="sales"
-                    stroke="#8b5cf6"
-                    fill="#8b5cf6"
-                    fillOpacity={0.1}
-                    strokeWidth={2}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
+            <div className="flex items-center gap-2 text-sm text-[hsl(var(--muted-foreground))]">
+              <TrendingUp className="h-4 w-4 text-[hsl(var(--primary))]" />
+              <span>Overview</span>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+
+          {/* Statistics Cards */}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <StatCard
+              title="Total Products"
+              value={stats.total_products}
+              icon={Package}
+              bgToken="--primary"
+            />
+            <StatCard
+              title="Total Orders"
+              value={stats.total_orders}
+              icon={ShoppingCart}
+              bgToken="--accent"
+            />
+            <StatCard
+              title="Total Sales"
+              value={stats.total_sales}
+              icon={IndianRupee}
+              bgToken="--primary-glow"
+              format="currency"
+            />
+            <StatCard
+              title="Total Users"
+              value={stats.total_users}
+              icon={Users}
+              bgToken="--accent-glow"
+            />
+          </div>
+
+          {/* Sales Chart */}
+          <Card className="bg-[hsl(var(--card))] border-[hsl(var(--border))] shadow-card">
+            <CardHeader>
+              <CardTitle className="font-serif-elegant text-xl text-[hsl(var(--primary))]">
+                Sales Overview
+              </CardTitle>
+              <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                Monthly sales performance for the current year
+              </p>
+            </CardHeader>
+
+            <CardContent>
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={salesData || []}>
+                    <CartesianGrid
+                      stroke="hsl(var(--border))"
+                      strokeOpacity={0.12}
+                      strokeDasharray="3 3"
+                    />
+                    <XAxis
+                      dataKey="month"
+                      axisLine={false}
+                      tickLine={false}
+                      stroke="hsl(var(--muted-foreground))"
+                      tick={{ fontSize: 12 }}
+                    />
+                    <YAxis
+                      axisLine={false}
+                      tickLine={false}
+                      stroke="hsl(var(--muted-foreground))"
+                      tick={{ fontSize: 12 }}
+                      tickFormatter={(value) =>
+                        `₹${(value / 1000).toFixed(0)}k`
+                      }
+                    />
+                    <Tooltip
+                      formatter={(value: number) => [
+                        formatCurrency(value),
+                        "Sales",
+                      ]}
+                      labelStyle={{ color: "hsl(var(--muted-foreground))" }}
+                      contentStyle={{
+                        backgroundColor: "hsl(var(--card))",
+                        color: "hsl(var(--foreground))",
+                        border: `1px solid hsl(var(--border))`,
+                        borderRadius: 8,
+                        boxShadow: `0 8px 30px -18px hsla(276 62% 26% / 0.32)`,
+                      }}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="sales"
+                      stroke="hsl(var(--primary))"
+                      fill="hsl(var(--primary))"
+                      fillOpacity={0.08}
+                      strokeWidth={2}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </AdminLayout>
   );
 };

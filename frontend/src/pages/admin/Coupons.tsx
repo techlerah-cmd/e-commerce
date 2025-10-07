@@ -79,7 +79,7 @@ const Coupons = () => {
     has_next: false,
     has_prev: false,
     page: 0,
-    size: 5,
+    size: 20,
     total: 0,
   }); // Assuming pa
 
@@ -520,15 +520,16 @@ const Coupons = () => {
 
         {/* Pagination */}
         {!fetching && coupons.length > 0 && (
-          <div className="flex justify-center items-center gap-4 mt-6">
+          <div className="flex flex-row justify-center items-center gap-3 sm:gap-4 mt-6">
             <Button
               variant="outline"
               onClick={goToPreviousPage}
               disabled={!pagination.has_prev}
-              className="flex items-center gap-2"
+              className="flex items-center justify-center gap-2 w-auto sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-4 sm:py-2"
+              aria-label="Previous page"
             >
               <svg
-                className="w-4 h-4"
+                className="w-3 h-3 sm:w-4 sm:h-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -540,11 +541,14 @@ const Coupons = () => {
                   d="M15 19l-7-7 7-7"
                 />
               </svg>
-              Previous
+              <span className="hidden xs:inline-block">Previous</span>
             </Button>
 
-            <span className="text-sm text-muted-foreground">
-              Page {currentPage} of{" "}
+            <span
+              style={{ color: "hsl(var(--muted-foreground))" }}
+              className="text-xs sm:text-sm mt-2 sm:mt-0"
+            >
+              Page {pagination.page} of{" "}
               {Math.ceil(pagination.total / pagination.size)}
             </span>
 
@@ -552,11 +556,12 @@ const Coupons = () => {
               variant="outline"
               onClick={goToNextPage}
               disabled={!pagination.has_next}
-              className="flex items-center gap-2"
+              className="flex items-center justify-center gap-2 w-auto sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-4 sm:py-2"
+              aria-label="Next page"
             >
-              Next
+              <span className="hidden xs:inline-block">Next</span>
               <svg
-                className="w-4 h-4"
+                className="w-3 h-3 sm:w-4 sm:h-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

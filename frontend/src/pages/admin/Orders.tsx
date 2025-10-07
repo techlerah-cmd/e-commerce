@@ -42,6 +42,7 @@ import { ICustomerOrder, IPagination } from "@/types/apiTypes";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { set } from "date-fns";
+import { Loading } from "@/components/ui/Loading";
 
 const Orders = () => {
   const [orders, setOrders] = useState<ICustomerOrder[]>([]);
@@ -58,15 +59,14 @@ const Orders = () => {
   const [selectedFilter, setSelectedFilter] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 5;
   const [query, setQuery] = useState<string>("");
   const [pagination, setPagination] = useState<IPagination>({
     has_next: false,
     has_prev: false,
     page: 0,
-    size: 5,
+    size: 20,
     total: 0,
-  }); // Assum
+  }); 
   const navigate = useNavigate();
   useEffect(() => {
     fetchProducts();
@@ -185,7 +185,12 @@ const Orders = () => {
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
           order.id === selectedOrder!.id
-            ? { ...order, status: newStatus,delivery_partner: deliveryPartner,delivery_tracking_id: trackingId }
+            ? {
+                ...order,
+                status: newStatus,
+                delivery_partner: deliveryPartner,
+                delivery_tracking_id: trackingId,
+              }
             : order
         )
       );
@@ -233,205 +238,217 @@ const Orders = () => {
             </Button>
           </div>
         </div>
-
-        {orders.length === 0 ? (
-          <Card>
-            <CardContent className="py-12 text-center text-muted-foreground">
-              No orders yet.
-            </CardContent>
-          </Card>
+        {fetching && fetchType === "getProducts" ? (
+          <Loading />
         ) : (
-          <div className="space-y-6">
-            {/* Orders Grid */}
-            <div className="grid gap-6">
-              {orders.map((order) => (
-                <Card
-                  key={order.id}
-                  className="hover:shadow-md transition-shadow"
-                >
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-1">
-                        <CardTitle className="text-primary">
-                          Order #
-                          {order.order_number ||
-                            order.order_number ||
-                            order.id.slice(0, 8).toUpperCase()}
-                        </CardTitle>
-                        <p className="text-sm text-muted-foreground">
-                          {order.transaction?.created_at
-                            ? new Date(
-                                order.transaction.created_at
-                              ).toLocaleString()
-                            : order.created_at
-                            ? new Date(order.created_at).toLocaleString()
-                            : "N/A"}
-                        </p>
-                      </div>
-                      {getStatusBadge(order.status)}
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {/* Order Summary */}
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                        <div>
-                          <p className="text-muted-foreground">Items</p>
-                          <p className="font-medium">
-                            {order.items?.length || 0} item(s)
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-muted-foreground">Customer</p>
-                          <p className="font-medium">
-                            {order.shipping_address?.full_name}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-muted-foreground">Total Amount</p>
-                          <p className="font-semibold text-accent">
-                            ₹{order.total.toLocaleString("en-IN")}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-muted-foreground">Payment</p>
-                          <p className="font-medium capitalize">
-                            {order.transaction?.payment_method ||
-                              order.transaction?.payment_method ||
-                              "N/A"}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Delivery Info (if shipped) */}
-                      {order.status === "shipped" &&
-                        (order.delivery_partner ||
-                          order.delivery_partner ||
-                          order.delivery_tracking_id ||
-                          order.delivery_tracking_id) && (
-                          <div className="bg-muted/50 p-3 rounded-lg">
-                            <h4 className="font-medium text-sm mb-2">
-                              Delivery Information
-                            </h4>
-                            <div className="grid grid-cols-2 gap-4 text-sm">
-                              {(order.delivery_partner ||
-                                order.delivery_partner) && (
-                                <div>
-                                  <p className="text-muted-foreground">
-                                    Delivery Partner
-                                  </p>
-                                  <p className="font-medium">
-                                    {order.delivery_partner ||
-                                      order.delivery_partner}
-                                  </p>
-                                </div>
-                              )}
-                              {(order.delivery_tracking_id ||
-                                order.delivery_tracking_id) && (
-                                <div>
-                                  <p className="text-muted-foreground">
-                                    Tracking ID
-                                  </p>
-                                  <p className="font-medium font-mono">
-                                    {order.delivery_tracking_id ||
-                                      order.delivery_tracking_id}
-                                  </p>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        )}
-
-                      {/* Action Buttons */}
-                      <div className="flex gap-2 pt-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => openDetailsDialog(order)}
-                          className="flex items-center gap-2"
-                        >
-                          <Eye className="h-4 w-4" />
-                          View Details
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => openStatusDialog(order)}
-                          className="flex items-center gap-2"
-                        >
-                          <Edit className="h-4 w-4" />
-                          Update Status
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            {!fetching && (
-              <div className="flex justify-center items-center gap-4 mt-6">
-                <Button
-                  variant="outline"
-                  onClick={goToPreviousPage}
-                  disabled={!pagination.has_prev}
-                  className="flex items-center gap-2"
-                >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 19l-7-7 7-7"
-                    />
-                  </svg>
-                  Previous
-                </Button>
-
-                <span className="text-sm text-muted-foreground">
-                  Page {pagination.page} of{" "}
-                  {Math.ceil(pagination.total / pagination.size)}
-                </span>
-
-                <Button
-                  variant="outline"
-                  onClick={goToNextPage}
-                  disabled={!pagination.has_next}
-                  className="flex items-center gap-2"
-                >
-                  Next
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </Button>
-              </div>
-            )}
-
-            {/* No results message */}
-            {orders.length === 0 && searchTerm && (
+          <>
+            {orders.length === 0 ? (
               <Card>
                 <CardContent className="py-12 text-center text-muted-foreground">
-                  No orders found matching "{searchTerm}". Try a different
-                  search term.
+                  No orders yet.
                 </CardContent>
               </Card>
+            ) : (
+              <div className="space-y-6">
+                {/* Orders Grid */}
+                <div className="grid gap-6">
+                  {orders.map((order) => (
+                    <Card
+                      key={order.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-1">
+                            <CardTitle className="text-primary">
+                              Order #
+                              {order.order_number ||
+                                order.order_number ||
+                                order.id.slice(0, 8).toUpperCase()}
+                            </CardTitle>
+                            <p className="text-sm text-muted-foreground">
+                              {order.transaction?.created_at
+                                ? new Date(
+                                    order.transaction.created_at
+                                  ).toLocaleString()
+                                : order.created_at
+                                ? new Date(order.created_at).toLocaleString()
+                                : "N/A"}
+                            </p>
+                          </div>
+                          {getStatusBadge(order.status)}
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          {/* Order Summary */}
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                            <div>
+                              <p className="text-muted-foreground">Items</p>
+                              <p className="font-medium">
+                                {order.items?.length || 0} item(s)
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-muted-foreground">Customer</p>
+                              <p className="font-medium">
+                                {order.shipping_address?.full_name}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-muted-foreground">
+                                Total Amount
+                              </p>
+                              <p className="font-semibold text-accent">
+                                ₹{order.total.toLocaleString("en-IN")}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-muted-foreground">Payment</p>
+                              <p className="font-medium capitalize">
+                                {order.transaction?.payment_method ||
+                                  order.transaction?.payment_method ||
+                                  "N/A"}
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Delivery Info (if shipped) */}
+                          {order.status === "shipped" &&
+                            (order.delivery_partner ||
+                              order.delivery_partner ||
+                              order.delivery_tracking_id ||
+                              order.delivery_tracking_id) && (
+                              <div className="bg-muted/10 p-3 rounded-lg">
+                                <h4 className="font-medium text-sm mb-2">
+                                  Delivery Information
+                                </h4>
+                                <div className="grid grid-cols-2 gap-4 text-sm">
+                                  {(order.delivery_partner ||
+                                    order.delivery_partner) && (
+                                    <div>
+                                      <p className="text-muted-foreground">
+                                        Delivery Partner
+                                      </p>
+                                      <p className="font-medium">
+                                        {order.delivery_partner ||
+                                          order.delivery_partner}
+                                      </p>
+                                    </div>
+                                  )}
+                                  {(order.delivery_tracking_id ||
+                                    order.delivery_tracking_id) && (
+                                    <div>
+                                      <p className="text-muted-foreground">
+                                        Tracking ID
+                                      </p>
+                                      <p className="font-medium font-mono">
+                                        {order.delivery_tracking_id ||
+                                          order.delivery_tracking_id}
+                                      </p>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+
+                          {/* Action Buttons */}
+                          <div className="flex gap-2 pt-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => openDetailsDialog(order)}
+                              className="flex items-center gap-2"
+                            >
+                              <Eye className="h-4 w-4" />
+                              View Details
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => openStatusDialog(order)}
+                              className="flex items-center gap-2"
+                            >
+                              <Edit className="h-4 w-4" />
+                              Update Status
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+
+                {!fetching && (
+                  <div className="flex flex-row justify-center items-center gap-3 sm:gap-4 mt-6">
+                    <Button
+                      variant="outline"
+                      onClick={goToPreviousPage}
+                      disabled={!pagination.has_prev}
+                      className="flex items-center justify-center gap-2 w-auto sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-4 sm:py-2"
+                      aria-label="Previous page"
+                    >
+                      <svg
+                        className="w-3 h-3 sm:w-4 sm:h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 19l-7-7 7-7"
+                        />
+                      </svg>
+                      <span className="hidden xs:inline-block">Previous</span>
+                    </Button>
+
+                    <span
+                      style={{ color: "hsl(var(--muted-foreground))" }}
+                      className="text-xs sm:text-sm mt-2 sm:mt-0"
+                    >
+                      Page {pagination.page} of{" "}
+                      {Math.ceil(pagination.total / pagination.size)}
+                    </span>
+
+                    <Button
+                      variant="outline"
+                      onClick={goToNextPage}
+                      disabled={!pagination.has_next}
+                      className="flex items-center justify-center gap-2 w-auto sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-4 sm:py-2"
+                      aria-label="Next page"
+                    >
+                      <span className="hidden xs:inline-block">Next</span>
+                      <svg
+                        className="w-3 h-3 sm:w-4 sm:h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </Button>
+                  </div>
+                )}
+
+                {/* No results message */}
+                {orders.length === 0 && searchTerm && (
+                  <Card>
+                    <CardContent className="py-12 text-center text-muted-foreground">
+                      No orders found matching "{searchTerm}". Try a different
+                      search term.
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
             )}
-          </div>
+          </>
         )}
 
         {/* Order Details Modal */}
@@ -521,7 +538,7 @@ const Orders = () => {
                 {selectedOrder.shipping_address && (
                   <div>
                     <h4 className="font-medium mb-2">Shipping Address</h4>
-                    <div className="bg-muted/50 p-3 rounded-lg text-sm">
+                    <div className="bg-muted/10 p-3 rounded-lg text-sm">
                       <p className="font-medium">
                         {selectedOrder.shipping_address?.full_name}
                       </p>
@@ -590,7 +607,7 @@ const Orders = () => {
                 {/* Payment Summary */}
                 <div>
                   <h4 className="font-medium mb-2">Payment Summary</h4>
-                  <div className="bg-muted/50 p-4 rounded-lg space-y-2">
+                  <div className="bg-muted/10 p-4 rounded-lg space-y-2">
                     <div className="flex justify-between text-sm">
                       <span>Subtotal:</span>
                       <span>
@@ -633,7 +650,7 @@ const Orders = () => {
                     <h4 className="font-medium mb-2">
                       Delivery Tracking Information
                     </h4>
-                    <div className="bg-muted/50 p-3 rounded-lg text-sm space-y-2">
+                    <div className="bg-muted/10 p-3 rounded-lg text-sm space-y-2">
                       {selectedOrder.delivery_tracking_id && (
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">
@@ -660,7 +677,7 @@ const Orders = () => {
                 {selectedOrder.transaction && (
                   <div>
                     <h4 className="font-medium mb-2">Transaction Details</h4>
-                    <div className="bg-muted/50 p-3 rounded-lg text-sm space-y-2">
+                    <div className="bg-muted/10 p-3 rounded-lg text-sm space-y-2">
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">
                           Transaction ID:

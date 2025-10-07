@@ -160,7 +160,7 @@ const ProductDetail = () => {
         )}
         {!(fetching && fetchType == "getProduct") && isFetched && product && (
           <>
-            <section className="border-b bg-white/70 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+            <section className="border-b bg-white/70 backdrop-blur supports-[backdrop-filter]:bg-white/10">
               <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                 <Breadcrumb>
                   <BreadcrumbList>
@@ -321,7 +321,7 @@ const ProductDetail = () => {
                     {/* Quantity Selector - Only show if in stock */}
                     {product.stock > 0 && (
                       <div className="flex items-center gap-4">
-                        <span className="font-medium text-primary">
+                        <span className="font-medium text-muted-foreground">
                           Quantity:
                         </span>
                         <div className="flex items-center border border-border rounded-lg">
@@ -406,7 +406,7 @@ const ProductDetail = () => {
 
                     {/* Features */}
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                      <div className="flex items-center gap-3 rounded-lg bg-white/50 p-4">
+                      <div className="flex items-center gap-3 rounded-lg bg-white/10 p-4">
                         <Truck className="h-5 w-5 text-accent" />
                         <div>
                           <p className="font-medium text-sm">Free Shipping</p>
@@ -415,7 +415,7 @@ const ProductDetail = () => {
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 rounded-lg bg-white/50 p-4">
+                      <div className="flex items-center gap-3 rounded-lg bg-white/10 p-4">
                         <RotateCcw className="h-5 w-5 text-accent" />
                         <div>
                           <p className="font-medium text-sm">Easy Returns</p>
@@ -424,7 +424,7 @@ const ProductDetail = () => {
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 rounded-lg bg-white/50 p-4">
+                      <div className="flex items-center gap-3 rounded-lg bg-white/10 p-4">
                         <Shield className="h-5 w-5 text-accent" />
                         <div>
                           <p className="font-medium text-sm">Authentic</p>

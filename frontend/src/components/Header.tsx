@@ -25,7 +25,10 @@ const Header = () => {
     ...(user?.is_admin ? [{ to: "/admin", label: "Dashboard" }] : []),
   ];
   return (
-    <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+    <header
+      className="sticky top-0 z-50 border-b backdrop-blur supports-[backdrop-filter]:bg-white/60"
+      style={{ backgroundColor: "hsl(var(--background) / 0.8)" }}
+    >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3">
           <Sheet>
@@ -41,7 +44,11 @@ const Header = () => {
             </SheetTrigger>
             <SheetContent side="left" className="w-80 p-0">
               <div className="px-6 py-4">
-                <Link to="/" className="font-serif text-xl tracking-wide">
+                <Link
+                  to="/"
+                  className="font-serif text-xl tracking-wide"
+                  style={{ color: "hsl(var(--foreground))" }}
+                >
                   Lerah Royal Elegance
                 </Link>
               </div>
@@ -53,16 +60,21 @@ const Header = () => {
                       to={item.to}
                       className={({ isActive }) =>
                         cn(
-                          "rounded-md px-4 py-2 text-sm transition-colors hover:bg-muted/60",
+                          "rounded-md px-4 py-2 text-sm transition-colors hover:bg-muted/60 hover:text-black",
                           isActive && "bg-muted/70 font-medium"
                         )
                       }
+                      style={({ isActive }) => ({
+                        color: isActive
+                          ? "hsl(var(--foreground))"
+                          : "hsl(var(--muted-foreground))",
+                      })}
                     >
                       {item.label}
                     </NavLink>
                   </SheetClose>
                 ))}
-                <SheetClose asChild key={"'/my-orders"}>
+                <SheetClose asChild key={"/my-orders"}>
                   <NavLink
                     to={"/my-orders"}
                     className={({ isActive }) =>
@@ -71,6 +83,11 @@ const Header = () => {
                         isActive && "bg-muted/70 font-medium"
                       )
                     }
+                    style={({ isActive }) => ({
+                      color: isActive
+                        ? "hsl(var(--foreground))"
+                        : "hsl(var(--muted-foreground))",
+                    })}
                   >
                     My Orders
                   </NavLink>
@@ -79,7 +96,11 @@ const Header = () => {
             </SheetContent>
           </Sheet>
 
-          <Link to="/" className="font-serif text-lg sm:text-xl tracking-wide">
+          <Link
+            to="/"
+            className="font-serif text-lg sm:text-xl tracking-wide"
+            style={{ color: "hsl(var(--foreground))" }}
+          >
             Lerah Royal Elegance
           </Link>
         </div>
@@ -91,10 +112,15 @@ const Header = () => {
               to={item.to}
               className={({ isActive }) =>
                 cn(
-                  "rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground",
+                  "rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted/60 hover:!text-black",
                   isActive && "text-foreground"
                 )
               }
+              style={({ isActive }) => ({
+                color: isActive
+                  ? "hsl(var(--foreground))"
+                  : "hsl(var(--muted-foreground))",
+              })}
             >
               {item.label}
             </NavLink>

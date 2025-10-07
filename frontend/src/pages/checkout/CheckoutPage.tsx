@@ -59,7 +59,9 @@ const CheckoutPage = () => {
     } else {
       setAddress(state.address);
     }
-  }, []); // Added dependency array to run only once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // run once on mount
+
   const [cart, setCart] = useState<ICart>({
     coupon: null,
     items: [],
@@ -84,7 +86,9 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     fetchCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const fetchCart = async () => {
     const response = await makeApiCall(
       "GET",
@@ -98,7 +102,7 @@ const CheckoutPage = () => {
       const subtotal = calculateSumOfItems(response.data.items);
       const discount = calculateCouponDiscount(subtotal, response.data.coupon);
       const shipping =
-        response.data.items.length != 0 ? (subtotal > 2000 ? 0 : 200) : 0;
+        response.data.items.length !== 0 ? (subtotal > 2000 ? 0 : 200) : 0;
       setCart({
         ...response.data,
         shipping,
@@ -124,7 +128,7 @@ const CheckoutPage = () => {
     if (!coupon) {
       return 0;
     }
-    if (coupon.discount_type == "percent") {
+    if (coupon.discount_type === "percent") {
       return (subtotal * coupon.discount_value) / 100;
     } else {
       return coupon.discount_value;
@@ -165,7 +169,6 @@ const CheckoutPage = () => {
       toast.success(
         address ? "Address updated successfully" : "Address added successfully"
       );
-      console.log("response.data", response.data);
       setAddress(response.data);
       setIsAddressModalOpen(false);
     } else {
@@ -195,7 +198,7 @@ const CheckoutPage = () => {
       );
 
       if (orderResponse.status !== 200 && orderResponse.status !== 201) {
-        if (orderResponse.status != 500) {
+        if (orderResponse.status !== 500) {
           toast.error(orderResponse.error);
         } else {
           toast.error("Failed to create payment order");
@@ -204,7 +207,7 @@ const CheckoutPage = () => {
       }
 
       handleRazorpayScriptLoaded(orderResponse.data);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Checkout error:", error);
       toast.error("Failed to initiate payment");
     }
@@ -214,13 +217,12 @@ const CheckoutPage = () => {
     if (!transactionData) return;
     const options = {
       key: transactionData.key,
-      amount: transactionData.amount * 100, // Razorpay works in paise
+      amount: transactionData.amount * 100, // paise
       currency: transactionData.currency,
       name: "Lorah Royal Elegance",
       description: "Order Payment",
-      order_id: transactionData.razorpay_order_id, // from backend
+      order_id: transactionData.razorpay_order_id,
       handler: function (response: any) {
-        // Payment successful, redirect to verification page
         navigate("/checkout/payment-verification", {
           state: {
             transaction_id: transactionData.razorpay_order_id,
@@ -230,7 +232,7 @@ const CheckoutPage = () => {
       modal: {
         ondismiss: async function () {
           setUnexpectedError(true);
-          const response = await makeApiCall(
+          await makeApiCall(
             "DELETE",
             API_ENDPOINT.DELETE_ORDER(transactionData.order_id),
             {},
@@ -242,19 +244,21 @@ const CheckoutPage = () => {
           navigate("/cart");
         },
       },
-      theme: { color: "#9333ea" }, // Purple theme matching your site
+      theme: { color: "#9333ea" }, // matches site purple
     };
     const rzp = new (window as any).Razorpay(options);
     rzp.open();
   };
+
   function formatPrice(value: number, currency: string = "INR") {
-    return new Intl.NumberFormat("en-US", {
+    return new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency,
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(value);
   }
+
   const handleCreateOrEditAddress = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -266,20 +270,20 @@ const CheckoutPage = () => {
       authToken,
       "createOrUpdateAddress"
     );
-    if (response.status == 200 || response.status == 201) {
+    if (response.status === 200 || response.status === 201) {
       setAddress(response.data);
-      console.log("response.data", response.data);
       toast.success("Address saved successfully");
       setIsAddressModalOpen(false);
     } else {
       toast.error("Failed to save address");
     }
   };
+
   if (!isFetched) {
     return (
       <>
         <Header />
-        <main className="min-h-screen bg-secondary">
+        <main className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
           <div className="py-8">
             <Loading />
           </div>
@@ -292,9 +296,9 @@ const CheckoutPage = () => {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-secondary">
+      <main className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
         {/* Breadcrumb */}
-        <section className="border-b bg-white/70 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+        <section className="border-b bg-[hsl(var(--card))]/6 backdrop-blur supports-[backdrop-filter]:bg-[hsl(var(--card))]/8">
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <Breadcrumb>
               <BreadcrumbList>
@@ -318,10 +322,10 @@ const CheckoutPage = () => {
         <section className="px-3 py-6 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <div className="mb-6">
-              <h1 className="font-serif-elegant text-3xl text-primary">
+              <h1 className="font-serif-elegant text-3xl text-[hsl(var(--primary))]">
                 Checkout
               </h1>
-              <p className="text-muted-foreground mt-1">
+              <p className="text-[hsl(var(--muted-foreground))] mt-1">
                 Review your order and complete your purchase
               </p>
             </div>
@@ -330,9 +334,9 @@ const CheckoutPage = () => {
               {/* Left Column - Address & Items */}
               <div className="lg:col-span-2 space-y-6">
                 {/* Delivery Address Section */}
-                <Card className="border-purple-200">
+                <Card className=" border-[hsl(var(--border))] shadow-card">
                   <CardHeader>
-                    <CardTitle className="font-serif-elegant text-xl text-primary flex items-center gap-2">
+                    <CardTitle className="font-serif-elegant text-xl text-[hsl(var(--primary))] flex items-center gap-2">
                       <MapPin className="h-5 w-5" />
                       Delivery Address
                     </CardTitle>
@@ -340,30 +344,31 @@ const CheckoutPage = () => {
                   <CardContent>
                     {address ? (
                       <div className="space-y-4">
-                        <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
+                        <div className="p-4 bg-[hsl(var(--muted))]/10 rounded-lg border border-[hsl(var(--border))]">
                           <div className="flex justify-between items-start">
                             <div className="space-y-1">
-                              <h3 className="font-medium text-primary">
+                              <h3 className="font-medium text-[hsl(var(--foreground))]">
                                 {address.full_name}
                               </h3>
-                              <p className="text-sm text-muted-foreground">
+                              <p className="text-sm text-[hsl(var(--muted-foreground))]">
                                 {address.street}
                               </p>
-                              <p className="text-sm text-muted-foreground">
+                              <p className="text-sm text-[hsl(var(--muted-foreground))]">
                                 {address.city}, {address.state}
                               </p>
-                              <p className="text-sm text-muted-foreground">
+                              <p className="text-sm text-[hsl(var(--muted-foreground))]">
                                 {address.country} - {address.postcode}
                               </p>
                               {address.landmark && (
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-sm text-[hsl(var(--muted-foreground))]">
                                   Landmark: {address.landmark}
                                 </p>
                               )}
-                              <p className="text-sm text-muted-foreground">
+                              <p className="text-sm text-[hsl(var(--muted-foreground))]">
                                 Phone: {address.phone}
                               </p>
                             </div>
+
                             <Dialog
                               open={isAddressModalOpen}
                               onOpenChange={setIsAddressModalOpen}
@@ -372,7 +377,7 @@ const CheckoutPage = () => {
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  className="border-purple-300 text-purple-700 hover:bg-purple-50"
+                                  className="btn-outline-luxury"
                                   onClick={() => {
                                     setAddressForm(address);
                                     setIsAddressModalOpen(true);
@@ -382,13 +387,15 @@ const CheckoutPage = () => {
                                   Edit
                                 </Button>
                               </DialogTrigger>
-                              <DialogContent className="max-w-md">
+                              <DialogContent className="max-w-md bg-[hsl(var(--card))] text-[hsl(var(--foreground))]">
                                 <DialogHeader>
-                                  <DialogTitle>Edit Address</DialogTitle>
+                                  <DialogTitle className="text-[hsl(var(--primary))]">
+                                    Edit Address
+                                  </DialogTitle>
                                 </DialogHeader>
                                 <form
                                   onSubmit={handleCreateOrEditAddress}
-                                  className="space-y-4"
+                                  className="space-y-4 p-2"
                                 >
                                   <div className="grid grid-cols-2 gap-4">
                                     <div>
@@ -405,6 +412,7 @@ const CheckoutPage = () => {
                                           })
                                         }
                                         required
+                                        className="bg-[hsl(var(--input))] border-[hsl(var(--border))]"
                                       />
                                     </div>
                                     <div>
@@ -419,6 +427,7 @@ const CheckoutPage = () => {
                                           })
                                         }
                                         required
+                                        className="bg-[hsl(var(--input))] border-[hsl(var(--border))]"
                                       />
                                     </div>
                                   </div>
@@ -436,6 +445,7 @@ const CheckoutPage = () => {
                                         })
                                       }
                                       required
+                                      className="bg-[hsl(var(--input))] border-[hsl(var(--border))]"
                                     />
                                   </div>
                                   <div className="grid grid-cols-2 gap-4">
@@ -451,6 +461,7 @@ const CheckoutPage = () => {
                                           })
                                         }
                                         required
+                                        className="bg-[hsl(var(--input))] border-[hsl(var(--border))]"
                                       />
                                     </div>
                                     <div>
@@ -465,6 +476,7 @@ const CheckoutPage = () => {
                                           })
                                         }
                                         required
+                                        className="bg-[hsl(var(--input))] border-[hsl(var(--border))]"
                                       />
                                     </div>
                                   </div>
@@ -481,6 +493,7 @@ const CheckoutPage = () => {
                                           })
                                         }
                                         required
+                                        className="bg-[hsl(var(--input))] border-[hsl(var(--border))]"
                                       />
                                     </div>
                                     <div>
@@ -497,6 +510,7 @@ const CheckoutPage = () => {
                                           })
                                         }
                                         required
+                                        className="bg-[hsl(var(--input))] border-[hsl(var(--border))]"
                                       />
                                     </div>
                                   </div>
@@ -512,6 +526,7 @@ const CheckoutPage = () => {
                                         })
                                       }
                                       placeholder="Optional"
+                                      className="bg-[hsl(var(--input))] border-[hsl(var(--border))]"
                                     />
                                   </div>
                                   <div className="flex gap-2 pt-4">
@@ -521,7 +536,7 @@ const CheckoutPage = () => {
                                       onClick={() =>
                                         setIsAddressModalOpen(false)
                                       }
-                                      className="flex-1"
+                                      className="flex-1 btn-outline-luxury"
                                     >
                                       Cancel
                                     </Button>
@@ -541,10 +556,11 @@ const CheckoutPage = () => {
                       </div>
                     ) : (
                       <div className="text-center py-8">
-                        <MapPin className="mx-auto mb-4 h-10 w-10 text-muted-foreground" />
-                        <p className="text-muted-foreground mb-4">
+                        <MapPin className="mx-auto mb-4 h-10 w-10 text-[hsl(var(--muted-foreground))]" />
+                        <p className="text-[hsl(var(--muted-foreground))] mb-4">
                           No delivery address found
                         </p>
+
                         <Dialog
                           open={isAddressModalOpen}
                           onOpenChange={setIsAddressModalOpen}
@@ -555,13 +571,15 @@ const CheckoutPage = () => {
                               Add Address
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="max-w-md">
+                          <DialogContent className="max-w-md bg-[hsl(var(--card))] text-[hsl(var(--foreground))]">
                             <DialogHeader>
-                              <DialogTitle>Add Delivery Address</DialogTitle>
+                              <DialogTitle className="text-[hsl(var(--primary))]">
+                                Add Delivery Address
+                              </DialogTitle>
                             </DialogHeader>
                             <form
                               onSubmit={handleAddressSubmit}
-                              className="space-y-4"
+                              className="space-y-4 p-2"
                             >
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
@@ -576,6 +594,7 @@ const CheckoutPage = () => {
                                       })
                                     }
                                     required
+                                    className="bg-[hsl(var(--input))] border-[hsl(var(--border))]"
                                   />
                                 </div>
                                 <div>
@@ -590,6 +609,7 @@ const CheckoutPage = () => {
                                       })
                                     }
                                     required
+                                    className="bg-[hsl(var(--input))] border-[hsl(var(--border))]"
                                   />
                                 </div>
                               </div>
@@ -605,6 +625,7 @@ const CheckoutPage = () => {
                                     })
                                   }
                                   required
+                                  className="bg-[hsl(var(--input))] border-[hsl(var(--border))]"
                                 />
                               </div>
                               <div className="grid grid-cols-2 gap-4">
@@ -620,6 +641,7 @@ const CheckoutPage = () => {
                                       })
                                     }
                                     required
+                                    className="bg-[hsl(var(--input))] border-[hsl(var(--border))]"
                                   />
                                 </div>
                                 <div>
@@ -634,6 +656,7 @@ const CheckoutPage = () => {
                                       })
                                     }
                                     required
+                                    className="bg-[hsl(var(--input))] border-[hsl(var(--border))]"
                                   />
                                 </div>
                               </div>
@@ -650,6 +673,7 @@ const CheckoutPage = () => {
                                       })
                                     }
                                     required
+                                    className="bg-[hsl(var(--input))] border-[hsl(var(--border))]"
                                   />
                                 </div>
                                 <div>
@@ -664,6 +688,7 @@ const CheckoutPage = () => {
                                       })
                                     }
                                     required
+                                    className="bg-[hsl(var(--input))] border-[hsl(var(--border))]"
                                   />
                                 </div>
                               </div>
@@ -679,6 +704,7 @@ const CheckoutPage = () => {
                                     })
                                   }
                                   placeholder="Optional"
+                                  className="bg-[hsl(var(--input))] border-[hsl(var(--border))]"
                                 />
                               </div>
                               <div className="flex gap-2 pt-4">
@@ -686,7 +712,7 @@ const CheckoutPage = () => {
                                   type="button"
                                   variant="outline"
                                   onClick={() => setIsAddressModalOpen(false)}
-                                  className="flex-1"
+                                  className="flex-1 btn-outline-luxury"
                                 >
                                   Cancel
                                 </Button>
@@ -707,9 +733,9 @@ const CheckoutPage = () => {
                 </Card>
 
                 {/* Order Items */}
-                <Card className="border-purple-200">
+                <Card className="bg-[hsl(var(--card))] border-[hsl(var(--border))] shadow-card">
                   <CardHeader>
-                    <CardTitle className="font-serif-elegant text-xl text-primary flex items-center gap-2">
+                    <CardTitle className="font-serif-elegant text-xl text-[hsl(var(--primary))] flex items-center gap-2">
                       <ShoppingBag className="h-5 w-5" />
                       Order Items ({cart.items.length})
                     </CardTitle>
@@ -717,8 +743,8 @@ const CheckoutPage = () => {
                   <CardContent className="p-0">
                     {cart.items.length === 0 ? (
                       <div className="p-8 text-center">
-                        <ShoppingBag className="mx-auto mb-4 h-10 w-10 text-muted-foreground" />
-                        <p className="text-muted-foreground">
+                        <ShoppingBag className="mx-auto mb-4 h-10 w-10 text-[hsl(var(--muted-foreground))]" />
+                        <p className="text-[hsl(var(--muted-foreground))]">
                           Your cart is empty
                         </p>
                         <Button
@@ -729,7 +755,7 @@ const CheckoutPage = () => {
                         </Button>
                       </div>
                     ) : (
-                      <div className="divide-y">
+                      <div className="divide-y divide-[hsl(var(--border))]">
                         {cart.items.map((item) => (
                           <div
                             key={item.id}
@@ -738,24 +764,24 @@ const CheckoutPage = () => {
                             <img
                               src={item.image}
                               alt={item.product.title}
-                              className="h-16 w-14 rounded-md object-cover ring-1 ring-purple-200"
+                              className="h-16 w-14 rounded-md object-cover ring-1 ring-[hsl(var(--border))]"
                             />
                             <div className="flex-1">
-                              <h3 className="font-medium text-primary">
+                              <h3 className="font-medium text-[hsl(var(--primary))]">
                                 {item.product.title}
                               </h3>
-                              <p className="text-sm text-muted-foreground">
+                              <p className="text-sm text-[hsl(var(--muted-foreground))]">
                                 Quantity: {item.qty}
                               </p>
-                              <p className="text-sm text-muted-foreground">
+                              <p className="text-sm text-[hsl(var(--muted-foreground))]">
                                 Unit Price: {formatPrice(item.product.price)}
                               </p>
                             </div>
                             <div className="text-right">
-                              <div className="font-semibold text-accent">
+                              <div className="font-semibold text-[hsl(var(--accent))]">
                                 {formatPrice(item.price)}
                               </div>
-                              <div className="text-xs text-muted-foreground">
+                              <div className="text-xs text-[hsl(var(--muted-foreground))]">
                                 Total Price
                               </div>
                             </div>
@@ -769,40 +795,40 @@ const CheckoutPage = () => {
 
               {/* Right Column - Order Summary */}
               <div>
-                <Card className="border-purple-200 sticky top-6">
+                <Card className="bg-[hsl(var(--card))] border-[hsl(var(--border))] shadow-luxury sticky top-6">
                   <CardHeader>
-                    <CardTitle className="font-serif-elegant text-xl text-primary">
+                    <CardTitle className="font-serif-elegant text-xl text-[hsl(var(--primary))]">
                       Order Summary
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {/* Summary Details */}
-                    <div className="space-y-3">
+                    <div className="space-y-3 text-[hsl(var(--muted-foreground))]">
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Subtotal</span>
-                        <span className="font-medium">
+                        <span>Subtotal</span>
+                        <span className="font-medium text-[hsl(var(--foreground))]">
                           {formatPrice(cart.subtotal)}
                         </span>
                       </div>
 
                       {cart.discount > 0 && (
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground flex items-center gap-1">
-                            <Tag className="h-3 w-3" />
+                          <span className="flex items-center gap-1">
+                            <Tag className="h-3 w-3 text-[hsl(var(--muted-foreground))]" />
                             Discount
                           </span>
-                          <span className="font-medium text-green-700">
+                          <span className="font-medium text-[hsl(var(--accent))]">
                             - {formatPrice(cart.discount)}
                           </span>
                         </div>
                       )}
 
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground flex items-center gap-1">
-                          <Truck className="h-3 w-3" />
+                        <span className="flex items-center gap-1">
+                          <Truck className="h-3 w-3 text-[hsl(var(--muted-foreground))]" />
                           Shipping
                         </span>
-                        <span className="font-medium">
+                        <span className="font-medium text-[hsl(var(--foreground))]">
                           {cart.shipping === 0
                             ? "Free"
                             : formatPrice(cart.shipping)}
@@ -810,7 +836,7 @@ const CheckoutPage = () => {
                       </div>
 
                       {cart.shipping === 0 && cart.subtotal > 0 && (
-                        <p className="text-xs text-green-700">
+                        <p className="text-xs text-[hsl(var(--accent))]">
                           🎉 Free shipping on orders above ₹2,000
                         </p>
                       )}
@@ -820,7 +846,7 @@ const CheckoutPage = () => {
 
                     <div className="flex justify-between text-lg font-semibold">
                       <span>Total</span>
-                      <span className="text-accent">
+                      <span className="text-[hsl(var(--accent))]">
                         {formatPrice(cart.total)}
                       </span>
                     </div>
@@ -836,37 +862,37 @@ const CheckoutPage = () => {
                     </Button>
 
                     {!address && (
-                      <p className="text-xs text-red-600 text-center">
+                      <p className="text-xs text-[hsl(var(--destructive))] text-center">
                         Please add a delivery address to continue
                       </p>
                     )}
 
                     <div className="pt-4 space-y-3">
                       {/* Razorpay Secure Payment Badge */}
-                      <div className="p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-purple-200">
+                      <div className="p-3 bg-[linear-gradient(90deg,hsl(44 95% 48% / 0.08),hsl(276 62% 26% / 0.03))] rounded-lg border border-[hsl(var(--border))]">
                         <div className="flex items-center gap-2 mb-2">
-                          <Shield className="h-4 w-4 text-purple-600" />
-                          <span className="text-xs font-semibold text-purple-900">
+                          <Shield className="h-4 w-4 text-[hsl(var(--primary))]" />
+                          <span className="text-xs font-semibold text-[hsl(var(--primary))]">
                             Secure Payment with Razorpay
                           </span>
                         </div>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-[hsl(var(--muted-foreground))]">
                           Your payment information is encrypted and secure. We
                           support UPI, Cards, Net Banking, and Wallets.
                         </p>
                       </div>
 
                       <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <div className="flex items-center gap-2 text-xs text-[hsl(var(--muted-foreground))]">
+                          <div className="w-2 h-2 bg-[hsl(var(--ring))] rounded-full"></div>
                           SSL encrypted checkout
                         </div>
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <div className="flex items-center gap-2 text-xs text-[hsl(var(--muted-foreground))]">
+                          <div className="w-2 h-2 bg-[hsl(var(--accent))] rounded-full"></div>
                           Free returns within 7 days
                         </div>
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                        <div className="flex items-center gap-2 text-xs text-[hsl(var(--muted-foreground))]">
+                          <div className="w-2 h-2 bg-[hsl(var(--primary))] rounded-full"></div>
                           24/7 customer support
                         </div>
                       </div>

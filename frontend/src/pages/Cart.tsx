@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -37,7 +38,7 @@ const Cart = () => {
   const [appliedCode, setAppliedCode] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
   const { fetchType, fetching, isFetched, makeApiCall } = useAPICall();
-  const { authToken , user } = useAuth();
+  const { authToken, user } = useAuth();
   const [cart, setCart] = useState<ICart>({
     coupon: null,
     items: [],
@@ -46,9 +47,12 @@ const Cart = () => {
     total: 0,
     discount: 0,
   });
+
   useEffect(() => {
     if (user) fetchCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const fetchCart = async () => {
     const response = await makeApiCall(
       "GET",
@@ -61,7 +65,7 @@ const Cart = () => {
     if (response.status === 200) {
       const subtotal = calculateSumOfItems(response.data.items);
       const discount = calculateCouponDiscount(subtotal, response.data.coupon);
-      const shipping = 0
+      const shipping = 0;
       setCart({
         ...response.data,
         items: [...response.data.items],
@@ -74,9 +78,11 @@ const Cart = () => {
       toast.error("Error fetching cart");
     }
   };
+
   const calculateSumOfItems = (items) => {
     let sum = 0;
     for (let i = 0; i < items.length; i++) {
+      // Use item.price (already includes qty multiplication in your original flow)
       sum += items[i].price;
     }
     return sum;
@@ -86,7 +92,7 @@ const Cart = () => {
     if (!coupon) {
       return 0;
     }
-    if (coupon.discount_type == "percent") {
+    if (coupon.discount_type === "percent") {
       return (subtotal * coupon.discount_value) / 100;
     } else {
       return coupon.discount_value;
@@ -105,10 +111,10 @@ const Cart = () => {
 
     if (response.status === 200) {
       toast.success("Item removed from cart");
-      const updatedItems = cart.items.filter((i) => i.id != id);
+      const updatedItems = cart.items.filter((i) => i.id !== id);
       const subtotal = calculateSumOfItems(updatedItems);
       const discount = 0;
-      const shipping = 0
+      const shipping = 0;
       setCart({
         ...cart,
         items: updatedItems,
@@ -123,7 +129,7 @@ const Cart = () => {
   };
 
   function formatPrice(value: number, currency: string = "INR") {
-    return new Intl.NumberFormat("en-US", {
+    return new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency,
       minimumFractionDigits: 2,
@@ -144,7 +150,7 @@ const Cart = () => {
       authToken,
       "applyCoupon"
     );
-    if (response.status == 200 || response.status == 201) {
+    if (response.status === 200 || response.status === 201) {
       const discount = calculateCouponDiscount(cart.subtotal, response.data);
       setCart({
         ...cart,
@@ -152,11 +158,14 @@ const Cart = () => {
         discount,
         total: Math.max(0, cart.subtotal - discount) + cart.shipping,
       });
+      setAppliedDiscount(discount);
+      setAppliedCode(response.data.code);
       toast.success(`Coupon ${response.data.code} applied`);
     } else {
-      toast.error(response.error);
+      toast.error(response.error || "Failed to apply coupon");
     }
   };
+
   const handleCheckout = async () => {
     try {
       const response = await makeApiCall(
@@ -176,21 +185,22 @@ const Cart = () => {
           },
         });
       } else {
-        if (response.status != 500) {
+        if (response.status !== 500) {
           toast.error(response.error);
         } else {
           toast.error("Failed to proceed to checkout");
         }
       }
-    } catch (error) {
-      toast.error(error.message);
+    } catch (error: any) {
+      toast.error(error.message || "Checkout failed");
     }
   };
+
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-secondary">
-        <section className="border-b bg-white/70 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+      <main className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
+        <section className="border-b bg-[hsl(var(--card))]/6 backdrop-blur supports-[backdrop-filter]:bg-[hsl(var(--card))]/8">
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <Breadcrumb>
               <BreadcrumbList>
@@ -207,7 +217,7 @@ const Cart = () => {
         </section>
 
         <section className="px-3 py-6 sm:px-6 lg:px-8">
-          {(fetching && fetchType == "getCart") ? (
+          {fetching && fetchType === "getCart" ? (
             <div className="py-4">
               <Loading />
             </div>
@@ -215,14 +225,17 @@ const Cart = () => {
             <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-3">
               <div className="lg:col-span-2 space-y-4">
                 <div>
-                  <h1 className="font-serif-elegant text-3xl text-primary">
+                  <h1 className="font-serif-elegant text-3xl text-[hsl(var(--primary))] flex items-center gap-3">
                     Your Cart
-                    {fetching && fetchType == "removeFromCart" && (
-                      <span className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></span>
+                    {fetching && fetchType === "removeFromCart" && (
+                      <span
+                        className="animate-spin inline-block h-6 w-6 rounded-full border-t-2 border-b-2"
+                        style={{ borderColor: `hsl(var(--primary))` }}
+                      />
                     )}
                   </h1>
                   {cart.items.length > 0 && (
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="text-sm text-[hsl(var(--muted-foreground))] mt-1">
                       {cart.items.length} item
                       {cart.items.length !== 1 ? "s" : ""} •{" "}
                       {cart.items.reduce((total, item) => total + item.qty, 0)}{" "}
@@ -232,10 +245,10 @@ const Cart = () => {
                 </div>
 
                 {cart.items.length === 0 ? (
-                  <Card>
+                  <Card className="bg-[hsl(var(--card))] border-[hsl(var(--border))] shadow-card">
                     <CardContent className="py-16 text-center">
-                      <ShoppingBag className="mx-auto mb-4 h-10 w-10 text-muted-foreground" />
-                      <p className="text-muted-foreground">
+                      <ShoppingBag className="mx-auto mb-4 h-10 w-10 text-[hsl(var(--muted-foreground))]" />
+                      <p className="text-[hsl(var(--muted-foreground))]">
                         Your cart is empty
                       </p>
                       <Button
@@ -247,8 +260,8 @@ const Cart = () => {
                     </CardContent>
                   </Card>
                 ) : (
-                  <Card className="border-purple-200">
-                    <CardContent className="p-0 divide-y">
+                  <Card className="bg-[hsl(var(--card))] border-[hsl(var(--border))] shadow-card">
+                    <CardContent className="p-0 divide-y divide-[hsl(var(--border))]">
                       {cart.items.map((item) => (
                         <div
                           key={item.product_id}
@@ -257,7 +270,7 @@ const Cart = () => {
                           <img
                             src={item.image}
                             alt={item.product.title}
-                            className="h-24 w-20 rounded-md object-cover ring-1 ring-purple-200 cursor-pointer hover:ring-2 hover:ring-purple-300 transition-all"
+                            className="h-24 w-20 rounded-md object-cover ring-1 ring-[hsl(var(--border))] cursor-pointer hover:ring-2 hover:ring-[hsl(var(--primary))] transition-all"
                             onClick={() =>
                               navigate(`/product/${item.product_id}`)
                             }
@@ -265,17 +278,17 @@ const Cart = () => {
                           <div className="flex-1 space-y-2">
                             <div>
                               <h3
-                                className="font-medium text-primary hover:text-accent cursor-pointer transition-colors"
+                                className="font-medium text-[hsl(var(--primary))] hover:text-[hsl(var(--accent))] cursor-pointer transition-colors"
                                 onClick={() =>
                                   navigate(`/product/${item.product_id}`)
                                 }
                               >
                                 {item.product.title}
                               </h3>
-                              <p className="text-sm text-muted-foreground">
+                              <p className="text-sm text-[hsl(var(--muted-foreground))]">
                                 Unit Price: {formatPrice(item.product.price)}
                               </p>
-                              <p className="text-sm text-muted-foreground">
+                              <p className="text-sm text-[hsl(var(--muted-foreground))]">
                                 Quantity: {item.qty}
                               </p>
                             </div>
@@ -283,14 +296,14 @@ const Cart = () => {
                             {/* Remove Item Button */}
                             <div className="flex items-center gap-3">
                               {item.product.stock < item.qty && (
-                                <p className="text-sm font-semibold text-red-600 bg-red-50 px-2 py-1 rounded-md inline-block mt-1">
+                                <p className="text-sm font-semibold text-[hsl(var(--destructive))] bg-[hsl(var(--destructive))]/10 px-2 py-1 rounded-md inline-block mt-1">
                                   Out of Stock
                                 </p>
                               )}
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
+                                className="h-8 w-8 p-0 text-[hsl(var(--destructive))] hover:text-[hsl(var(--destructive-foreground))] hover:bg-[hsl(var(--destructive))]/10"
                                 onClick={() => removeItem(item.id)}
                                 disabled={fetching}
                               >
@@ -300,10 +313,10 @@ const Cart = () => {
                           </div>
 
                           <div className="text-right space-y-1">
-                            <div className="font-semibold text-accent text-lg">
+                            <div className="font-semibold text-[hsl(var(--accent))] text-lg">
                               {formatPrice(item.price)}
                             </div>
-                            <div className="text-xs text-muted-foreground">
+                            <div className="text-xs text-[hsl(var(--muted-foreground))]">
                               Total Price
                             </div>
                           </div>
@@ -313,18 +326,19 @@ const Cart = () => {
                   </Card>
                 )}
               </div>
+
               <div>
-                <div className="sticky top-12 ">
-                  <Card className="border-purple-200">
+                <div className="sticky top-12">
+                  <Card className="bg-[hsl(var(--card))] border-[hsl(var(--border))] shadow-luxury">
                     <CardHeader>
-                      <CardTitle className="font-serif-elegant text-xl text-primary">
+                      <CardTitle className="font-serif-elegant text-xl text-[hsl(var(--primary))]">
                         Order Summary
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
                       {/* Coupon */}
                       <div className="mb-4 space-y-2">
-                        <label className="text-sm text-muted-foreground">
+                        <label className="text-sm text-[hsl(var(--muted-foreground))]">
                           Coupon Code
                         </label>
                         <div className="flex gap-2">
@@ -332,77 +346,76 @@ const Cart = () => {
                             placeholder="Enter code"
                             value={coupon}
                             onChange={(e) => setCoupon(e.target.value)}
+                            className="bg-[hsl(var(--input))] border-[hsl(var(--border))]"
                           />
                           <Button
                             variant="outline"
-                            className="border-amber-300 text-amber-700 hover:bg-amber-50"
-                            onClick={() => {
-                              applyCoupon(coupon);
-                            }}
-                            loading={fetching && fetchType == "applyCoupon"}
+                            className="btn-outline-luxury"
+                            onClick={() => applyCoupon(coupon)}
+                            loading={fetching && fetchType === "applyCoupon"}
                             disabled={
-                              cart.items.length == 0 ||
+                              cart.items.length === 0 ||
                               !coupon ||
-                              (fetching && fetchType == "applyCoupon")
+                              (fetching && fetchType === "applyCoupon")
                             }
                           >
                             Apply
                           </Button>
                         </div>
                         {appliedDiscount > 0 && (
-                          <p className="text-xs text-green-600">
+                          <p className="text-xs text-[hsl(var(--accent))]">
                             Applied {appliedCode} • You save{" "}
                             {formatPrice(appliedDiscount)}
                           </p>
                         )}
                       </div>
-                      <div className="space-y-3 text-sm">
+
+                      <div className="space-y-3 text-sm text-[hsl(var(--muted-foreground))]">
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">
-                            Subtotal
-                          </span>
-                          <span className="font-medium">
+                          <span>Subtotal</span>
+                          <span className="font-medium text-[hsl(var(--foreground))]">
                             {formatPrice(cart.subtotal)}
                           </span>
                         </div>
+
                         {cart.discount > 0 && (
                           <div className="flex justify-between">
-                            <span className="text-muted-foreground">
-                              Discount
-                            </span>
-                            <span className="font-medium text-green-700">
+                            <span>Discount</span>
+                            <span className="font-medium text-[hsl(var(--accent))]">
                               - {formatPrice(cart.discount)}
                             </span>
                           </div>
                         )}
+
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">
-                            Shipping
-                          </span>
-                          <span className="font-medium">
+                          <span>Shipping</span>
+                          <span className="font-medium text-[hsl(var(--foreground))]">
                             {cart.shipping === 0
                               ? "Free"
                               : formatPrice(cart.shipping)}
                           </span>
                         </div>
+
                         <Separator />
+
                         <div className="flex justify-between text-base font-semibold">
                           <span>Total</span>
-                          <span className="text-accent">
+                          <span className="text-[hsl(var(--accent))]">
                             {formatPrice(cart.total)}
                           </span>
                         </div>
                       </div>
+
                       <Button
-                        className="mt-6 w-full bg-amber-500 text-white hover:bg-amber-600 transition shadow-sm hover:shadow"
+                        className="mt-6 w-full btn-luxury"
                         disabled={
-                          cart.items.length == 0 ||
-                          (fetching && fetchType == "getAddress") ||
+                          cart.items.length === 0 ||
+                          (fetching && fetchType === "getAddress") ||
                           cart.items.find((i) => i.product.stock < i.qty) !=
                             null
                         }
                         onClick={handleCheckout}
-                        loading={fetching && fetchType == "getAddress"}
+                        loading={fetching && fetchType === "getAddress"}
                       >
                         Proceed to Checkout
                       </Button>

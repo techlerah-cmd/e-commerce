@@ -62,7 +62,7 @@ const ResetPasswordPage: React.FC = () => {
     e.preventDefault();
     if (!validate()) return;
 
-    // show optimistic toast
+    // optimistic toast
     const payload = {
       token: token,
       password: password,
@@ -83,7 +83,7 @@ const ResetPasswordPage: React.FC = () => {
       );
       navigate("/login", { replace: true });
     } else {
-      toast.error("Token is Invalid or expired.");
+      toast.error("Token is invalid or expired.");
     }
   };
 
@@ -94,94 +94,130 @@ const ResetPasswordPage: React.FC = () => {
   return (
     <>
       <Header />
-      <div className="container px-4 max-w-md mx-auto py-12">
-        <Card>
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold">
-              Create a new password
-            </CardTitle>
-            <CardDescription>
-              Choose a strong password for your account. This link will expire
-              soon.
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2 relative">
-                <Label htmlFor="password">New password</Label>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="At least 8 characters"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((s) => !s)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-sm opacity-70"
-                  >
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Must contain letters and numbers.
-                </p>
-              </div>
-
-              <div className="space-y-2 relative">
-                <Label htmlFor="confirmPassword">Confirm password</Label>
-                <div className="relative">
-                  <Input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type={showConfirm ? "text" : "password"}
-                    placeholder="Confirm your password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirm((s) => !s)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-sm opacity-70"
-                  >
-                    {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
-                </div>
-              </div>
-
-              {error && (
-                <p className="text-sm text-red-600 font-medium">{error}</p>
-              )}
-
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={fetching && fetchType === "resetPassword"}
+      <main
+        className="min-h-screen flex items-center justify-center py-12"
+        style={{ backgroundColor: "hsl(var(--background))" }}
+      >
+        <div className="container px-4 max-w-md mx-auto">
+          <Card className="card-luxury">
+            <CardHeader className="space-y-1" style={{ paddingBottom: 0 }}>
+              <CardTitle
+                className="text-2xl font-bold"
+                style={{ color: "hsl(var(--primary))" }}
               >
-                {fetching && fetchType === "resetPassword"
-                  ? "Resetting..."
-                  : "Reset password"}
-              </Button>
-
-              {/* Back to login button */}
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full mt-2"
-                onClick={() => navigate("/login")}
+                Create a new password
+              </CardTitle>
+              <CardDescription
+                style={{ color: "hsl(var(--muted-foreground))" }}
               >
-                Back to Login
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
+                Choose a strong password for your account. This link will expire
+                soon.
+              </CardDescription>
+            </CardHeader>
+
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2 relative">
+                  <Label
+                    htmlFor="password"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
+                  >
+                    New password
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      id="password"
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="At least 8 characters"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((s) => !s)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-sm opacity-70"
+                      aria-label={
+                        showPassword ? "Hide password" : "Show password"
+                      }
+                      style={{ color: "hsl(var(--muted-foreground))" }}
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                  <p
+                    className="text-xs mt-1"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
+                  >
+                    Must contain letters and numbers.
+                  </p>
+                </div>
+
+                <div className="space-y-2 relative">
+                  <Label
+                    htmlFor="confirmPassword"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
+                  >
+                    Confirm password
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      type={showConfirm ? "text" : "password"}
+                      placeholder="Confirm your password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirm((s) => !s)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-sm opacity-70"
+                      aria-label={
+                        showConfirm ? "Hide password" : "Show password"
+                      }
+                      style={{ color: "hsl(var(--muted-foreground))" }}
+                    >
+                      {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                </div>
+
+                {error && (
+                  <p
+                    className="text-sm font-medium"
+                    style={{ color: "hsl(var(--destructive))" }}
+                  >
+                    {error}
+                  </p>
+                )}
+
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={fetching && fetchType === "resetPassword"}
+                >
+                  {fetching && fetchType === "resetPassword"
+                    ? "Resetting..."
+                    : "Reset password"}
+                </Button>
+
+                {/* Back to login button */}
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full mt-2 btn-outline-luxury"
+                  onClick={() => navigate("/login")}
+                >
+                  Back to Login
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </main>
     </>
   );
 };
