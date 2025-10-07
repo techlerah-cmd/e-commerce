@@ -218,12 +218,7 @@ const AddProduct = () => {
       formdata.append("featured", form.featured ? "true" : "false");
       formdata.append(
         "product_metadata",
-        JSON.stringify(
-          form.product_metadata.reduce((acc, item) => {
-            if (item.key) acc[item.key] = item.value;
-            return acc;
-          }, {} as Record<string, string>)
-        )
+        JSON.stringify(form.product_metadata)
       );
       form.images.forEach((item, idx) => {
         formdata.append("images", item.file, item.file.name);
