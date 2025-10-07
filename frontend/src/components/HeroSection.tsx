@@ -1,9 +1,49 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import { useNavigate, useLocation } from "react-router-dom";
+
+const scrollToId = (id: string) => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    return true;
+  }
+  return false;
+};
 
 const HeroSection = () => {
   const [heroRef, isHeroVisible] = useScrollAnimation(0.1);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleGoToCollections = () => {
+    navigate("/collections");
+  };
+
+  const handleGoToStory = async () => {
+    // If already on the homepage path, try to scroll directly
+    if (location.pathname === "/" || location.pathname === "") {
+      const ok = scrollToId("story");
+      if (ok) return;
+      // If element not found (maybe not mounted yet) try again shortly
+      setTimeout(() => scrollToId("story"), 150);
+      return;
+    }
+
+    // If on a different route, navigate to home then scroll
+    // navigate(...) is synchronous here but React will mount the new route
+    navigate("/");
+    // attempt to scroll after a small delay to allow the page to mount
+    // keep it short and add a few retries for robustness
+    const tryScroll = (attempt = 0) => {
+      if (attempt > 6) return;
+      if (!scrollToId("story")) {
+        setTimeout(() => tryScroll(attempt + 1), 150);
+      }
+    };
+    setTimeout(() => tryScroll(0), 120);
+  };
 
   return (
     <section
@@ -32,11 +72,9 @@ const HeroSection = () => {
             isHeroVisible ? "visible" : ""
           }`}
           style={{
-            // fluid clamp fallback for browsers that support inline styles
             fontSize: "clamp(1.75rem, 5vw, 3.5rem)",
           }}
         >
-          {/* make first part slightly smaller on mobile */}
           <span className="block text-[1.05em] sm:text-[0.9em] md:text-[1em] mb-1">
             With every drape
           </span>
@@ -61,11 +99,15 @@ const HeroSection = () => {
             isHeroVisible ? "visible" : ""
           }`}
         >
-          <Button className="btn-luxury text-base sm:text-lg px-6 py-3 w-full sm:w-auto">
+          <Button
+            onClick={handleGoToCollections}
+            className="btn-luxury text-base sm:text-lg px-6 py-3 w-full sm:w-auto"
+          >
             Explore Collection
           </Button>
           <Button
             variant="outline"
+            onClick={handleGoToStory}
             className="btn-outline-luxury text-base sm:text-lg px-6 py-3 w-full sm:w-auto border-primary-foreground bg-primary-foreground text-primary"
           >
             Our Story
