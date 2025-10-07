@@ -244,11 +244,11 @@ def send_user_enquiry(data:ContactUs,db:Session=Depends(get_db)):
   </body>
   </html>
   """
-  return {'detail':'Message Sent Successfully'}
+  # return {'detail':'Message Sent Successfully'}
 
   resend.Emails.send({
-    "from": "onboarding@resend.dev",
-    "to": data.email,
+    "from": settings.RESEND_FROM_ADDRESS,
+    "to": settings.RESEND_FROM_ADDRESS,
     "subject": f"New Contact Inquiry: {data.subject}",
     "html": html_content 
   })
