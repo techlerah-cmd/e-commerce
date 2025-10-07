@@ -175,8 +175,10 @@ const Collections = () => {
         <section className="px-6 py-12">
           <div className="mx-auto max-w-7xl">
             {fetching && <Loading />}
-
-            {!fetching && products.length === 0 ? (
+            {!fetching && 
+            <>
+            
+            {products.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 text-center">
                 <div className="mb-6 rounded-full bg-muted p-6">
                   <Box className="h-12 w-12 text-muted-foreground" />
@@ -253,6 +255,8 @@ const Collections = () => {
                 ))}
               </div>
             )}
+            </>
+            }
           </div>
           {/* Pagination */}
           {!fetching && products.length > 0 && (
