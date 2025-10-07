@@ -9,6 +9,7 @@ import { Loading } from "./ui/Loading";
 import { useAPICall } from "@/hooks/useApiCall";
 import { API_ENDPOINT } from "@/config/backend";
 import { useAuth } from "@/contexts/AuthContext";
+import { formatPrice } from "@/data/products";
 
 type ProductGridProps = {
   hideViewAllButton?: boolean;
@@ -106,7 +107,7 @@ const ProductGrid = ({ hideViewAllButton = false }: ProductGridProps) => {
 
                 <div className="flex items-center gap-3 mb-4">
                   <span className="font-sans-clean text-lg font-bold text-accent">
-                    {product.price}
+                    {formatPrice(product.price)}
                   </span>
                   <span className="font-sans-clean text-sm text-muted-foreground line-through">
                     {product.actual_price}
