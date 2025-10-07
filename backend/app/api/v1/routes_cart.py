@@ -143,6 +143,11 @@ def apply_coupon(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="This coupon has been used maximum times.",
         )
+    if db_coupon.expires_at <= datetime.utcnow():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This coupon has expired.",
+        )
     # now add the coupon to the cart
     update_data = {
         'coupon_id':db_coupon.id
