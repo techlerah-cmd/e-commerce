@@ -316,7 +316,7 @@ const PaymentVerification = () => {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-secondary flex items-center justify-center px-4 py-12">
+      <main className="min-h-screen bg-secondary flex items-center justify-center px-4 pb-12">
         <Card className="max-w-md w-full border-red-200">
           <CardContent className="pt-6">
             <div className="text-center space-y-6">
