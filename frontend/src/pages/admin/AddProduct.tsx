@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
+import imageCompression from "browser-image-compression";
+
 import {
   Dialog,
   DialogContent,
@@ -299,19 +301,39 @@ const AddProduct = () => {
     });
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      const newFiles = Array.from(files);
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
 
-      setForm({
-        ...form,
-        images: [
-          ...form.images,
-          ...newFiles.map((item) => ({ file: item, isNew: true })),
-        ],
-      });
+    const filesArray = Array.from(e.target.files);
+
+    const compressedFiles: File[] = [];
+
+    for (const file of filesArray) {
+      try {
+        const options = {
+          maxSizeMB: 1, // target max size in MB
+          maxWidthOrHeight: 1024, // max width/height
+          useWebWorker: true,
+        };
+        const compressedFile = await imageCompression(file, options);
+        compressedFiles.push(compressedFile);
+      } catch (error) {
+        console.error("Image compression error:", error);
+        compressedFiles.push(file); // fallback to original
+      }
     }
+
+    // Add compressed images to form state
+    setForm({
+      ...form,
+      images: [
+        ...form.images,
+        ...compressedFiles.map((f) => ({ file: f, isNew: true })),
+      ],
+    });
+
+    // Reset input value so same file can be uploaded again if needed
+    e.target.value = "";
   };
 
   const removeImage = (index: number) => {
@@ -643,7 +665,7 @@ const AddProduct = () => {
         </div>
 
         {/* Pagination */}
-        {!fetching && (
+        {!fetching && products.length > 0 && (
           <div className="flex justify-center items-center gap-4 mt-6">
             <Button
               variant="outline"
@@ -762,6 +784,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
   removeImage,
   loading,
 }) => {
+  
   return (
     <form className="space-y-4" onSubmit={onSubmit}>
       <div>

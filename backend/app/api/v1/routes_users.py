@@ -11,6 +11,7 @@ from app.common.utils import generate_otp
 from app.lib.resend import send_reset_link
 from app.app_users.models import User
 import resend
+from datetime import datetime
 from fastapi_limiter.depends import RateLimiter
 from datetime import timedelta
 from app.core.security import create_access_token,decode_token
@@ -232,7 +233,7 @@ def send_user_enquiry(data:ContactUs,db:Session=Depends(get_db)):
                   <strong style="color: #374151;">Lerah Royal E-commerce</strong>
                 </p>
                 <p style="margin: 15px 0 0 0; color: #9ca3af; font-size: 12px;">
-                  © 2024 Lerah Royal. All rights reserved.
+                  © {datetime.now().year} Lerah Royal. All rights reserved.
                 </p>
               </td>
             </tr>
