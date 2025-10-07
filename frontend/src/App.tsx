@@ -117,9 +117,21 @@ const UserVerification = ({ children }) => {
 const AppRouters = () => {
   const { isCheckedUser } = useAuth();
   const { pathname } = useLocation();
+  const protectedPath = [
+    "/my-orders",
+    "/cart",
+    "/checkout",
+    "/checkout/payment-verification",
+    "/admin",
+    "/admin/products",
+    "/admin/coupons",
+    "/admin/orders",
+  ]
   if (
     !isCheckedUser &&
-    (pathname.includes("admin") || pathname.includes("checkout"))
+      protectedPath.some((path) =>
+        pathname.startsWith(path)
+      )
   ) {
     return (
       <div className="py-4">
