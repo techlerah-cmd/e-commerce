@@ -121,7 +121,7 @@ Thank You Screen      Failed Screen with Support Info
 
 ```json
 {
-  "transaction_id": "pay_xxxxxxxxxxxxx"
+  "transaction_id": "pay_8921223049xxx"
 }
 ```
 
@@ -389,7 +389,7 @@ Update the support contact in the failed screen:
 
 ```typescript
 <p>Need help? Email us at support@lerahsaree.com</p>
-<p>or call +91-XXXXXXXXXX</p>
+<p>or call +91-8921223049</p>
 ```
 
 Replace with your actual support email and phone number.

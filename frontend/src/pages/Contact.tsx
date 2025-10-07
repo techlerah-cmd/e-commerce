@@ -70,41 +70,38 @@ const Contact = () => {
       return;
     }
 
-      const response = await makeApiCall(
-        "POST",
-        API_ENDPOINT.CONTACT_US,
-        {
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          email: formData.email,
-          phone: formData.phone,
-          subject: formData.subject,
-          message: formData.message,
-        },
-        "application/json",
-        undefined,
-        "contact"
-      );
+    const response = await makeApiCall(
+      "POST",
+      API_ENDPOINT.CONTACT_US,
+      {
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        subject: formData.subject,
+        message: formData.message,
+      },
+      "application/json",
+      undefined,
+      "contact"
+    );
 
-      if (response.status === 200 || response.status === 201) {
-        toast.success(
-          "Message sent successfully! We'll get back to you within 24 hours."
-        );
-        // Reset form
-        // setFormData({
-        //   firstName: "",
-        //   lastName: "",
-        //   email: "",
-        //   phone: "",
-        //   subject: "",
-        //   message: "",
-        // });
-      } else {
-        toast.error(
-          "Failed to send message. Please try again."
-        );
-      }
-   
+    if (response.status === 200 || response.status === 201) {
+      toast.success(
+        "Message sent successfully! We'll get back to you within 24 hours."
+      );
+      // Reset form
+      // setFormData({
+      //   firstName: "",
+      //   lastName: "",
+      //   email: "",
+      //   phone: "",
+      //   subject: "",
+      //   message: "",
+      // });
+    } else {
+      toast.error("Failed to send message. Please try again.");
+    }
   };
 
   const contactInfo = [
@@ -118,7 +115,7 @@ const Contact = () => {
     {
       icon: Phone,
       title: "Call Us",
-      details: ["+91 98765 43210", "+91 11 2345 6789"],
+      details: ["+91 8921223049"],
       description:
         "Speak directly with our saree experts for personalized assistance and styling advice.",
     },
@@ -233,7 +230,7 @@ const Contact = () => {
                           name="phone"
                           value={formData.phone}
                           onChange={handleInputChange}
-                          placeholder="+91 98765 43210"
+                          placeholder="+91 8921223049"
                           className="border-border focus:border-accent"
                         />
                       </div>

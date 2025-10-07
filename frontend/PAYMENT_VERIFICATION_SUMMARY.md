@@ -124,7 +124,7 @@ if (timeRemaining === 0) {
 
 ```json
 {
-  "transaction_id": "pay_xxxxxxxxxxxxx"
+  "transaction_id": "pay_8921223049xxx"
 }
 ```
 
@@ -213,7 +213,7 @@ Edit `PaymentVerification.tsx` line ~390:
 
 ```typescript
 <p>Need help? Email us at support@lerahsaree.com</p>
-<p>or call +91-XXXXXXXXXX</p>
+<p>or call +91-8921223049</p>
 ```
 
 ### 2. Test the Flow

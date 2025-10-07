@@ -87,7 +87,7 @@ Your backend needs to implement these two endpoints:
 
 ```json
 {
-  "order_id": "order_xxxxxxxxxxxxx",
+  "order_id": "order_8921223049xxx",
   "amount": 250000,
   "currency": "INR"
 }
@@ -108,8 +108,8 @@ Your backend needs to implement these two endpoints:
 
 ```json
 {
-  "razorpay_order_id": "order_xxxxxxxxxxxxx",
-  "razorpay_payment_id": "pay_xxxxxxxxxxxxx",
+  "razorpay_order_id": "order_8921223049xxx",
+  "razorpay_payment_id": "pay_8921223049xxx",
   "razorpay_signature": "signature_string"
 }
 ```

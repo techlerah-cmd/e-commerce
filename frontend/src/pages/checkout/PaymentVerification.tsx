@@ -436,8 +436,8 @@ const PaymentVerification = () => {
               </div>
 
               <div className="text-xs text-[hsl(var(--muted-foreground))]">
-                <p>Need help? Email us at support@lerahsaree.com</p>
-                <p>or call +91-XXXXXXXXXX</p>
+                <p>Need help? Email us at admin@lerah.in</p>
+                <p>or call +91-8921223049</p>
               </div>
             </div>
           </CardContent>
