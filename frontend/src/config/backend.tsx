@@ -1,6 +1,6 @@
 import { get } from "http";
 
-export const API_URL = `${"https://backend.lerah.in"}/api/v1`;
+export const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
 export const API_ENDPOINT = {
   VERIFY_USER: `${API_URL}/user/verify-me `,
   LOGIN: `${API_URL}/user/login`,
