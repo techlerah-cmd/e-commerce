@@ -29,7 +29,7 @@ def get_product(
 
     return db_product
 
-@app.post('/',response_model=ProductResponse)
+@app.post('',response_model=ProductResponse)
 def create_product(
       title:str=Form(...),
       description:str=Form(...),
