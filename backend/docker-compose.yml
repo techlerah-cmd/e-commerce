@@ -5,6 +5,8 @@ services:
     build: ./
     container_name: fastapi
     restart: always
+    volumes:
+      - ./media:/app/media
     env_file:
       - .env
     depends_on:
@@ -56,6 +58,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
+      - ./media:/app/media
       - ./nginx/certbot/conf:/etc/letsencrypt
       - ./nginx/certbot/www:/var/www/certbot
     depends_on:
