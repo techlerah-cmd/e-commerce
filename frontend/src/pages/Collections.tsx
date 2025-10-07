@@ -170,8 +170,9 @@ const Collections = () => {
                 </Button>
               </div>
               <div className="flex items-center gap-3">
+                <p className="w-20 pl-2">Filter : </p>
                 <Select value={filter} onValueChange={setFilter}>
-                  <SelectTrigger className="w-ful">
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
                   <SelectContent>
@@ -185,9 +186,6 @@ const Collections = () => {
                     </SelectItem>
                   </SelectContent>
                 </Select>
-                <Button variant="outline" className="btn-outline-luxury">
-                  Filters
-                </Button>
               </div>
             </div>
           </div>
