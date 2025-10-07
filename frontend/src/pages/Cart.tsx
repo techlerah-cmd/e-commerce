@@ -61,8 +61,7 @@ const Cart = () => {
     if (response.status === 200) {
       const subtotal = calculateSumOfItems(response.data.items);
       const discount = calculateCouponDiscount(subtotal, response.data.coupon);
-      const shipping =
-        response.data.items.length != 0 ? (subtotal > 2000 ? 0 : 200) : 0;
+      const shipping = 0
       setCart({
         ...response.data,
         items: [...response.data.items],
@@ -109,8 +108,7 @@ const Cart = () => {
       const updatedItems = cart.items.filter((i) => i.id != id);
       const subtotal = calculateSumOfItems(updatedItems);
       const discount = 0;
-      const shipping =
-        updatedItems.length != 0 ? (subtotal > 2000 ? 0 : 200) : 0;
+      const shipping = 0
       setCart({
         ...cart,
         items: updatedItems,
