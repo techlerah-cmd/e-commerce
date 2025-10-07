@@ -207,7 +207,7 @@ const Cart = () => {
         </section>
 
         <section className="px-3 py-6 sm:px-6 lg:px-8">
-          {!isFetched || !cart ? (
+          {(fetching && fetchType == "getCart") ? (
             <div className="py-4">
               <Loading />
             </div>
