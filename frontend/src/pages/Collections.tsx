@@ -171,7 +171,7 @@ const Collections = () => {
               </div>
               <div className="flex items-center gap-3">
                 <Select value={filter} onValueChange={setFilter}>
-                  <SelectTrigger className="w-48">
+                  <SelectTrigger className="w-ful">
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
                   <SelectContent>
