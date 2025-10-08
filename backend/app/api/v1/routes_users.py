@@ -30,22 +30,35 @@ def login(data:LoginRequest,db:Session=Depends(get_db)):
   token = create_access_token({'sub':data.email})
   return { 'user':user,'token':token }
 
-@app.post('/google-login',dependencies=[Depends(RateLimiter(times=10, seconds=60))])
-def google_login(data:GoogleLoginRequest,db:Session=Depends(get_db)):
-  idinfo = id_token.verify_oauth2_token(
-            data.token,
-            requests.Request(),
-            settings.GOOGLE_CLIENT_ID
-        )
-  user_email = idinfo["email"]
-  user_full_name = idinfo.get("name")  
-  user = crud_auth.get_user_by_email(db,user_email)
-  # Create user if not exists
-  if not user:
-    user = crud_auth.create_user(db,user_email)
-    crud_auth.update_user_data(db,user,{'full_name':user_full_name})
-  token = create_access_token(data={'sub':user_email})
-  return {'token':token,'user':user} 
+
+@app.post('/google-login', dependencies=[Depends(RateLimiter(times=10, seconds=60))])
+def google_login(data: GoogleLoginRequest, db: Session = Depends(get_db)):
+    access_token = data.token  # this is your access_token from frontend
+
+    # Get user info from Google
+    userinfo_resp = requests.get(
+        "https://openidconnect.googleapis.com/v1/userinfo",
+        headers={"Authorization": f"Bearer {access_token}"}
+    )
+
+    if userinfo_resp.status_code != 200:
+        # invalid token or expired
+        raise HTTPException(status_code=400, detail="Invalid Google token")
+
+    idinfo = userinfo_resp.json()
+    # idinfo contains fields like email, name, sub (google user id), email_verified
+
+    # Optionally: validate that the token was intended for your client by checking aud/azp if present.
+    user_email = idinfo.get("email")
+    user_full_name = idinfo.get("name")
+
+    user = crud_auth.get_user_by_email(db, user_email)
+    if not user:
+        user = crud_auth.create_user(db, user_email)
+        crud_auth.update_user_data(db, user, {"full_name": user_full_name})
+
+    token = create_access_token(data={"sub": user_email})
+    return {"token": token, "user": user}
 
 @app.post('/forgot-password',response_model=ForgotPasswordResponse,dependencies=[Depends(RateLimiter(times=10, seconds=60))])
 def forgot_password(data:ForgotPassword,background_tasks: BackgroundTasks,db:Session=Depends(get_db)):
