@@ -178,6 +178,8 @@ const LoginPage = () => {
                         console.log("Prompt displayed");
                       }
                     }}
+                    auto_select={false}
+                    width={"100%"}
                   />
                 </div>
               </div>
