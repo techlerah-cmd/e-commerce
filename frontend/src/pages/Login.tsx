@@ -174,7 +174,6 @@ const LoginPage = () => {
                       style: {
                         width: "100%",
                         backgroundColor: "white",
-                        paddingBottom: "4px",
                       },
                     }}
                   />
