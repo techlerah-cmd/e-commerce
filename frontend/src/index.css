@@ -563,4 +563,5 @@ All colors MUST be HSL.
 .google-login-container #gsi_474816_492775-wrapper,
 .google-login-container .gsi_474816_492775-wrapper {
   background-color: white;
+  width: 100%;
 }
