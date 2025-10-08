@@ -559,6 +559,3 @@ All colors MUST be HSL.
   display: inline-block !important;
   vertical-align: middle !important;
 }
-.google-login-container iframe {
-  display: none !important;
-}
