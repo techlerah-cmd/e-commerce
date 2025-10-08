@@ -171,7 +171,11 @@ const LoginPage = () => {
                     // pass container props so wrapper can be full width
                     containerProps={{
                       className: "w-full google-login-container",
-                      style: { width: "100%" },
+                      style: {
+                        width: "100%",
+                        backgroundColor: "white",
+                        paddingBottom: "4px",
+                      },
                     }}
                   />
                 </div>
