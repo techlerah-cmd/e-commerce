@@ -559,3 +559,8 @@ All colors MUST be HSL.
   display: inline-block !important;
   vertical-align: middle !important;
 }
+
+.google-login-container #gsi_474816_492775-wrapper,
+.google-login-container .gsi_474816_492775-wrapper {
+  background-color: white;
+}
