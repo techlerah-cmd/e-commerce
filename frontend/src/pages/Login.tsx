@@ -167,20 +167,12 @@ const LoginPage = () => {
                     onSuccess={handleGoogleLogin}
                     onError={() => console.log("Login Failed")}
                     useOneTap={false}
-                    theme="outline"
-                    size="large"
-                    shape="rectangular"
-                    type="standard"
-                    context="signin"
-                    // This ensures no pre-selected account — forces chooser
-                    promptMomentNotification={(notification) => {
-                      if (notification.isDisplayed()) {
-                        console.log("Prompt displayed");
-                      }
-                    }}
                     auto_select={false}
-                    width={"100%"}
-                    containerProps={{className: "w-full",style:{width:"100%"}}}
+                    // pass container props so wrapper can be full width
+                    containerProps={{
+                      className: "w-full google-login-container",
+                      style: { width: "100%" },
+                    }}
                   />
                 </div>
               </div>

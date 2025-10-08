@@ -526,4 +526,36 @@ All colors MUST be HSL.
   .shadow-card {
     box-shadow: var(--shadow-card);
   }
+} /* keep wrapper full-width */
+.google-login-container {
+  width: 100% !important;
+  display: block !important;
+}
+
+/* force main button to full width and center */
+.google-login-container [role="button"],
+.google-login-container .g_id_signin,
+.google-login-container .g_id_signin > div {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+  white-space: nowrap !important; /* avoid wrapping */
+}
+
+/* show only the first span (label); hide other nested spans that cause duplication */
+.google-login-container [role="button"] span:not(:first-child) {
+  /* display: none !important; */
+}
+
+/* truncate the visible label so it never grows beyond container */
+.google-login-container [role="button"] span:first-child {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  max-width: 100% !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
 }
