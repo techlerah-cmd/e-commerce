@@ -170,7 +170,14 @@ const LoginPage = () => {
                     theme="outline"
                     size="large"
                     shape="rectangular"
-                    /* remove width prop or use a px number: width={320} */
+                    type="standard"
+                    context="signin"
+                    // This ensures no pre-selected account — forces chooser
+                    promptMomentNotification={(notification) => {
+                      if (notification.isDisplayed()) {
+                        console.log("Prompt displayed");
+                      }
+                    }}
                   />
                 </div>
               </div>
