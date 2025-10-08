@@ -180,6 +180,7 @@ const LoginPage = () => {
                     }}
                     auto_select={false}
                     width={"100%"}
+                    containerProps={{className: "w-full",style:{width:"100%"}}}
                   />
                 </div>
               </div>
