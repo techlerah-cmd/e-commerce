@@ -1,9 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-		<!--	created with www.mysitemapgenerator.com	-->
-		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url>
-	<loc>https://www.lerah.in/</loc>
-	<lastmod>2025-10-07T00:21:15+01:00</lastmod>
-	<priority>1.0</priority>
-</url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Homepage -->
+  <url>
+    <loc>https://www.lerah.in/</loc>
+    <lastmod>2025-10-09T00:00:00+01:00</lastmod>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Collections -->
+  <url>
+    <loc>https://www.lerah.in/collections</loc>
+    <lastmod>2025-10-09T00:00:00+01:00</lastmod>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Contact -->
+  <url>
+    <loc>https://www.lerah.in/contact</loc>
+    <lastmod>2025-10-09T00:00:00+01:00</lastmod>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Policy -->
+  <url>
+    <loc>https://www.lerah.in/policy</loc>
+    <lastmod>2025-10-09T00:00:00+01:00</lastmod>
+    <priority>0.6</priority>
+  </url>
+
+  
+
+
+  <!-- Login & Reset Password (optional, low priority) -->
+  <url>
+    <loc>https://www.lerah.in/login</loc>
+    <lastmod>2025-10-09T00:00:00+01:00</lastmod>
+    <priority>0.4</priority>
+  </url>
+
+
 </urlset>
