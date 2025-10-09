@@ -231,7 +231,7 @@ def get_products_feed(db:Session=Depends(get_db),):
         price_str = f"{product.price:.2f} INR" if product.price else "0 INR"
 
         # Product link (adjust your frontend URL structure)
-        link = f"{settings.BASE_URL}/product/{product.id}"
+        link = f"{settings.FRONTEND_URL}/product/{product.id}"
 
         availability = "in stock" if product.stock > 0 else "out of stock"
 
