@@ -230,16 +230,12 @@ const Collections = () => {
                     {(searchTerm || filter) && (
                       <Button
                         variant="outlineSecondary"
-                        className="btn-outline-luxury"
                         onClick={() => {
                           setSearchTerm("");
                           setSearch("");
                           setFilter("");
                         }}
-                        style={{
-                          borderColor: "hsl(var(--primary))",
-                          color: "hsl(var(--primary))",
-                        }}
+                       
                       >
                         Clear Filters
                       </Button>
