@@ -126,26 +126,7 @@ const Footer = () => {
               <Heart className="w-4 h-4 text-accent fill-accent" /> for timeless
               elegance.
             </p>
-            <div className="flex gap-6">
-              <Link
-                to="#"
-                className="font-sans-clean text-muted hover:text-accent transition-colors duration-300 text-sm"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                to="#"
-                className="font-sans-clean text-muted hover:text-accent transition-colors duration-300 text-sm"
-              >
-                Terms of Service
-              </Link>
-              <Link
-                to="#"
-                className="font-sans-clean text-muted hover:text-accent transition-colors duration-300 text-sm"
-              >
-                Returns
-              </Link>
-            </div>
+            
           </div>
         </div>
       </div>

@@ -246,29 +246,29 @@ const Collections = () => {
                     )}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                  <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {products.map((p) => (
                       <div
                         key={p.id}
                         className="group cursor-pointer"
                         onClick={() => navigate(`/product/${p.id}`)}
                       >
-                        {/* card wrapper */}
+                        {/* CARD WRAPPER */}
                         <div className="relative overflow-hidden">
-                          {/* IMAGE SECTION */}
-                          <div className="relative w-full h-72 sm:h-80 md:h-[26rem] lg:h-[30rem]">
+                          {/* PRODUCT IMAGE (FULL COVER) */}
+                          <div className="relative w-full h-56 sm:h-72 md:h-[26rem] lg:h-[30rem]">
                             <img
                               src={p.image}
                               alt={p.title}
                               className="
               absolute inset-0 w-full h-full 
-              object-contain sm:object-cover 
-              transition-all duration-700 ease-out
-              group-hover:scale-[1.02]
+              object-cover 
+              transition-transform duration-700 ease-out
+              group-hover:scale-105
             "
                             />
 
-                            {/* dark overlay for consistency */}
+                            {/* Subtle dark overlay for readability */}
                             <div
                               className="absolute inset-0 pointer-events-none"
                               style={{
@@ -278,12 +278,12 @@ const Collections = () => {
                               }}
                             />
 
-                            {/* OUT OF STOCK BADGE */}
+                            {/* OUT OF STOCK LABEL */}
                             {p.stock === 0 && (
                               <div className="absolute left-1/2 bottom-6 transform -translate-x-1/2 w-10/12 md:w-8/12 lg:w-1/2">
                                 <div className="bg-white/95 px-4 py-3 text-center rounded-sm shadow-sm">
                                   <span
-                                    className="block font-semibold uppercase tracking-wider"
+                                    className="block font-semibold uppercase tracking-wider text-xs md:text-sm"
                                     style={{
                                       color: "hsl(var(--ast-global-color-2))",
                                     }}
@@ -295,10 +295,10 @@ const Collections = () => {
                             )}
                           </div>
 
-                          {/* TEXT AREA */}
-                          <div className="px-6 py-2 pb-4 text-center">
+                          {/* TEXT CONTENT */}
+                          <div className="px-4 sm:px-6 py-2 pb-4 text-center">
                             <h3
-                              className="font-serif-elegant text-lg md:text-xl lg:text-2xl font-semibold mb-3"
+                              className="font-serif-elegant text-sm sm:text-lg md:text-xl lg:text-2xl font-semibold mb-2"
                               style={{
                                 color: "hsl(var(--ast-global-color-2))",
                               }}
@@ -308,7 +308,7 @@ const Collections = () => {
 
                             <div className="mb-2 flex justify-center gap-1">
                               <div
-                                className="text-base md:text-lg font-semibold"
+                                className="text-sm sm:text-base md:text-lg font-semibold"
                                 style={{
                                   color: "hsl(var(--ast-global-color-2))",
                                 }}
@@ -317,7 +317,7 @@ const Collections = () => {
                               </div>
                               {p.actual_price > p.price && (
                                 <div
-                                  className="text-sm mt-1 line-through"
+                                  className="text-xs sm:text-sm mt-1 line-through"
                                   style={{
                                     color: "hsl(var(--muted-foreground))",
                                   }}
@@ -330,7 +330,7 @@ const Collections = () => {
                             {/* READ MORE BUTTON */}
                             <Button
                               variant="outline"
-                              className="text-secondary border-transparent hover:bg-secondary hover:text-muted"
+                              className="text-secondary border-transparent hover:bg-secondary hover:text-muted text-xs sm:text-sm"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 navigate(`/product/${p.id}`);

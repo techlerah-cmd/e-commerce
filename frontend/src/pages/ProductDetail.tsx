@@ -363,7 +363,7 @@ const ProductDetail = () => {
                           />
                         </Button> */}
                         <Button
-                          variant="outline"
+                          variant="outlineSecondary"
                           onClick={handleShare}
                           className="btn-outline-luxury"
                         >
