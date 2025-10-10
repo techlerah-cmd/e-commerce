@@ -5,10 +5,18 @@ const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
 >(({ className, ...props }, ref) => (
-  <div className="relative w-full overflow-auto rounded-xl border border-border shadow-[0_0_16px_hsla(44,95%,48%,0.1)]">
+  <div
+    className={cn(
+      "relative w-full overflow-auto rounded-xl border border-[hsl(var(--border))] shadow-card bg-[hsl(var(--background))]",
+      className
+    )}
+  >
     <table
       ref={ref}
-      className={cn("w-full caption-bottom text-sm text-foreground", className)}
+      className={cn(
+        "w-full caption-bottom text-sm text-[hsl(var(--foreground))]",
+        className
+      )}
       {...props}
     />
   </div>
@@ -22,7 +30,8 @@ const TableHeader = React.forwardRef<
   <thead
     ref={ref}
     className={cn(
-      "[&_tr]:border-b border-border bg-[hsl(276,62%,20%)]/60 backdrop-blur-sm",
+      /* subtle tinted header with backdrop + defined border */
+      "[&_tr]:border-b border-[hsl(var(--border))] bg-[hsl(var(--secondary))]/8 backdrop-blur-sm",
       className
     )}
     {...props}
@@ -37,7 +46,8 @@ const TableBody = React.forwardRef<
   <tbody
     ref={ref}
     className={cn(
-      "[&_tr:last-child]:border-0 text-[hsl(40,98%,84%)]",
+      /* neutral rows, dark text for readability on white bg */
+      "[&_tr:last-child]:border-0 text-[hsl(var(--foreground))] [&_tr]:bg-transparent",
       className
     )}
     {...props}
@@ -52,7 +62,7 @@ const TableFooter = React.forwardRef<
   <tfoot
     ref={ref}
     className={cn(
-      "border-t border-border bg-[hsl(276,40%,12%)]/80 font-medium text-[hsl(44,95%,66%)] [&>tr]:last:border-b-0",
+      "border-t border-[hsl(var(--border))] bg-[hsl(var(--secondary))]/6 font-medium text-[hsl(var(--muted-foreground))] [&>tr]:last:border-b-0",
       className
     )}
     {...props}
@@ -67,7 +77,8 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      "border-b border-border transition-colors duration-200 data-[state=selected]:bg-[hsl(276,62%,22%)] hover:bg-[hsl(276,50%,24%)]/60",
+      /* hover and selected states use subtle secondary tint; smooth transitions */
+      "border-b border-[hsl(var(--border))] transition-colors duration-200 hover:bg-[hsl(var(--secondary))]/6 data-[state=selected]:bg-[hsl(var(--secondary))]/10",
       className
     )}
     {...props}
@@ -82,7 +93,7 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      "h-12 px-4 text-left align-middle font-semibold tracking-wide text-[hsl(44,95%,72%)] uppercase [&:has([role=checkbox])]:pr-0",
+      "h-12 px-4 text-left align-middle font-semibold tracking-wide text-[hsl(var(--secondary))] uppercase text-xs",
       className
     )}
     {...props}
@@ -97,7 +108,7 @@ const TableCell = React.forwardRef<
   <td
     ref={ref}
     className={cn(
-      "p-4 align-middle text-[hsl(40,98%,90%)] [&:has([role=checkbox])]:pr-0",
+      "p-4 align-middle text-[hsl(var(--foreground))] text-sm [&:has([role=checkbox])]:pr-0",
       className
     )}
     {...props}
@@ -111,7 +122,10 @@ const TableCaption = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <caption
     ref={ref}
-    className={cn("mt-4 text-sm text-[hsl(44,95%,70%)]/80 italic", className)}
+    className={cn(
+      "mt-4 text-sm text-[hsl(var(--muted-foreground))] italic",
+      className
+    )}
     {...props}
   />
 ));

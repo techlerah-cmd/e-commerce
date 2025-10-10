@@ -34,7 +34,7 @@ const CtaSection = () => {
             Begin Your <span className="text-gradient-gold">Elegance</span>{" "}
             Journey
           </h2>
-          <p className="font-sans-clean text-lg text-primary-foreground/90 mb-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="font-sans-clean text-lg text-muted mb-8 max-w-2xl mx-auto leading-relaxed">
             Discover the perfect saree that tells your story. From traditional
             ceremonies to modern celebrations, find your signature style.
           </p>
@@ -42,30 +42,30 @@ const CtaSection = () => {
         </div>
 
         {/* Newsletter Signup */}
-        <div className="bg-primary-foreground/10 backdrop-blur-sm rounded-2xl p-8 border border-primary-foreground/20">
+        <div className="bg-primary-foreground/40 backdrop-blur-sm rounded-2xl p-8 border border-primary-foreground/20">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Mail className="w-6 h-6 text-accent" />
-            <h3 className="font-serif-elegant text-2xl font-semibold text-primary-foreground">
+            <h3 className="font-serif-elegant text-2xl font-semibold text-primary">
               Stay in Style
             </h3>
           </div>
-          <p className="font-sans-clean text-primary-foreground/80 mb-6 max-w-md mx-auto">
+          <p className="font-sans-clean  mb-6 max-w-md mx-auto text-muted">
             Get exclusive access to new collections, styling tips, and special
             offers
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto text-muted">
             <Input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              className="bg-primary-foreground/20 border-primary-foreground/30 text-primary-foreground placeholder:text-primary-foreground/60 focus:border-accent focus:ring-accent"
+              className="bg-primary-foreground/20 border-primary-foreground/30  focus:border-accent focus:ring-accent text-muted  placeholder:text-muted"
             />
             <Button onClick={handleSubscribe}>Subscribe</Button>
           </div>
 
-          <p className="font-sans-clean text-xs text-primary-foreground/60 mt-4">
+          <p className="font-sans-clean text-xs text-muted mt-4 text-gray-300">
             We respect your privacy. Unsubscribe at any time.
           </p>
         </div>

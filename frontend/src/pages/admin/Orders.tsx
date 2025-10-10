@@ -66,7 +66,7 @@ const Orders = () => {
     page: 0,
     size: 20,
     total: 0,
-  }); 
+  });
   const navigate = useNavigate();
   useEffect(() => {
     fetchProducts();
@@ -215,7 +215,7 @@ const Orders = () => {
     <AdminLayout>
       <div className="max-w-6xl space-y-8">
         <div className="flex items-center justify-between">
-          <h1 className="font-serif-elegant text-3xl text-primary">
+          <h1 className="font-serif-elegant text-3xl text-secondary">
             Orders Management
           </h1>
         </div>
@@ -260,7 +260,7 @@ const Orders = () => {
                       <CardHeader>
                         <div className="flex items-center justify-between">
                           <div className="space-y-1">
-                            <CardTitle className="text-primary">
+                            <CardTitle className="text-secondary">
                               Order #
                               {order.order_number ||
                                 order.order_number ||
@@ -299,7 +299,7 @@ const Orders = () => {
                               <p className="text-muted-foreground">
                                 Total Amount
                               </p>
-                              <p className="font-semibold text-accent">
+                              <p className="font-semibold text-primary-foreground">
                                 ₹{order.total.toLocaleString("en-IN")}
                               </p>
                             </div>
@@ -355,7 +355,7 @@ const Orders = () => {
                           {/* Action Buttons */}
                           <div className="flex gap-2 pt-2">
                             <Button
-                              variant="outline"
+                              variant="outlineSecondary"
                               size="sm"
                               onClick={() => openDetailsDialog(order)}
                               className="flex items-center gap-2"
@@ -364,7 +364,7 @@ const Orders = () => {
                               View Details
                             </Button>
                             <Button
-                              variant="outline"
+                              variant="outlineSecondary"
                               size="sm"
                               onClick={() => openStatusDialog(order)}
                               className="flex items-center gap-2"
@@ -382,7 +382,7 @@ const Orders = () => {
                 {!fetching && (
                   <div className="flex flex-row justify-center items-center gap-3 sm:gap-4 mt-6">
                     <Button
-                      variant="outline"
+                      variant="outlineSecondary"
                       onClick={goToPreviousPage}
                       disabled={!pagination.has_prev}
                       className="flex items-center justify-center gap-2 w-auto sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-4 sm:py-2"
@@ -413,7 +413,7 @@ const Orders = () => {
                     </span>
 
                     <Button
-                      variant="outline"
+                      variant="outlineSecondary"
                       onClick={goToNextPage}
                       disabled={!pagination.has_next}
                       className="flex items-center justify-center gap-2 w-auto sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-4 sm:py-2"
@@ -928,7 +928,7 @@ const Orders = () => {
                   Update Status
                 </Button>
                 <Button
-                  variant="outline"
+                  variant="outlineSecondary"
                   onClick={() => setStatusDialogOpen(false)}
                 >
                   Cancel

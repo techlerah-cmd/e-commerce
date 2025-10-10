@@ -21,16 +21,20 @@ const buttonVariants = cva(
         outline:
           "border-2 border-accent text-accent bg-transparent hover:bg-accent hover:text-accent-foreground transition-all duration-300",
 
+        // 🆕 Outline Secondary
+        outlineSecondary:
+          "border-2 border-secondary text-secondary bg-transparent hover:bg-secondary hover:text-secondary-foreground transition-all duration-300",
+
         // Subtle Muted Button
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-muted hover:text-foreground shadow-sm",
+          "bg-secondary text-secondary-foreground hover:bg-primary hover:border-secondary  hover:text-foreground shadow-sm",
 
         // Minimal transparent button
         ghost:
           "text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-all duration-300",
 
         // Underlined link button
-        link: "text-accent underline underline-offset-4 hover:text-accent-glow transition-all duration-300",
+        link: "text-accent hover:text-accent-glow transition-all duration-300",
       },
       size: {
         default: "h-10 px-6 py-2",
@@ -56,8 +60,8 @@ export interface ButtonProps
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
-      className,
       variant,
+      className,
       size,
       asChild = false,
       loading = false,
@@ -80,6 +84,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
   }
 );
+
 Button.displayName = "Button";
 
 export { Button, buttonVariants };

@@ -294,19 +294,20 @@ const Policy = () => {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+      <section className="relative py-20 px-6 bg-secondary">
+        <div className="text-center ">
+          <h1 className="text-4xl md:text-5xl font-serif-elegant text-gradient-purple mb-4">
+            Our Policies
+          </h1>
+          <p className="text-xl text-muted max-w-2xl mx-auto">
+            Transparency and trust are at the heart of our relationship with
+            you. Please review our policies to understand how we serve you.
+          </p>
+        </div>
+      </section>
+      <main className="min-h-screen  ">
         <div className="container mx-auto px-4 py-16">
           {/* Hero Section */}
-          <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-serif-elegant text-gradient-purple mb-4">
-              Our Policies
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Transparency and trust are at the heart of our relationship with
-              you. Please review our policies to understand how we serve you.
-            </p>
-            <Separator className="mt-8 w-24 mx-auto bg-gradient-to-r from-primary to-accent" />
-          </div>
 
           {/* Policy Sections */}
           <div className="max-w-4xl mx-auto space-y-8">
@@ -316,7 +317,7 @@ const Policy = () => {
                 className={`card-luxury transition-all duration-700 `}
               >
                 <CardHeader>
-                  <CardTitle className="text-2xl font-serif-elegant text-gradient-purple">
+                  <CardTitle className="text-2xl font-serif-elegant text-secondary">
                     {section.title}
                   </CardTitle>
                 </CardHeader>

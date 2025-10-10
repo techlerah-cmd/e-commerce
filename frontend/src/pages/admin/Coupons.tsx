@@ -54,6 +54,7 @@ import { useAPICall } from "@/hooks/useApiCall";
 import { API_ENDPOINT } from "@/config/backend";
 import { useAuth } from "@/contexts/AuthContext";
 import toast from "react-hot-toast";
+import { Loading } from "@/components/ui/Loading";
 
 const Coupons = () => {
   const [coupons, setCoupons] = useState<ICouponCode[]>([]);
@@ -238,7 +239,7 @@ const Coupons = () => {
     <AdminLayout>
       <div className="max-w-7xl">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="font-serif-elegant text-3xl text-primary">
+          <h1 className="font-serif-elegant text-3xl text-secondary">
             Coupon Management
           </h1>
           <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
@@ -256,7 +257,7 @@ const Coupons = () => {
             </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle className="font-serif-elegant text-xl text-primary">
+                <DialogTitle className="font-serif-elegant text-xl text-secondary">
                   Add New Coupon
                 </DialogTitle>
               </DialogHeader>
@@ -324,96 +325,108 @@ const Coupons = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {coupons.map((coupon) => (
-                    <TableRow key={coupon.code}>
-                      <TableCell>
-                        <div className="font-medium text-primary">
-                          {coupon.code}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1">
-                          <span className="font-medium">
-                            {coupon.discount_type === "percent"
-                              ? `${coupon.discount_value}%`
-                              : `${coupon.discount_value}₹`}
-                          </span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="font-medium">
-                          ₹{coupon.min_order.toLocaleString()}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1">
-                          <Users className="w-4 h-4 text-muted-foreground" />
-                          <span className="font-medium">
-                            {coupon.used_count}
-                            {coupon.max_uses ? `/${coupon.max_uses}` : ""}
-                          </span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4 text-muted-foreground" />
-                          <span className="text-sm">
-                            {coupon.expires_at
-                              ? new Date(coupon.expires_at).toLocaleDateString()
-                              : "Never"}
-                          </span>
-                        </div>
-                      </TableCell>
-
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                              setEditingCoupon(coupon);
-                              setForm({
-                                ...coupon,
-                                expires_at: new Date(coupon.expires_at)
-                                  .toISOString()
-                                  .split("T")[0],
-                              });
-                              setIsEditModalOpen(true);
-                            }}
-                          >
-                            <Edit className="w-4 h-4" />
-                          </Button>
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button variant="outline" size="sm">
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>
-                                  Delete Coupon
-                                </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  Are you sure you want to delete "{coupon.code}
-                                  "? This action cannot be undone.
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                  onClick={() => handleDelete(coupon.id)}
-                                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                >
-                                  Delete
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        </div>
+                  {fetching && fetchType == "getProducts" && (
+                    <TableRow>
+                      <TableCell colSpan={6}>
+                        <Loading />
                       </TableCell>
                     </TableRow>
-                  ))}
+                  )}
+
+                  {!fetching &&
+                    coupons.map((coupon) => (
+                      <TableRow key={coupon.code}>
+                        <TableCell>
+                          <div className="font-medium text-secondary">
+                            {coupon.code}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-1">
+                            <span className="font-medium">
+                              {coupon.discount_type === "percent"
+                                ? `${coupon.discount_value}%`
+                                : `${coupon.discount_value}₹`}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="font-medium">
+                            ₹{coupon.min_order.toLocaleString()}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-1">
+                            <Users className="w-4 h-4 text-muted-foreground" />
+                            <span className="font-medium">
+                              {coupon.used_count}
+                              {coupon.max_uses ? `/${coupon.max_uses}` : ""}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-1">
+                            <Calendar className="w-4 h-4 text-muted-foreground" />
+                            <span className="text-sm">
+                              {coupon.expires_at
+                                ? new Date(
+                                    coupon.expires_at
+                                  ).toLocaleDateString()
+                                : "Never"}
+                            </span>
+                          </div>
+                        </TableCell>
+
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="outlineSecondary"
+                              size="sm"
+                              onClick={() => {
+                                setEditingCoupon(coupon);
+                                setForm({
+                                  ...coupon,
+                                  expires_at: new Date(coupon.expires_at)
+                                    .toISOString()
+                                    .split("T")[0],
+                                });
+                                setIsEditModalOpen(true);
+                              }}
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button variant="outlineSecondary" size="sm">
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>
+                                    Delete Coupon
+                                  </AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Are you sure you want to delete "
+                                    {coupon.code}
+                                    "? This action cannot be undone.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => handleDelete(coupon.id)}
+                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                  >
+                                    Delete
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </CardContent>
@@ -427,7 +440,9 @@ const Coupons = () => {
               <CardContent className="p-4">
                 <div className="flex justify-between items-start mb-3">
                   <div>
-                    <h3 className="font-medium text-primary">{coupon.code}</h3>
+                    <h3 className="font-medium text-secondary">
+                      {coupon.code}
+                    </h3>
                     <div className="flex items-center gap-1 text-sm text-muted-foreground">
                       {coupon.discount_type === "percent" ? (
                         <Percent className="w-3 h-3" />
@@ -469,7 +484,7 @@ const Coupons = () => {
 
                 <div className="flex gap-2">
                   <Button
-                    variant="outline"
+                    variant="outlineSecondary"
                     size="sm"
                     onClick={() => {
                       setEditingCoupon(coupon);
@@ -488,7 +503,11 @@ const Coupons = () => {
                   </Button>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button variant="outline" size="sm" className="flex-1">
+                      <Button
+                        variant="outlineSecondary"
+                        size="sm"
+                        className="flex-1"
+                      >
                         <Trash2 className="w-4 h-4 mr-2" />
                         Delete
                       </Button>
@@ -522,7 +541,6 @@ const Coupons = () => {
         {!fetching && coupons.length > 0 && (
           <div className="flex flex-row justify-center items-center gap-3 sm:gap-4 mt-6">
             <Button
-              variant="outline"
               onClick={goToPreviousPage}
               disabled={!pagination.has_prev}
               className="flex items-center justify-center gap-2 w-auto sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-4 sm:py-2"
@@ -553,7 +571,6 @@ const Coupons = () => {
             </span>
 
             <Button
-              variant="outline"
               onClick={goToNextPage}
               disabled={!pagination.has_next}
               className="flex items-center justify-center gap-2 w-auto sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-4 sm:py-2"
@@ -581,7 +598,7 @@ const Coupons = () => {
         <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="font-serif-elegant text-xl text-primary">
+              <DialogTitle className="font-serif-elegant text-xl text-secondary">
                 Edit Coupon
               </DialogTitle>
             </DialogHeader>
@@ -670,12 +687,14 @@ const CouponForm: React.FC<CouponFormProps> = ({
           <Button
             type="button"
             variant={form.discount_type === "percent" ? "default" : "outline"}
+            className="text-secondary"
             onClick={() => setForm({ ...form, discount_type: "percent" })}
           >
             Percent (%)
           </Button>
           <Button
             type="button"
+            className="text-secondary"
             variant={form.discount_type === "flat" ? "default" : "outline"}
             onClick={() => setForm({ ...form, discount_type: "flat" })}
           >
@@ -710,7 +729,7 @@ const CouponForm: React.FC<CouponFormProps> = ({
       <div className="flex justify-end gap-2 pt-4">
         <Button
           type="button"
-          variant="outline"
+          variant="outlineSecondary"
           onClick={onCancel}
           disabled={loading}
         >

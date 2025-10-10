@@ -322,7 +322,7 @@ const CheckoutPage = () => {
         <section className="px-3 py-6 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <div className="mb-6">
-              <h1 className="font-serif-elegant text-3xl text-[hsl(var(--primary))]">
+              <h1 className="font-serif-elegant text-3xl text-[hsl(var(--secondary))]">
                 Checkout
               </h1>
               <p className="text-[hsl(var(--muted-foreground))] mt-1">
@@ -336,7 +336,7 @@ const CheckoutPage = () => {
                 {/* Delivery Address Section */}
                 <Card className=" border-[hsl(var(--border))] shadow-card">
                   <CardHeader>
-                    <CardTitle className="font-serif-elegant text-xl text-[hsl(var(--primary))] flex items-center gap-2">
+                    <CardTitle className="font-serif-elegant text-xl text-secondary flex items-center gap-2">
                       <MapPin className="h-5 w-5" />
                       Delivery Address
                     </CardTitle>
@@ -375,9 +375,9 @@ const CheckoutPage = () => {
                             >
                               <DialogTrigger asChild>
                                 <Button
-                                  variant="outline"
+                                  variant="outlineSecondary"
                                   size="sm"
-                                  className="btn-outline-luxury"
+                                  className=""
                                   onClick={() => {
                                     setAddressForm(address);
                                     setIsAddressModalOpen(true);
@@ -389,7 +389,7 @@ const CheckoutPage = () => {
                               </DialogTrigger>
                               <DialogContent className="max-w-md bg-[hsl(var(--card))] text-[hsl(var(--foreground))]">
                                 <DialogHeader>
-                                  <DialogTitle className="text-[hsl(var(--primary))]">
+                                  <DialogTitle className="text-[hsl(var(--secondary))]">
                                     Edit Address
                                   </DialogTitle>
                                 </DialogHeader>
@@ -573,7 +573,7 @@ const CheckoutPage = () => {
                           </DialogTrigger>
                           <DialogContent className="max-w-md bg-[hsl(var(--card))] text-[hsl(var(--foreground))]">
                             <DialogHeader>
-                              <DialogTitle className="text-[hsl(var(--primary))]">
+                              <DialogTitle className="text-[hsl(var(--secondary))]">
                                 Add Delivery Address
                               </DialogTitle>
                             </DialogHeader>
@@ -735,7 +735,7 @@ const CheckoutPage = () => {
                 {/* Order Items */}
                 <Card className="bg-[hsl(var(--card))] border-[hsl(var(--border))] shadow-card">
                   <CardHeader>
-                    <CardTitle className="font-serif-elegant text-xl text-[hsl(var(--primary))] flex items-center gap-2">
+                    <CardTitle className="font-serif-elegant text-xl text-secondary flex items-center gap-2">
                       <ShoppingBag className="h-5 w-5" />
                       Order Items ({cart.items.length})
                     </CardTitle>
@@ -767,7 +767,7 @@ const CheckoutPage = () => {
                               className="h-16 w-14 rounded-md object-cover ring-1 ring-[hsl(var(--border))]"
                             />
                             <div className="flex-1">
-                              <h3 className="font-medium text-[hsl(var(--primary))]">
+                              <h3 className="font-medium text-[hsl(var(--secondary))]">
                                 {item.product.title}
                               </h3>
                               <p className="text-sm text-[hsl(var(--muted-foreground))]">
@@ -797,7 +797,7 @@ const CheckoutPage = () => {
               <div>
                 <Card className="bg-[hsl(var(--card))] border-[hsl(var(--border))] shadow-luxury sticky top-6">
                   <CardHeader>
-                    <CardTitle className="font-serif-elegant text-xl text-[hsl(var(--primary))]">
+                    <CardTitle className="font-serif-elegant text-xl text-secondary">
                       Order Summary
                     </CardTitle>
                   </CardHeader>
@@ -817,7 +817,7 @@ const CheckoutPage = () => {
                             <Tag className="h-3 w-3 text-[hsl(var(--muted-foreground))]" />
                             Discount
                           </span>
-                          <span className="font-medium text-[hsl(var(--accent))]">
+                          <span className="font-medium text-green-500">
                             - {formatPrice(cart.discount)}
                           </span>
                         </div>
@@ -834,25 +834,20 @@ const CheckoutPage = () => {
                             : formatPrice(cart.shipping)}
                         </span>
                       </div>
-
-                      {cart.shipping === 0 && cart.subtotal > 0 && (
-                        <p className="text-xs text-[hsl(var(--accent))]">
-                          🎉 Free shipping on orders above ₹2,000
-                        </p>
-                      )}
                     </div>
 
                     <Separator />
 
                     <div className="flex justify-between text-lg font-semibold">
                       <span>Total</span>
-                      <span className="text-[hsl(var(--accent))]">
+                      <span className="text-secondary">
                         {formatPrice(cart.total)}
                       </span>
                     </div>
 
                     <Button
-                      className="w-full btn-luxury flex items-center gap-2"
+                      variant="secondary"
+                      className="w-full  flex items-center gap-2"
                       onClick={handleCheckout}
                       disabled={!address || cart.items.length === 0 || fetching}
                       loading={fetching || unexpectedError}
@@ -871,8 +866,8 @@ const CheckoutPage = () => {
                       {/* Razorpay Secure Payment Badge */}
                       <div className="p-3 bg-[linear-gradient(90deg,hsl(44 95% 48% / 0.08),hsl(276 62% 26% / 0.03))] rounded-lg border border-[hsl(var(--border))]">
                         <div className="flex items-center gap-2 mb-2">
-                          <Shield className="h-4 w-4 text-[hsl(var(--primary))]" />
-                          <span className="text-xs font-semibold text-[hsl(var(--primary))]">
+                          <Shield className="h-4 w-4 text-[hsl(var(--secondary))]" />
+                          <span className="text-xs font-semibold text-[hsl(var(--secondary))]">
                             Secure Payment with Razorpay
                           </span>
                         </div>
@@ -884,15 +879,15 @@ const CheckoutPage = () => {
 
                       <div className="space-y-2">
                         <div className="flex items-center gap-2 text-xs text-[hsl(var(--muted-foreground))]">
-                          <div className="w-2 h-2 bg-[hsl(var(--ring))] rounded-full"></div>
+                          <div className="w-2 h-2 bg-[hsl(var(--secondary))] rounded-full"></div>
                           SSL encrypted checkout
                         </div>
                         <div className="flex items-center gap-2 text-xs text-[hsl(var(--muted-foreground))]">
-                          <div className="w-2 h-2 bg-[hsl(var(--accent))] rounded-full"></div>
+                          <div className="w-2 h-2 bg-[hsl(var(--secondary))] rounded-full"></div>
                           Free returns within 7 days
                         </div>
                         <div className="flex items-center gap-2 text-xs text-[hsl(var(--muted-foreground))]">
-                          <div className="w-2 h-2 bg-[hsl(var(--primary))] rounded-full"></div>
+                          <div className="w-2 h-2 bg-[hsl(var(--secondary))] rounded-full"></div>
                           24/7 customer support
                         </div>
                       </div>

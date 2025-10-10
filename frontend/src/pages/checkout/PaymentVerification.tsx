@@ -196,15 +196,15 @@ const PaymentVerification = () => {
               <div className="text-center space-y-6">
                 <div className="flex justify-center">
                   <div className="relative">
-                    <Loader2 className="h-16 w-16 text-[hsl(var(--primary))] animate-spin" />
+                    <Loader2 className="h-16 w-16 text-[hsl(var(--secondary))] animate-spin" />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <Clock className="h-8 w-8 text-[hsl(var(--primary))]/80" />
+                      <Clock className="h-8 w-8 text-[hsl(var(--secondary))]/80" />
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <h2 className="text-2xl font-serif-elegant text-[hsl(var(--primary))] mb-2">
+                  <h2 className="text-2xl font-serif-elegant text-[hsl(var(--secondary))] mb-2">
                     Verifying Payment
                   </h2>
                   <p className="text-[hsl(var(--muted-foreground))]">
@@ -214,18 +214,18 @@ const PaymentVerification = () => {
 
                 <div className="bg-[hsl(var(--muted))]/30 rounded-lg p-4 border border-[hsl(var(--border))]">
                   <div className="flex items-center justify-center gap-2 mb-2">
-                    <Clock className="h-5 w-5 text-[hsl(var(--primary))]" />
-                    <span className="text-sm font-medium text-[hsl(var(--primary))]">
+                    <Clock className="h-5 w-5 text-[hsl(var(--secondary))]" />
+                    <span className="text-sm font-medium text-[hsl(var(--secondary))]">
                       Time Remaining
                     </span>
                   </div>
-                  <div className="text-3xl font-bold text-[hsl(var(--primary))] font-mono">
+                  <div className="text-3xl font-bold text-[hsl(var(--secondary))] font-mono">
                     {formatTime(timeRemaining)}
                   </div>
                   <div className="mt-2">
                     <div className="w-full bg-[hsl(var(--border))] rounded-full h-2">
                       <div
-                        className="bg-[hsl(var(--primary))] h-2 rounded-full transition-all duration-1000"
+                        className="bg-[hsl(var(--secondary))] h-2 rounded-full transition-all duration-1000"
                         style={{ width: `${(timeRemaining / 180) * 100}%` }}
                       />
                     </div>
@@ -255,9 +255,9 @@ const PaymentVerification = () => {
                   Verification attempt: {attemptCount + 1}
                 </p>
 
-                <div className="flex items-start gap-2 text-left bg-[hsl(var(--primary))]/10 p-3 rounded-lg border border-[hsl(var(--primary))]/20">
-                  <AlertCircle className="h-5 w-5 text-[hsl(var(--primary))]" />
-                  <p className="text-xs text-[hsl(var(--primary))]">
+                <div className="flex items-start gap-2 text-left bg-[hsl(var(--secondary))]/10 p-3 rounded-lg border border-[hsl(var(--secondary))]/20">
+                  <AlertCircle className="h-5 w-5 text-[hsl(var(--secondary))]" />
+                  <p className="text-xs text-[hsl(var(--secondary))]">
                     We're checking with the payment gateway. This usually takes
                     a few seconds. Please don't close this page.
                   </p>
@@ -271,87 +271,88 @@ const PaymentVerification = () => {
     );
   }
 
-  if (verificationStatus === "success") {
-    return (
-      <>
-        <Header />
-        <main className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))] flex items-center justify-center px-4 py-12">
-          <Card className="max-w-md w-full bg-[hsl(var(--card))] border-[hsl(var(--border))] shadow-luxury">
-            <CardContent className="pt-6 p-6">
-              <div className="text-center space-y-6">
-                <div className="flex justify-center">
-                  <div className="relative">
-                    <div
-                      className="absolute inset-0 rounded-full animate-pulse opacity-30"
-                      style={{ background: "hsla(44 95% 48% / 0.12)" }}
-                    />
-                    <div className="relative bg-[hsl(var(--muted))]/30 rounded-full p-4">
-                      <CheckCircle2 className="h-16 w-16 text-[hsl(var(--accent))]" />
-                    </div>
-                  </div>
-                </div>
+ if (verificationStatus === "success") {
+   return (
+     <>
+       <Header />
+       <main className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))] flex items-center justify-center px-4 py-12">
+         <Card className="max-w-md w-full bg-[hsl(var(--card))] border-[hsl(var(--border))] shadow-luxury">
+           <CardContent className="pt-6 p-6">
+             <div className="text-center space-y-6">
+               <div className="flex justify-center">
+                 <div className="relative">
+                   <div
+                     className="absolute inset-0 rounded-full animate-pulse opacity-30"
+                     style={{ background: "hsla(140 72% 35% / 0.12)" }} // ✅ green glow
+                   />
+                   <div className="relative bg-[hsl(var(--muted))]/30 rounded-full p-4">
+                     <CheckCircle2 className="h-16 w-16 text-green-600" />{" "}
+                     {/* ✅ green tick */}
+                   </div>
+                 </div>
+               </div>
 
-                <div>
-                  <h2 className="text-2xl font-serif-elegant text-[hsl(var(--primary))] mb-2">
-                    Thank You for Your Order!
-                  </h2>
-                  <p className="text-[hsl(var(--muted-foreground))]">
-                    Your payment has been confirmed successfully.
-                  </p>
-                </div>
+               <div>
+                 <h2 className="text-2xl font-serif-elegant text-[hsl(var(--secondary))] mb-2">
+                   Thank You for Your Order!
+                 </h2>
+                 <p className="text-[hsl(var(--muted-foreground))]">
+                   Your payment has been confirmed successfully.
+                 </p>
+               </div>
 
-                <div className="bg-[hsl(var(--muted))]/20 rounded-lg p-4 border border-[hsl(var(--border))]">
-                  <div className="space-y-2 text-sm">
-                    {orderId && (
-                      <div className="flex justify-between">
-                        <span className="text-[hsl(var(--muted-foreground))]">
-                          Order ID:
-                        </span>
-                        <span className="font-semibold text-[hsl(var(--primary))]">
-                          #{orderId}
-                        </span>
-                      </div>
-                    )}
-                    <div className="flex justify-between">
-                      <span className="text-[hsl(var(--muted-foreground))]">
-                        Transaction ID:
-                      </span>
-                      <span className="font-mono text-xs text-[hsl(var(--foreground))]">
-                        {transactionId.substring(0, 20)}...
-                      </span>
-                    </div>
-                  </div>
-                </div>
+               <div className="bg-[hsl(var(--muted))]/20 rounded-lg p-4 border border-[hsl(var(--border))]">
+                 <div className="space-y-2 text-sm">
+                   {orderId && (
+                     <div className="flex justify-between">
+                       <span className="text-[hsl(var(--muted-foreground))]">
+                         Order ID:
+                       </span>
+                       <span className="font-semibold text-green-600">
+                         #{orderId}
+                       </span>
+                     </div>
+                   )}
+                   <div className="flex justify-between">
+                     <span className="text-[hsl(var(--muted-foreground))]">
+                       Transaction ID:
+                     </span>
+                     <span className="font-mono text-xs text-[hsl(var(--foreground))]">
+                       {transactionId.substring(0, 20)}...
+                     </span>
+                   </div>
+                 </div>
+               </div>
 
-                <div className="bg-[hsl(var(--primary))]/8 rounded-lg p-4 border border-[hsl(var(--primary))]/20 text-muted-foreground">
-                  <p className="text-sm text-muted-foreground">
-                    📦 You can track your order from the Orders page.
-                  </p>
-                </div>
+               <div className="bg-green-50 rounded-lg p-4 border border-green-200 text-muted-foreground">
+                 <p className="text-sm text-green-700">
+                   ✅ You can track your order from the Orders page.
+                 </p>
+               </div>
 
-                <div className="space-y-3">
-                  <Button
-                    className="w-full btn-luxury"
-                    onClick={() => navigate("/my-orders")}
-                  >
-                    View My Orders
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full btn-outline-luxury"
-                    onClick={() => navigate("/collections")}
-                  >
-                    Continue Shopping
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </main>
-        <Footer />
-      </>
-    );
-  }
+               <div className="space-y-3">
+                 <Button
+                   className="w-full"
+                   onClick={() => navigate("/my-orders")}
+                 >
+                   View My Orders
+                 </Button>
+                 <Button
+                   variant="outline"
+                   className="w-full"
+                   onClick={() => navigate("/collections")}
+                 >
+                   Continue Shopping
+                 </Button>
+               </div>
+             </div>
+           </CardContent>
+         </Card>
+       </main>
+       <Footer />
+     </>
+   );
+ }
 
   // Failed or Timeout State
   return (
@@ -368,7 +369,7 @@ const PaymentVerification = () => {
               </div>
 
               <div>
-                <h2 className="text-2xl font-serif-elegant text-[hsl(var(--primary))] mb-2">
+                <h2 className="text-2xl font-serif-elegant text-[hsl(var(--secondary))] mb-2">
                   {verificationStatus === "timeout"
                     ? "Verification Timeout"
                     : "Payment Verification Failed"}

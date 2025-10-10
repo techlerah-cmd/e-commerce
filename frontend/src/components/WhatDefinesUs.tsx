@@ -1,49 +1,59 @@
+import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import { useState, useEffect } from "react";
+import { ShoppingBag, Handshake, Star } from "lucide-react";
+
 const items = [
   {
     id: 1,
     title: "Where Every Woman Belongs",
-    body:
-      "At Lèrah, we believe beauty should never be limited. From everyday elegance to heirloom treasures, our sarees range from ₹1,000 to ₹5 lakhs — so every woman can find the piece she was meant to own. We are not a brand for a select few; we are for every soul a saree chooses.",
+    body: "At Lèrah, beauty knows no limits. Our sarees range from ₹1,000 to ₹5 lakhs, so every woman can find her perfect piece.",
+    icon: "shopping",
   },
   {
     id: 2,
     title: "A Bridge of Trust",
-    body:
-      "We are not just sellers — we are the bridge between artisans and women who value their craft. Every saree carries the soul of its weaver, and we believe it is destined for one rightful owner. Our role is simply to connect the two.",
+    body: "We connect artisans with women who value their craft, ensuring each saree reaches its rightful owner.",
+    icon: "handshake",
   },
   {
     id: 3,
     title: "A Promise of Quality",
-    body:
-      "Our commitment goes beyond fashion — it is about heritage, authenticity, and timeless elegance. By handpicking sarees from master weavers, we ensure that every piece reflects unmatched craftsmanship and lasting value.",
+    body: "By handpicking sarees from master weavers, we guarantee heritage, authenticity, and timeless elegance.",
+    icon: "star",
   },
 ];
 
-import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { useState, useEffect } from "react";
+const IconMap = ({ name }: { name: string }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const commonProps = { width: 18, height: 18, "aria-hidden": true } as any;
+  if (name === "shopping") return <ShoppingBag {...commonProps} />;
+  if (name === "handshake") return <Handshake {...commonProps} />;
+  return <Star {...commonProps} />;
+};
 
 const WhatDefinesUs = () => {
   const [sectionRef, isSectionVisible] = useScrollAnimation(0.2);
   const [headerVisible, setHeaderVisible] = useState(false);
-  const [pillarsVisible, setPillarsVisible] = useState<boolean[]>([]);
+  const [pillarsVisible, setPillarsVisible] = useState<boolean[]>(() =>
+    Array(items.length).fill(false)
+  );
   const [lineVisible, setLineVisible] = useState(false);
 
   useEffect(() => {
     if (isSectionVisible) {
       const headerTimer = setTimeout(() => setHeaderVisible(true), 200);
       const lineTimer = setTimeout(() => setLineVisible(true), 400);
-      
-      // Stagger pillar animations
-      const pillarTimers = items.map((_, index) => 
+
+      const pillarTimers = items.map((_, index) =>
         setTimeout(() => {
-          setPillarsVisible(prev => {
+          setPillarsVisible((prev) => {
             const newState = [...prev];
             newState[index] = true;
             return newState;
           });
-        }, 600 + (index * 400))
+        }, 600 + index * 200)
       );
-      
+
       return () => {
         clearTimeout(headerTimer);
         clearTimeout(lineTimer);
@@ -53,62 +63,71 @@ const WhatDefinesUs = () => {
   }, [isSectionVisible]);
 
   return (
-    <section ref={sectionRef} className="relative py-24 px-6 bg-background">
+    <section
+      ref={sectionRef}
+      className="relative py-20 px-6 bg-background overflow-hidden"
+    >
       {/* Ambient aesthetics */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-0 -translate-x-1/2 h-64 w-[42rem] rounded-full bg-accent/10 blur-3xl"></div>
-        <div className="absolute right-0 bottom-0 h-56 w-56 rounded-full bg-primary/10 blur-2xl"></div>
+        <div className="absolute left-1/2 top-0 -translate-x-1/2 h-64 w-[42rem] rounded-full bg-accent/10 blur-3xl" />
+        <div className="absolute right-0 bottom-0 h-56 w-56 rounded-full bg-primary/10 blur-2xl" />
       </div>
 
-      <div className="relative max-w-6xl mx-auto">
-        <div className={`text-center mb-14 animate-fade-up ${headerVisible ? 'visible' : ''}`}>
-          <h2 className="font-serif-elegant text-4xl md:text-5xl font-bold text-primary mb-4">
-            What <span className="text-gradient-gold">defines</span> us?
-          </h2>
-          <p className="font-sans-clean text-lg text-muted-foreground max-w-2xl mx-auto">
-            Our ethos, woven in three timeless promises
-          </p>
-        </div>
+      <div className="relative max-w-7xl mx-auto">
+        {/* Main grid: header in first column, three pillars in the next three columns on large screens */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
+          {/* Left header column (stays on top for mobile) */}
+          <div
+            className={`lg:pr-8 ${
+              headerVisible ? "animate-fade-up visible" : "opacity-0"
+            }`}
+          >
+            <h2 className="font-serif-elegant text-xl md:text-2xl lg:text-3xl font-bold text-secondary mb-4">
+              Why{" "}
+              <span className="text-gradient-gold text-secondary">
+                choose us
+              </span>
+            </h2>
+            <div
+              className={`h-0.5 w-16 bg-accent mt-4 ${
+                lineVisible ? "opacity-100" : "opacity-0"
+              } transition-opacity duration-500`}
+            />
+            <p className="mt-6 text-secondary max-w-sm">
+              Our values are stitched into every piece — authenticity, care, and
+              a promise that each saree finds its rightful home.
+            </p>
+          </div>
 
-        {/* Pillars (non-card, flowing lines) */}
-        <div className="relative">
-          {/* Vertical ornamental line */}
-          <div className={`hidden md:block absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-border to-transparent animate-ornamental-line ${lineVisible ? 'visible' : ''}`}></div>
+          {/* Pillars - on mobile they stack under header; on lg they sit side-by-side */}
+          {items.map((item, idx) => (
+            <div
+              key={item.id}
+              className={`p-6 lg:p-0 ${
+                pillarsVisible[idx]
+                  ? "animate-pillar-slide visible"
+                  : "opacity-0"
+              } bg-transparent`}
+            >
+              <div className="flex gap-4 items-start md:items-start">
+                {/* Fixed-size icon container so text wrapping won't distort it */}
+                <div className="flex-shrink-0 h-12 w-12 rounded-full bg-secondary from-accent to-primary text-white flex items-center justify-center">
+                  <IconMap name={item.icon} />
+                  <span className="sr-only">{item.title} icon</span>
+                </div>
 
-          <div className="flex flex-col gap-12">
-            {items.map((item, idx) => (
-              <div key={item.id} className={`grid items-start gap-8 md:grid-cols-[1fr_auto_1fr] ${idx % 2 === 0 ? "md:text-right" : ""} animate-pillar-slide ${pillarsVisible[idx] ? 'visible' : ''}`}>
-                {/* Text block left/right alternating */}
-                <div className={`${idx % 2 === 0 ? "order-1" : "order-3"}`}>
-                  <div className="inline-flex items-center gap-3 mb-3">
-                    <div className="h-9 w-9 rounded-full bg-gradient-to-br from-accent to-primary text-white flex items-center justify-center font-serif-elegant text-base transition-all duration-300 hover:scale-110">
-                      {String(item.id).padStart(1, "0")}
-                    </div>
-                    <span className="hidden md:inline h-px w-12 bg-border"></span>
-                  </div>
-                  <h3 className={`font-serif-elegant text-2xl md:text-3xl text-primary mb-3 animate-pillar-title ${pillarsVisible[idx] ? 'visible' : ''}`}>
+                {/* Text content */}
+                <div>
+                  <h3 className="font-serif-elegant text-xl lg:text-2xl text-secondary font-semibold mb-2">
                     {item.title}
                   </h3>
-                  <p className={`font-sans-clean text-muted-foreground text-base md:text-lg leading-relaxed animate-pillar-text ${pillarsVisible[idx] ? 'visible' : ''}`}>
+                  <p className="text-muted-foreground text-sm lg:text-base leading-relaxed">
                     {item.body}
                   </p>
                 </div>
-
-                {/* Center jewel */}
-                <div className="order-2 flex items-center justify-center">
-                  <div className="relative">
-                    <div className={`h-14 w-14 rounded-full bg-background border border-border flex items-center justify-center animate-jewel-pulse ${pillarsVisible[idx] ? 'visible' : ''}`}>
-                      <div className="h-2.5 w-2.5 rounded-full bg-accent animate-glow"></div>
-                    </div>
-                    <div className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-accent/20"></div>
-                  </div>
-                </div>
-
-                {/* Spacer for alternating layout */}
-                <div className={`${idx % 2 === 0 ? "order-3" : "order-1"}`}></div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -116,5 +135,3 @@ const WhatDefinesUs = () => {
 };
 
 export default WhatDefinesUs;
-
-

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -79,88 +80,133 @@ const MyOrders = () => {
 
   const goToPreviousPage = () => setCurrentPage(currentPage - 1);
   const goToNextPage = () => setCurrentPage(currentPage + 1);
-
   const getStatusBadge = (status: ICustomerOrder["status"]) => {
-    const statusConfig = {
+    const statusConfig: Record<
+      string,
+      { label: string; bg: string; text: string; border?: string; icon: any }
+    > = {
       payment_pending: {
         label: "Payment Pending",
-        color: "bg-amber-100 text-amber-800",
+        bg: "bg-amber-50",
+        text: "text-amber-800",
+        border: "border-amber-100",
         icon: Clock,
       },
       created: {
         label: "Created",
-        color: "bg-gray-200 text-gray-900",
+        bg: "bg-gray-100",
+        text: "text-gray-900",
+        border: "border-gray-200",
         icon: Clock,
       },
       payment_paid: {
         label: "Processing",
-        color: "bg-purple-100 text-primary",
+        bg: "bg-violet-50",
+        text: "text-violet-800",
+        border: "border-violet-100",
         icon: Package,
       },
       shipped: {
         label: "Shipped",
-        color: "bg-green-100 text-green-800",
+        bg: "bg-green-50",
+        text: "text-green-800",
+        border: "border-green-100",
         icon: Truck,
       },
       cancelled: {
         label: "Cancelled",
-        color: "bg-red-100 text-red-800",
+        bg: "bg-red-50",
+        text: "text-red-800",
+        border: "border-red-100",
         icon: XCircle,
       },
       canceled: {
         label: "Cancelled",
-        color: "bg-red-100 text-red-800",
+        bg: "bg-red-50",
+        text: "text-red-800",
+        border: "border-red-100",
         icon: XCircle,
       },
       payment_failed: {
         label: "Payment Failed",
-        color: "bg-red-100 text-red-800",
+        bg: "bg-red-50",
+        text: "text-red-800",
+        border: "border-red-100",
         icon: XCircle,
       },
     };
-    const config = statusConfig[status];
+
+    const config = statusConfig[status] ?? {
+      label: String(status ?? "Unknown"),
+      bg: "bg-gray-50",
+      text: "text-gray-800",
+      border: "border-gray-100",
+      icon: Clock,
+    };
+
     const Icon = config.icon;
+
     return (
       <span
-        className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${config.color}`}
+        className={`inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-medium border ${config.bg} ${config.text} ${config.border}`}
       >
-        <Icon className="h-3 w-3" />
-        {config.label}
+        <Icon className="h-3 w-3 text-current" />
+        <span>{config.label}</span>
       </span>
     );
   };
 
   const getPaymentStatusBadge = (status: string) => {
-    const statusConfig = {
+    const statusConfig: Record<
+      string,
+      { label: string; bg: string; text: string; border?: string; icon: any }
+    > = {
       created: {
         label: "Pending",
-        color: "bg-amber-100 text-amber-800",
+        bg: "bg-amber-50",
+        text: "text-amber-800",
+        border: "border-amber-100",
         icon: Clock,
       },
       paid: {
         label: "Completed",
-        color: "bg-green-100 text-green-800",
+        bg: "bg-green-50",
+        text: "text-green-800",
+        border: "border-green-100",
         icon: CheckCircle,
       },
       failed: {
         label: "Failed",
-        color: "bg-red-100 text-red-800",
+        bg: "bg-red-50",
+        text: "text-red-800",
+        border: "border-red-100",
         icon: XCircle,
       },
       cancelled: {
         label: "Cancelled",
-        color: "bg-red-100 text-red-800",
+        bg: "bg-red-50",
+        text: "text-red-800",
+        border: "border-red-100",
         icon: XCircle,
       },
     };
-    const config = statusConfig[status];
+
+    const config = statusConfig[status] ?? {
+      label: String(status ?? "Unknown"),
+      bg: "bg-gray-50",
+      text: "text-gray-800",
+      border: "border-gray-100",
+      icon: Clock,
+    };
+
     const Icon = config.icon;
+
     return (
       <span
-        className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${config.color}`}
+        className={`inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-medium border ${config.bg} ${config.text} ${config.border}`}
       >
-        <Icon className="h-3 w-3" />
-        {config.label}
+        <Icon className="h-3 w-3 text-current" />
+        <span>{config.label}</span>
       </span>
     );
   };
@@ -173,10 +219,10 @@ const MyOrders = () => {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
+      <main className="min-h-screen bg-[hsl(var(--background))] text-muted">
         <div className="container mx-auto px-4 py-8 max-w-6xl">
           <div className="flex items-center justify-between mb-8">
-            <h1 className="font-serif-elegant text-3xl text-[hsl(var(--primary))]">
+            <h1 className="font-serif-elegant text-3xl text-primary-foreground">
               My Orders
             </h1>
           </div>
@@ -206,9 +252,9 @@ const MyOrders = () => {
               {orders.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-16 text-center">
                   <div className="mb-6 rounded-full bg-[hsl(var(--muted))] p-6">
-                    <Box className="h-12 w-12 text-[hsl(var(--muted-foreground))]" />
+                    <Box className="h-12 w-12 text-muted " />
                   </div>
-                  <h3 className="font-serif-elegant text-2xl font-semibold text-[hsl(var(--primary))] mb-2">
+                  <h3 className="font-serif-elegant text-2xl font-semibold text-primary-foreground mb-2">
                     No Orders Found
                   </h3>
                 </div>
@@ -219,11 +265,11 @@ const MyOrders = () => {
                     {orders.map((order) => (
                       <Card
                         key={order.id}
-                        className="hover:shadow-luxury transition-shadow bg-[hsl(var(--card))]"
+                        className="hover:shadow-luxury transition-shadow bg-white"
                       >
                         <CardHeader>
                           <div className="flex items-center justify-between">
-                            <CardTitle className="text-[hsl(var(--primary))]">
+                            <CardTitle className="text-primary-foreground">
                               Order #{order.order_number}
                             </CardTitle>
                             {getStatusBadge(order.status)}
@@ -245,7 +291,7 @@ const MyOrders = () => {
                                 <p className="text-[hsl(var(--muted-foreground))]">
                                   Total Amount
                                 </p>
-                                <p className="font-semibold text-[hsl(var(--accent))]">
+                                <p className="font-semibold text-primary-foreground">
                                   ₹{order.total.toLocaleString("en-IN")}
                                 </p>
                               </div>
@@ -276,7 +322,7 @@ const MyOrders = () => {
                                 variant="outline"
                                 size="sm"
                                 onClick={() => openDetailsDialog(order)}
-                                className="btn-outline-luxury flex items-center gap-2"
+                                className="text-primary-foreground flex items-center gap-2"
                               >
                                 <Eye className="h-4 w-4" /> View Details
                               </Button>
@@ -301,7 +347,6 @@ const MyOrders = () => {
           {!fetching && orders.length != 0 && (
             <div className="flex flex-row justify-center items-center gap-3 sm:gap-4 mt-6">
               <Button
-                variant="outline"
                 onClick={goToPreviousPage}
                 disabled={!pagination.has_prev}
                 className="flex items-center justify-center gap-2 w-auto sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-4 sm:py-2"
@@ -332,7 +377,6 @@ const MyOrders = () => {
               </span>
 
               <Button
-                variant="outline"
                 onClick={goToNextPage}
                 disabled={!pagination.has_next}
                 className="flex items-center justify-center gap-2 w-auto sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-4 sm:py-2"
@@ -357,9 +401,9 @@ const MyOrders = () => {
           )}
 
           <Dialog open={detailsDialogOpen} onOpenChange={setDetailsDialogOpen}>
-            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto p-6 rounded-2xl bg-[hsl(var(--card))] text-[hsl(var(--foreground))] shadow-luxury">
+            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto p-6 rounded-2xl bg-[hsl(var(--muted))] text-[hsl(var(--foreground))] shadow-luxury">
               <DialogHeader className="relative">
-                <DialogTitle className="font-serif-elegant text-xl text-[hsl(var(--primary))]">
+                <DialogTitle className="font-serif-elegant text-xl text-primary-foreground">
                   Order Details - #{selectedOrder?.order_number}
                 </DialogTitle>
 
@@ -369,7 +413,7 @@ const MyOrders = () => {
                   aria-label="Close"
                   className="absolute right-4 top-4 rounded-md p-1 hover:bg-[hsl(var(--input))]/40 transition"
                 >
-                  <XCircle className="h-5 w-5 text-[hsl(var(--muted-foreground))]" />
+                  <XCircle className="h-5 w-5 text-muted " />
                 </button> */}
               </DialogHeader>
 
@@ -470,15 +514,15 @@ const MyOrders = () => {
                               onClick={() => {
                                 navigate(`/product/${item.product_id}`);
                               }}
-                              className="font-medium hover:underline cursor-pointer text-[hsl(var(--primary))]"
+                              className="font-medium hover:underline cursor-pointer text-primary-foreground"
                             >
                               {item.name}
                             </p>
 
-                            <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                            <p className="text-sm text-primary-foreground ">
                               Quantity: {item.qty}
                             </p>
-                            <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                            <p className="text-sm text-primary-foreground ">
                               Unit Price: ₹
                               {item.unit_price?.toLocaleString("en-IN")}
                             </p>

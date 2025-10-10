@@ -14,16 +14,15 @@ import Header from "@/components/Header";
 import { useAPICall } from "@/hooks/useApiCall";
 import toast from "react-hot-toast";
 import { API_ENDPOINT } from "@/config/backend";
-import { Eye, EyeOff } from "lucide-react"; // optional icons — replace if not available
+import { Eye, EyeOff } from "lucide-react";
 
-const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/; // at least 8 chars, one letter, one number
+const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 
 const ResetPasswordPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { makeApiCall, fetching, fetchType } = useAPICall();
 
-  // token param (you said "ref" in DB — read ref param; fallback to "token")
   const token = searchParams.get("ref") ?? searchParams.get("token") ?? "";
 
   const [password, setPassword] = useState("");
@@ -31,10 +30,16 @@ const ResetPasswordPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-
+  useEffect(() => {
+    document.getElementsByTagName("body")[0].classList.add("overflow-hidden");
+    return () => {
+      document
+        .getElementsByTagName("body")[0]
+        .classList.remove("overflow-hidden");
+    };
+  }, []);
   useEffect(() => {
     if (!token) {
-      // redirect to login if no token/ref present
       navigate("/login", { replace: true });
     }
   }, [token, navigate]);
@@ -62,11 +67,7 @@ const ResetPasswordPage: React.FC = () => {
     e.preventDefault();
     if (!validate()) return;
 
-    // optimistic toast
-    const payload = {
-      token: token,
-      password: password,
-    };
+    const payload = { token, password };
 
     const res = await makeApiCall(
       "POST",
@@ -87,28 +88,26 @@ const ResetPasswordPage: React.FC = () => {
     }
   };
 
-  // If navigate already redirected due to missing token, we don't render the form.
   if (!token) {
     return <Navigate to="/login" replace />;
   }
+
   return (
     <>
       <Header />
-      <main
-        className="min-h-screen flex items-center justify-center py-12"
-        style={{ backgroundColor: "hsl(var(--background))" }}
-      >
+      <main className="min-h-screen flex py-12 justify-center  bg-secondary text-primary">
         <div className="container px-4 max-w-md mx-auto">
-          <Card className="card-luxury">
+          <Card>
             <CardHeader className="space-y-1" style={{ paddingBottom: 0 }}>
               <CardTitle
                 className="text-2xl font-bold"
-                style={{ color: "hsl(var(--primary))" }}
+                style={{ color: "hsl(var(--secondary))" }}
               >
                 Create a new password
               </CardTitle>
               <CardDescription
                 style={{ color: "hsl(var(--muted-foreground))" }}
+                className="pb-3"
               >
                 Choose a strong password for your account. This link will expire
                 soon.
@@ -133,6 +132,7 @@ const ResetPasswordPage: React.FC = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
+                      className="bg-primary text-secondary"
                     />
                     <button
                       type="button"
@@ -170,6 +170,7 @@ const ResetPasswordPage: React.FC = () => {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       required
+                      className="bg-primary text-secondary"
                     />
                     <button
                       type="button"
@@ -196,18 +197,15 @@ const ResetPasswordPage: React.FC = () => {
 
                 <Button
                   type="submit"
-                  className="w-full"
+                  variant="link"
+                  className="w-full !bg-secondary "
                   disabled={fetching && fetchType === "resetPassword"}
                 >
-                  {fetching && fetchType === "resetPassword"
-                    ? "Resetting..."
-                    : "Reset password"}
+                  Reset password
                 </Button>
 
-                {/* Back to login button */}
                 <Button
                   type="button"
-                  variant="outline"
                   className="w-full mt-2 btn-outline-luxury"
                   onClick={() => navigate("/login")}
                 >

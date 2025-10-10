@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import {
   Card,
@@ -94,94 +94,107 @@ const LoginPage = () => {
       toast.error("Login failed! Please check your credentials.");
     }
   };
+  useEffect(() => {
+    document.getElementsByTagName("body")[0].classList.add("overflow-hidden");
+    return () => {
+      document
+        .getElementsByTagName("body")[0]
+        .classList.remove("overflow-hidden");
+    };
+  }, []);
   return (
     <>
       <Header />
-      <div className="container px-4 max-w-md mx-auto py-12">
-        <Card>
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold">Login</CardTitle>
-            <CardDescription>
-              Enter your credentials to access your account
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="name@example.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="flex items-center justify-between mb-2">
-                <span></span>
-                <button
-                  type="button"
-                  className="text-sm text-blue-600 hover:underline flex items-center cursor-pointer"
-                  disabled={fetching}
-                  onClick={handleForgotPassword}
-                >
-                  Forgot Password?
-                  {fetching && fetchType == "forgotPassword" && (
-                    <div className="pl-2 flex items-center justify-center h-full">
-                      <div className="animate-spin rounded-full h-3 w-3 border-t-2 border-b-2 border-primary"></div>
-                    </div>
-                  )}
-                </button>
-              </div>
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={fetching}
-                loading={fetching && fetchType == "login"}
-              >
-                Login
-              </Button>
-              <div className="flex items-center my-4">
-                <div className="flex-grow border-t border-gray-300"></div>
-                <span className="px-3 text-sm text-gray-500 uppercase">or</span>
-                <div className="flex-grow border-t border-gray-300"></div>
-              </div>
-              <div className="w-full sm:w-auto">
-                <div className="w-full">
-                  {" "}
-                  {/* container forces the width */}
-                  <GoogleLogin
-                    onSuccess={handleGoogleLogin}
-                    onError={() => console.log("Login Failed")}
-                    useOneTap={false}
-                    auto_select={false}
-                    // pass container props so wrapper can be full width
-                    containerProps={{
-                      className: "w-full google-login-container",
-                      style: {
-                        width: "100%",
-                        backgroundColor: "white",
-                      },
-                    }}
+      <div className="bg-secondary min-h-screen over">
+        <div className="container px-4 max-w-md mx-auto py-12">
+          <Card>
+            <CardHeader className="space-y-1">
+              <CardTitle className="text-2xl font-bold">Login</CardTitle>
+              <CardDescription>
+                Enter your credentials to access your account
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="name@example.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
                   />
                 </div>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="flex items-center justify-between mb-2">
+                  <span></span>
+                  <button
+                    type="button"
+                    className="text-sm text-blue-600 hover:underline flex items-center cursor-pointer"
+                    disabled={fetching}
+                    onClick={handleForgotPassword}
+                  >
+                    Forgot Password?
+                    {fetching && fetchType == "forgotPassword" && (
+                      <div className="pl-2 flex items-center justify-center h-full">
+                        <div className="animate-spin rounded-full h-3 w-3 border-t-2 border-b-2 border-primary"></div>
+                      </div>
+                    )}
+                  </button>
+                </div>
+                <Button
+                  type="submit"
+                  variant="secondary"
+                  className="w-full hover:bg-secondary hover:text-primary"
+                  disabled={fetching}
+                  loading={fetching && fetchType == "login"}
+                >
+                  Login
+                </Button>
+                <div className="flex items-center my-4">
+                  <div className="flex-grow border-t border-gray-300"></div>
+                  <span className="px-3 text-sm text-gray-500 uppercase">
+                    or
+                  </span>
+                  <div className="flex-grow border-t border-gray-300"></div>
+                </div>
+                <div className="w-full sm:w-auto">
+                  <div className="w-full">
+                    {" "}
+                    {/* container forces the width */}
+                    <GoogleLogin
+                      onSuccess={handleGoogleLogin}
+                      onError={() => console.log("Login Failed")}
+                      useOneTap={false}
+                      auto_select={false}
+                      // pass container props so wrapper can be full width
+                      containerProps={{
+                        className: "w-full google-login-container",
+                        style: {
+                          width: "100%",
+                          backgroundColor: "white",
+                        },
+                      }}
+                    />
+                  </div>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </>
   );

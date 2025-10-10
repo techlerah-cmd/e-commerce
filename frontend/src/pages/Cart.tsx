@@ -225,7 +225,7 @@ const Cart = () => {
             <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-3">
               <div className="lg:col-span-2 space-y-4">
                 <div>
-                  <h1 className="font-serif-elegant text-3xl text-[hsl(var(--primary))] flex items-center gap-3">
+                  <h1 className="font-serif-elegant text-3xl text-secondary flex items-center gap-3">
                     Your Cart
                     {fetching && fetchType === "removeFromCart" && (
                       <span
@@ -252,7 +252,8 @@ const Cart = () => {
                         Your cart is empty
                       </p>
                       <Button
-                        className="btn-luxury mt-6"
+                        variant="secondary"
+                        className=" mt-6"
                         onClick={() => navigate("/collections")}
                       >
                         Explore Collections
@@ -278,7 +279,7 @@ const Cart = () => {
                           <div className="flex-1 space-y-2">
                             <div>
                               <h3
-                                className="font-medium text-[hsl(var(--primary))] hover:text-[hsl(var(--accent))] cursor-pointer transition-colors"
+                                className="font-medium   cursor-pointer transition-colors"
                                 onClick={() =>
                                   navigate(`/product/${item.product_id}`)
                                 }
@@ -331,7 +332,7 @@ const Cart = () => {
                 <div className="sticky top-12">
                   <Card className="bg-[hsl(var(--card))] border-[hsl(var(--border))] shadow-luxury">
                     <CardHeader>
-                      <CardTitle className="font-serif-elegant text-xl text-[hsl(var(--primary))]">
+                      <CardTitle className="font-serif-elegant text-xl text-secondary">
                         Order Summary
                       </CardTitle>
                     </CardHeader>
@@ -346,10 +347,9 @@ const Cart = () => {
                             placeholder="Enter code"
                             value={coupon}
                             onChange={(e) => setCoupon(e.target.value)}
-                            className="bg-[hsl(var(--input))] border-[hsl(var(--border))]"
+                            className="bg-muted border-[hsl(var(--border))]"
                           />
                           <Button
-                            variant="outline"
                             className="btn-outline-luxury"
                             onClick={() => applyCoupon(coupon)}
                             loading={fetching && fetchType === "applyCoupon"}
@@ -381,7 +381,7 @@ const Cart = () => {
                         {cart.discount > 0 && (
                           <div className="flex justify-between">
                             <span>Discount</span>
-                            <span className="font-medium text-[hsl(var(--accent))]">
+                            <span className="font-medium text-green-500">
                               - {formatPrice(cart.discount)}
                             </span>
                           </div>
@@ -398,16 +398,17 @@ const Cart = () => {
 
                         <Separator />
 
-                        <div className="flex justify-between text-base font-semibold">
+                        <div className="flex justify-between text-base font-semibold ">
                           <span>Total</span>
-                          <span className="text-[hsl(var(--accent))]">
+                          <span className="text-primary-foreground">
                             {formatPrice(cart.total)}
                           </span>
                         </div>
                       </div>
 
                       <Button
-                        className="mt-6 w-full btn-luxury"
+                        variant="secondary"
+                        className="mt-6 w-full"
                         disabled={
                           cart.items.length === 0 ||
                           (fetching && fetchType === "getAddress") ||

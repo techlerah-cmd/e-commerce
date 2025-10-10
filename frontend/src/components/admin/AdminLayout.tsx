@@ -65,7 +65,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
               <X className="h-5 w-5 text-[hsl(var(--muted-foreground))]" />
             </button>
 
-            <h1 className="mt-4 font-serif-elegant text-xl text-[hsl(var(--primary))] hidden md:block">
+            <h1 className="mt-4 font-serif-elegant text-xl text-[hsl(var(--secondary))] hidden md:block">
               Admin
             </h1>
           </div>
@@ -82,7 +82,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                     "mb-1 flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
                     "hover:bg-[hsl(var(--muted))]/30 hover:text-[hsl(var(--foreground))]",
                     active
-                      ? "bg-[hsl(var(--muted))]/50 font-medium text-[hsl(var(--primary))] border-l-4 border-[hsl(var(--accent))] pl-[calc(0.75rem-4px)]"
+                      ? "bg-[hsl(var(--muted))]/50 font-medium text-[hsl(var(--secondary))] border-l-4 border-[hsl(var(--accent))] pl-[calc(0.75rem-4px)]"
                       : "text-[hsl(var(--muted-foreground))]"
                   )}
                   aria-current={active ? "page" : undefined}
@@ -138,12 +138,12 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                   aria-expanded={isOpen}
                   aria-label="Toggle menu"
                 >
-                  <Menu className="h-5 w-5 text-[hsl(var(--primary))]" />
+                  <Menu className="h-5 w-5 text-[hsl(var(--secondary))]" />
                 </button>
 
                 <Link
                   to="/"
-                  className="font-serif-elegant text-lg text-[hsl(var(--primary))] md:hidden"
+                  className="font-serif-elegant text-lg text-[hsl(var(--secondary))] md:hidden"
                 >
                   Admin
                 </Link>
@@ -152,7 +152,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                   {/* optional quick links */}
                   <Link
                     to="/admin/"
-                    className="text-sm text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))]"
+                    className="text-sm text-[hsl(var(--primary-foreground))] hover:text-[hsl(var(--secondary))]"
                   >
                     Overview
                   </Link>
@@ -162,7 +162,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
               <div className="flex items-center gap-2">
                 <Link to="/" className="sm:inline-flex">
                   <Button
-                    variant="outline"
+                    variant="outlineSecondary"
                     size="sm"
                     className="btn-outline-luxury"
                   >

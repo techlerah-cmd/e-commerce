@@ -29,8 +29,8 @@ import { Loading } from "@/components/ui/Loading";
  * AdminDashboard — themed to the deep purple + warm gold design system.
  *
  * Notes:
- * - Uses CSS variables from your theme: --background, --card, --border, --primary, --accent, --foreground, --muted-foreground, --gradient-accent, --shadow-luxury
- * - Recharts SVG props accept CSS color strings like "hsl(var(--primary))", so we use those directly.
+ * - Uses CSS variables from your theme: --background, --card, --border, --secondary, --accent, --foreground, --muted-foreground, --gradient-accent, --shadow-luxury
+ * - Recharts SVG props accept CSS color strings like "hsl(var(--secondary))", so we use those directly.
  */
 
 const AdminDashboard = () => {
@@ -85,19 +85,19 @@ const AdminDashboard = () => {
     title,
     value,
     icon: Icon,
-    bgToken = "--primary",
+    bgToken = "--secondary",
     format = "number",
   }: {
     title: string;
     value: number;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     icon: any;
-    bgToken?: string; // CSS variable token name (e.g. --accent or --primary)
+    bgToken?: string; // CSS variable token name (e.g. --accent or --secondary)
     format?: "number" | "currency";
   }) => {
     // Use CSS variables for background; fallback to primary if missing
     const circleStyle = {
-      backgroundImage: `linear-gradient(135deg, hsl(var(${bgToken})) , hsla(0 0% 100% / 0.02))`,
+      backgroundColor: `hsl(var(${bgToken}))`,
       boxShadow: `0 8px 24px -12px hsla(276 62% 26% / 0.18)`,
     } as React.CSSProperties;
 
@@ -109,7 +109,7 @@ const AdminDashboard = () => {
               <p className="text-sm font-medium text-[hsl(var(--muted-foreground))]">
                 {title}
               </p>
-              <p className="text-2xl font-bold text-[hsl(var(--primary))]">
+              <p className="text-2xl font-bold text-[hsl(var(--secondary))]">
                 {format === "currency" ? formatCurrency(value) : value}
               </p>
             </div>
@@ -118,7 +118,7 @@ const AdminDashboard = () => {
               className="p-3 rounded-full w-12 h-12 flex items-center justify-center"
               style={circleStyle}
             >
-              <Icon className="h-6 w-6 text-[hsl(var(--foreground))]" />
+              <Icon className="h-6 w-6 text-[hsl(var(--primary))]" />
             </div>
           </div>
         </CardContent>
@@ -133,14 +133,9 @@ const AdminDashboard = () => {
       ) : (
         <div className="space-y-8">
           <div className="flex items-center justify-between">
-            <h1 className="font-serif-elegant text-3xl text-[hsl(var(--primary))]">
+            <h1 className="font-serif-elegant text-3xl text-[hsl(var(--secondary))]">
               Admin Dashboard
             </h1>
-
-            <div className="flex items-center gap-2 text-sm text-[hsl(var(--muted-foreground))]">
-              <TrendingUp className="h-4 w-4 text-[hsl(var(--primary))]" />
-              <span>Overview</span>
-            </div>
           </div>
 
           {/* Statistics Cards */}
@@ -149,33 +144,33 @@ const AdminDashboard = () => {
               title="Total Products"
               value={stats.total_products}
               icon={Package}
-              bgToken="--primary"
+              bgToken="--secondary"
             />
             <StatCard
               title="Total Orders"
               value={stats.total_orders}
               icon={ShoppingCart}
-              bgToken="--accent"
+              bgToken="--secondary"
             />
             <StatCard
               title="Total Sales"
               value={stats.total_sales}
               icon={IndianRupee}
-              bgToken="--primary-glow"
+              bgToken="--secondary"
               format="currency"
             />
             <StatCard
               title="Total Users"
               value={stats.total_users}
               icon={Users}
-              bgToken="--accent-glow"
+              bgToken="--secondary"
             />
           </div>
 
           {/* Sales Chart */}
           <Card className="bg-[hsl(var(--card))] border-[hsl(var(--border))] shadow-card">
             <CardHeader>
-              <CardTitle className="font-serif-elegant text-xl text-[hsl(var(--primary))]">
+              <CardTitle className="font-serif-elegant text-xl text-[hsl(var(--secondary))]">
                 Sales Overview
               </CardTitle>
               <p className="text-sm text-[hsl(var(--muted-foreground))]">
@@ -225,8 +220,8 @@ const AdminDashboard = () => {
                     <Area
                       type="monotone"
                       dataKey="sales"
-                      stroke="hsl(var(--primary))"
-                      fill="hsl(var(--primary))"
+                      stroke="hsl(var(--secondary))"
+                      fill="hsl(var(--secondary))"
                       fillOpacity={0.08}
                       strokeWidth={2}
                     />

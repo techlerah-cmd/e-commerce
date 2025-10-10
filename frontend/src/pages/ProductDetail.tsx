@@ -83,7 +83,7 @@ const ProductDetail = () => {
         <Header />
         <main className="min-h-screen bg-secondary flex items-center justify-center">
           <div className="text-center">
-            <h1 className="font-serif-elegant text-4xl text-primary mb-4">
+            <h1 className="font-serif-elegant text-4xl text-secondary mb-4">
               Product Not Found
             </h1>
             <p className="text-muted-foreground mb-6">
@@ -160,29 +160,7 @@ const ProductDetail = () => {
         )}
         {!(fetching && fetchType == "getProduct") && isFetched && product && (
           <>
-            <section className="border-b bg-white/70 backdrop-blur supports-[backdrop-filter]:bg-white/10">
-              <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                <Breadcrumb>
-                  <BreadcrumbList>
-                    <BreadcrumbItem>
-                      <BreadcrumbLink href="/">Home</BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem>
-                      <BreadcrumbLink href="/collections">
-                        Collections
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem>
-                      <BreadcrumbPage>{product.title}</BreadcrumbPage>
-                    </BreadcrumbItem>
-                  </BreadcrumbList>
-                </Breadcrumb>
-              </div>
-            </section>
-
-            <section className="px-4 py-12 sm:px-6 lg:px-8">
+            <section className="px-4 py-12 sm:px-6  bg-muted lg:px-8">
               <div className="mx-auto max-w-7xl">
                 <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
                   {/* Product Images */}
@@ -229,7 +207,7 @@ const ProductDetail = () => {
                   {/* Product Info */}
                   <div className="space-y-6">
                     <div>
-                      <h1 className="font-serif-elegant text-3xl font-bold text-primary lg:text-4xl">
+                      <h1 className="font-serif-elegant text-3xl font-bold text-secondary lg:text-4xl">
                         {product.title}
                       </h1>
                       <div className="mt-3 flex items-center gap-2">
@@ -249,7 +227,7 @@ const ProductDetail = () => {
                     </div>
 
                     <div className="flex items-center gap-4">
-                      <span className="font-sans-clean text-3xl font-bold text-accent">
+                      <span className="font-sans-clean text-3xl font-bold text-primary-foreground">
                         {formatPrice(product.price)}
                       </span>
                       {product.actual_price && (
@@ -301,7 +279,7 @@ const ProductDetail = () => {
                     {product.product_metadata.length > 0 && (
                       <Card>
                         <CardContent className="p-6">
-                          <h3 className="font-serif-elegant text-lg font-semibold text-primary mb-4">
+                          <h3 className="font-serif-elegant text-lg font-semibold text-secondary mb-4">
                             Product Details
                           </h3>
                           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -355,7 +333,7 @@ const ProductDetail = () => {
                         {product.stock > 0 ? (
                           <Button
                             onClick={addToCart}
-                            className="btn-luxury flex-1"
+                            className="btn-luxury flex-1 bg-secondary"
                             loading={fetchType == "addToCart"}
                             disabled={fetchType == "addToCart"}
                           >
@@ -402,37 +380,6 @@ const ProductDetail = () => {
                       >
                         Buy Now
                       </Button> */}
-                    </div>
-
-                    {/* Features */}
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                      <div className="flex items-center gap-3 rounded-lg bg-white/10 p-4">
-                        <Truck className="h-5 w-5 text-accent" />
-                        <div>
-                          <p className="font-medium text-sm">Free Shipping</p>
-                          <p className="text-xs text-muted-foreground">
-                            On orders above ₹2000
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3 rounded-lg bg-white/10 p-4">
-                        <RotateCcw className="h-5 w-5 text-accent" />
-                        <div>
-                          <p className="font-medium text-sm">Easy Returns</p>
-                          <p className="text-xs text-muted-foreground">
-                            7 days return policy
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3 rounded-lg bg-white/10 p-4">
-                        <Shield className="h-5 w-5 text-accent" />
-                        <div>
-                          <p className="font-medium text-sm">Authentic</p>
-                          <p className="text-xs text-muted-foreground">
-                            100% genuine products
-                          </p>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>

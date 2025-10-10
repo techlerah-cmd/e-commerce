@@ -46,9 +46,12 @@ const Collections = () => {
   const [search, setSearch] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
     fetchProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, searchTerm, filter]);
+
   const fetchProducts = async () => {
     const response = await makeApiCall(
       "GET",
@@ -62,7 +65,6 @@ const Collections = () => {
       "application/json"
     );
     if (response.status === 200) {
-      console.log("response", response.data);
       setProducts(response.data.items || []);
       setPagination(response.data.pagination || pagination);
     }
@@ -93,51 +95,42 @@ const Collections = () => {
   return (
     <>
       <Header />
-      <main
-        className="min-h-screen"
-        style={{ backgroundColor: "hsl(var(--background))" }}
-      >
-        <section
-          className="border-b backdrop-blur supports-[backdrop-filter]:bg-white/60"
-          style={{ backgroundColor: "hsl(var(--card) / 0.75)" }}
-        >
-          <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <main className="min-h-screen  bg-muted">
+        <section className="border-b supports-[backdrop-filter]:backdrop-blur-sm bg-secondary">
+          <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 ">
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbLink
-                    href="/"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                  >
+                  <BreadcrumbLink href="/" className="text-muted">
                     Home
                   </BreadcrumbLink>
                 </BreadcrumbItem>
-                <BreadcrumbSeparator />
+                <BreadcrumbSeparator className="text-muted" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage style={{ color: "hsl(var(--foreground))" }}>
+                  <BreadcrumbPage className="text-muted">
                     Collections
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
+
             <div className="mt-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
               <div>
                 <h1
                   className="font-serif-elegant text-4xl md:text-5xl"
-                  style={{ color: "hsl(var(--primary))" }}
+                  style={{ color: "hsl(var(--primary, 41 89% 84%))" }}
                 >
                   Curated Collections
                 </h1>
-                <p
-                  className="mt-2 font-sans-clean max-w-2xl"
-                  style={{ color: "hsl(var(--muted-foreground))" }}
-                >
+                <p className="mt-2 font-sans-clean max-w-2xl text-muted">
                   Explore timeless sarees handcrafted with precision. Discover
                   pieces that echo grace and grandeur.
                 </p>
               </div>
-              <div className="flex items-center gap-3"></div>
+
+              <div className="flex items-center gap-3" />
             </div>
+
             <div className="mt-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
               <div className=" flex gap-2 ">
                 <div className="relative flex-1">
@@ -147,15 +140,18 @@ const Collections = () => {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     onKeyPress={handleSearchKeyPress}
-                    className="pr-10"
+                    className="pr-10 bg-muted"
+                    // input background + text color from theme (ensures not plain white)
                   />
                   {search && (
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="absolute right-8 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 hover:bg-transparent"
+                      className="absolute right-8 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
                       onClick={handleClearSearch}
-                      style={{ color: "hsl(var(--muted-foreground))" }}
+                      style={{
+                        color: "hsl(var(--muted-foreground, 0 0% 20%))",
+                      }}
                     >
                       ×
                     </Button>
@@ -164,15 +160,21 @@ const Collections = () => {
                 <Button
                   onClick={handleSearch}
                   className="flex items-center gap-2"
+                  style={{
+                    backgroundImage: "var(--gradient-accent)",
+                    color: "hsl(var(--accent-foreground, 0 0% 8%))",
+                    borderColor: "hsl(var(--primary, 41 89% 84%))",
+                  }}
                 >
                   <Search className="w-4 h-4" />
                   Search
                 </Button>
               </div>
+
               <div className="flex items-center gap-3">
-                <p className="w-20 pl-2">Filter : </p>
+                <p className="text-nowrap pl-2 text-muted ">Filter :</p>
                 <Select value={filter} onValueChange={setFilter}>
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="w-full bg-muted ">
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
                   <SelectContent>
@@ -194,6 +196,7 @@ const Collections = () => {
         <section className="px-6 py-12">
           <div className="mx-auto max-w-7xl">
             {fetching && <Loading />}
+
             {!fetching && (
               <>
                 {products.length === 0 ? (
@@ -207,12 +210,14 @@ const Collections = () => {
                         style={{ color: "hsl(var(--muted-foreground))" }}
                       />
                     </div>
+
                     <h3
                       className="font-serif-elegant text-2xl font-semibold mb-2"
                       style={{ color: "hsl(var(--primary))" }}
                     >
                       No Products Found
                     </h3>
+
                     <p
                       className="font-sans-clean max-w-md mb-6"
                       style={{ color: "hsl(var(--muted-foreground))" }}
@@ -221,6 +226,7 @@ const Collections = () => {
                         ? "We couldn't find any products matching your search criteria. Try adjusting your filters or search terms."
                         : "No products are currently available in our collection. Please check back later."}
                     </p>
+
                     {(searchTerm || filter) && (
                       <Button
                         variant="outline"
@@ -229,6 +235,10 @@ const Collections = () => {
                           setSearchTerm("");
                           setSearch("");
                           setFilter("");
+                        }}
+                        style={{
+                          borderColor: "hsl(var(--primary))",
+                          color: "hsl(var(--primary))",
                         }}
                       >
                         Clear Filters
@@ -240,65 +250,93 @@ const Collections = () => {
                     {products.map((p) => (
                       <div
                         key={p.id}
-                        className="card-product group cursor-pointer"
+                        className="group cursor-pointer"
                         onClick={() => navigate(`/product/${p.id}`)}
                       >
-                        <div className="relative aspect-[3/4] overflow-hidden">
-                          <img
-                            src={p.image}
-                            alt={p.title}
-                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                          />
-                          {differenceInDays(
-                            new Date(),
-                            new Date(p.created_at)
-                          ) < 3 && (
-                            <span
-                              className="absolute left-4 top-4 rounded-full px-2 py-1 text-xs font-semibold"
+                        {/* card wrapper for consistent spacing and background (keeps card look) */}
+                        <div className="relative overflow-hidden">
+                          {/* IMAGE - fills the card */}
+                          <div className="relative w-full h-80 md:h-[26rem] lg:h-[30rem]">
+                            <img
+                              src={p.image}
+                              alt={p.title}
+                              className="absolute inset-0 w-full h-full object-cover duration-600 "
+                            />
+
+                            {/* overall subtle dark overlay so text/readability is consistent */}
+                            <div
+                              className="absolute inset-0 pointer-events-none"
                               style={{
-                                backgroundColor: "hsl(var(--accent))",
-                                color: "hsl(var(--accent-foreground))",
+                                backgroundColor:
+                                  "hsl(var(--foreground, 0 0% 8%) / 0.18)",
+                                mixBlendMode: "multiply",
                               }}
-                            >
-                              NEW
-                            </span>
-                          )}
-                        </div>
-                        <div className="p-6">
-                          <h3
-                            className="font-serif-elegant text-xl font-semibold transition-colors duration-300 group-hover:text-accent"
-                            style={{ color: "hsl(var(--primary))" }}
-                          >
-                            {p.title}
-                          </h3>
-                          <div className="mt-2 flex items-center gap-3">
-                            <span
-                              className="font-sans-clean text-lg font-bold"
-                              style={{ color: "hsl(var(--accent))" }}
-                            >
-                              {formatPrice(p.price)}
-                            </span>
-                            {p.actual_price > p.price && (
-                              <span
-                                className="font-sans-clean text-sm line-through"
-                                style={{
-                                  color: "hsl(var(--muted-foreground))",
-                                }}
-                              >
-                                {formatPrice(p.actual_price)}
-                              </span>
+                            />
+
+                            {/* Centered white badge (like screenshot) */}
+                            {p.stock === 0 && (
+                              <div className="absolute left-1/2 bottom-6 transform -translate-x-1/2 w-10/12 md:w-8/12 lg:w-1/2">
+                                <div className="bg-white/95 px-4 py-3 text-center rounded-sm shadow-sm">
+                                  <span
+                                    className="block font-semibold uppercase tracking-wider"
+                                    style={{
+                                      color: "hsl(var(--ast-global-color-2))",
+                                    }}
+                                  >
+                                    Out of stock
+                                  </span>
+                                </div>
+                              </div>
                             )}
                           </div>
-                          <Button
-                            variant="outline"
-                            className="btn-outline-luxury mt-4 w-full"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              navigate(`/product/${p.id}`);
-                            }}
-                          >
-                            View Details
-                          </Button>
+
+                          {/* TEXT AREA - keep the same roomy spacing as screenshot */}
+                          <div className="px-6 py-2 pb-4 text-center">
+                            <h3
+                              className="font-serif-elegant text-lg md:text-xl lg:text-2xl font-semibold mb-3"
+                              style={{
+                                color: "hsl(var(--ast-global-color-2))",
+                              }} // burgundy title
+                            >
+                              {p.title}
+                            </h3>
+
+                            <div className="mb-2 flex justify-center gap-1">
+                              <div
+                                className="text-base md:text-lg font-semibold"
+                                style={{
+                                  color: "hsl(var(--ast-global-color-2))",
+                                }}
+                              >
+                                {formatPrice(p.price)}
+                              </div>
+                              {p.actual_price > p.price && (
+                                <div
+                                  className="text-sm mt-1"
+                                  style={{
+                                    color: "hsl(var(--muted-foreground))",
+                                    textDecoration: "line-through",
+                                  }}
+                                >
+                                  {formatPrice(p.actual_price)}
+                                </div>
+                              )}
+                            </div>
+
+                            <div>
+                              {/* "READ MORE" link look */}
+                              <Button
+                                variant="outline"
+                                className="text-secondary border-transparent hover:bg-secondary hover:text-muted"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  navigate(`/product/${p.id}`);
+                                }}
+                              >
+                                Read more
+                              </Button>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -307,15 +345,19 @@ const Collections = () => {
               </>
             )}
           </div>
+
           {/* Pagination */}
           {!fetching && products.length > 0 && (
             <div className="flex flex-row justify-center items-center gap-3 sm:gap-4 mt-6">
               <Button
-                variant="outline"
                 onClick={goToPreviousPage}
                 disabled={!pagination.has_prev}
                 className="flex items-center justify-center gap-2 w-auto sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-4 sm:py-2"
                 aria-label="Previous page"
+                style={{
+                  borderColor: "hsl(var(--border))",
+                  color: "hsl(var(--muted-foreground))",
+                }}
               >
                 <svg
                   className="w-3 h-3 sm:w-4 sm:h-4"
@@ -342,11 +384,14 @@ const Collections = () => {
               </span>
 
               <Button
-                variant="outline"
                 onClick={goToNextPage}
                 disabled={!pagination.has_next}
                 className="flex items-center justify-center gap-2 w-auto sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-4 sm:py-2"
                 aria-label="Next page"
+                style={{
+                  borderColor: "hsl(var(--border))",
+                  color: "hsl(var(--muted-foreground))",
+                }}
               >
                 <span className="hidden xs:inline-block">Next</span>
                 <svg

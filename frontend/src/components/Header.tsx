@@ -8,28 +8,27 @@ import {
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { Menu, ShoppingBag } from "lucide-react";
+import { Menu, ShoppingBag, LogOut } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { LogOut } from "lucide-react";
 
 const Header = () => {
   const { isAuthenticated, user, logout } = useAuth();
-  console.log(isAuthenticated, user);
+
   const navItems = [
     { to: "/", label: "Home" },
     { to: "/collections", label: "Collections" },
-    // { to: "#new", label: "New Arrivals" },
-    // { to: "#story", label: "Our Story" },
     { to: "/contact", label: "Contact" },
     { to: "/policy", label: "Policies" },
     ...(user?.is_admin ? [{ to: "/admin", label: "Dashboard" }] : []),
   ];
+
   return (
     <header
-      className="sticky top-0 z-50 border-b backdrop-blur supports-[backdrop-filter]:bg-white/60"
-      style={{ backgroundColor: "hsl(var(--background) / 0.8)" }}
+      className="sticky top-0 z-50 border-b"
+      style={{ backgroundColor: "hsl(var(--secondary))" }}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        {/* Left Section: Mobile Menu + Logo */}
         <div className="flex items-center gap-3">
           <Sheet>
             <SheetTrigger asChild>
@@ -39,17 +38,17 @@ const Header = () => {
                 className="md:hidden"
                 aria-label="Open menu"
               >
-                <Menu className="h-5 w-5" />
+                <Menu className="h-5 w-5 text-[hsl(var(--primary))]" />
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-80 p-0">
               <div className="px-6 py-4">
-                <Link
-                  to="/"
-                  className="font-serif text-xl tracking-wide"
-                  style={{ color: "hsl(var(--foreground))" }}
-                >
-                  Lerah Royal Elegance
+                <Link to="/" className="flex items-center">
+                  <img
+                    src="/logo.png"
+                    alt="Lerah Royal Elegance"
+                    className="h-10 w-auto sm:h-12"
+                  />
                 </Link>
               </div>
               <Separator />
@@ -60,14 +59,14 @@ const Header = () => {
                       to={item.to}
                       className={({ isActive }) =>
                         cn(
-                          "rounded-md px-4 py-2 text-sm transition-colors hover:bg-muted/60 hover:text-black",
+                          "rounded-md px-4 py-2 text-sm transition-colors ",
                           isActive && "bg-muted/70 font-medium"
                         )
                       }
                       style={({ isActive }) => ({
                         color: isActive
-                          ? "hsl(var(--foreground))"
-                          : "hsl(var(--muted-foreground))",
+                          ? "hsl(var(--primary))"
+                          : "hsl(var(--primary))",
                       })}
                     >
                       {item.label}
@@ -79,14 +78,14 @@ const Header = () => {
                     to={"/my-orders"}
                     className={({ isActive }) =>
                       cn(
-                        "rounded-md px-4 py-2 text-sm transition-colors hover:bg-muted/60",
+                        "rounded-md px-4 py-2 text-sm transition-colors ",
                         isActive && "bg-muted/70 font-medium"
                       )
                     }
                     style={({ isActive }) => ({
                       color: isActive
-                        ? "hsl(var(--foreground))"
-                        : "hsl(var(--muted-foreground))",
+                        ? "hsl(var(--primary))"
+                        : "hsl(var(--primary))",
                     })}
                   >
                     My Orders
@@ -96,15 +95,17 @@ const Header = () => {
             </SheetContent>
           </Sheet>
 
-          <Link
-            to="/"
-            className="font-serif text-lg sm:text-xl tracking-wide"
-            style={{ color: "hsl(var(--foreground))" }}
-          >
-            Lerah Royal Elegance
+          {/* Logo */}
+          <Link to="/" className="flex items-center">
+            <img
+              src="/logo.png"
+              alt="Lerah Royal Elegance"
+              className="h-10 w-auto sm:h-12"
+            />
           </Link>
         </div>
 
+        {/* Desktop Nav */}
         <nav className="hidden items-center gap-1 md:flex">
           {navItems.map((item) => (
             <NavLink
@@ -112,14 +113,12 @@ const Header = () => {
               to={item.to}
               className={({ isActive }) =>
                 cn(
-                  "rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted/60 hover:!text-black",
-                  isActive && "text-foreground"
+                  "rounded-md px-3 py-2 text-sm transition-colors ",
+                  isActive && "font-medium"
                 )
               }
               style={({ isActive }) => ({
-                color: isActive
-                  ? "hsl(var(--foreground))"
-                  : "hsl(var(--muted-foreground))",
+                color: "hsl(var(--primary))",
               })}
             >
               {item.label}
@@ -127,6 +126,7 @@ const Header = () => {
           ))}
         </nav>
 
+        {/* Right Section: Auth + Cart */}
         <div className="flex items-center gap-2">
           {!isAuthenticated ? (
             <Link to="/login">
@@ -141,12 +141,18 @@ const Header = () => {
               </Button>
             </Link>
           )}
+
           <Link to="/cart" aria-label="Cart">
-            <Button variant="ghost" size="icon">
-              <ShoppingBag className="h-5 w-5" />
+            <Button
+              variant="ghost"
+              className="hover:bg-transparent"
+              size="icon"
+            >
+              <ShoppingBag className="h-5 w-5  text-[hsl(var(--primary))]" />
             </Button>
           </Link>
-          {isAuthenticated ? (
+
+          {isAuthenticated && (
             <Button
               variant="ghost"
               size="icon"
@@ -156,12 +162,6 @@ const Header = () => {
             >
               <LogOut className="h-5 w-5" />
             </Button>
-          ) : (
-            <Link to="/login">
-              <Button variant="outline" className="inline-flex sm:hidden">
-                Login
-              </Button>
-            </Link>
           )}
         </div>
       </div>

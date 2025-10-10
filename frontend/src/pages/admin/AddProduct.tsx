@@ -348,7 +348,7 @@ const AddProduct = () => {
     <AdminLayout>
       <div className="max-w-7xl">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="font-serif-elegant text-3xl text-primary">
+          <h1 className="font-serif-elegant text-3xl text-secondary">
             Product Management
           </h1>
           <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
@@ -366,7 +366,7 @@ const AddProduct = () => {
             </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle className="font-serif-elegant text-xl text-primary">
+                <DialogTitle className="font-serif-elegant text-xl text-secondary">
                   Add New Product
                 </DialogTitle>
               </DialogHeader>
@@ -467,7 +467,7 @@ const AddProduct = () => {
                               </div>
                               <div className="text-sm text-muted-foreground">
                                 {product.code && (
-                                  <span className="text-primary font-medium">
+                                  <span className="text-secondary font-medium">
                                     #{product.code}
                                   </span>
                                 )}
@@ -510,7 +510,7 @@ const AddProduct = () => {
                         <TableCell>
                           <div className="flex items-center gap-2">
                             <Button
-                              variant="outline"
+                              variant="outlineSecondary"
                               size="sm"
                               onClick={() => handleEdit(product)}
                             >
@@ -518,7 +518,7 @@ const AddProduct = () => {
                             </Button>
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
-                                <Button variant="outline" size="sm">
+                                <Button variant="outlineSecondary" size="sm">
                                   <Trash2 className="w-4 h-4" />
                                 </Button>
                               </AlertDialogTrigger>
@@ -577,7 +577,7 @@ const AddProduct = () => {
                         <h3 className="font-medium">{product.title}</h3>
                         <p className="text-sm text-muted-foreground">
                           {product.code && (
-                            <span className="text-primary font-medium">
+                            <span className="text-secondary font-medium">
                               #{product.code}
                             </span>
                           )}
@@ -619,7 +619,7 @@ const AddProduct = () => {
 
                     <div className="flex gap-2">
                       <Button
-                        variant="outline"
+                        variant="outlineSecondary"
                         size="sm"
                         onClick={() => handleEdit(product)}
                         className="flex-1"
@@ -630,7 +630,7 @@ const AddProduct = () => {
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button
-                            variant="outline"
+                            variant="outlineSecondary"
                             size="sm"
                             className="flex-1"
                           >
@@ -671,7 +671,6 @@ const AddProduct = () => {
         {!fetching && products.length > 0 && (
           <div className="flex flex-row justify-center items-center gap-3 sm:gap-4 mt-6">
             <Button
-              variant="outline"
               onClick={goToPreviousPage}
               disabled={!pagination.has_prev}
               className="flex items-center justify-center gap-2 w-auto sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-4 sm:py-2"
@@ -702,7 +701,6 @@ const AddProduct = () => {
             </span>
 
             <Button
-              variant="outline"
               onClick={goToNextPage}
               disabled={!pagination.has_next}
               className="flex items-center justify-center gap-2 w-auto sm:w-auto text-sm sm:text-base px-4 py-2 sm:px-4 sm:py-2"
@@ -730,7 +728,7 @@ const AddProduct = () => {
         <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="font-serif-elegant text-xl text-primary">
+              <DialogTitle className="font-serif-elegant text-xl text-secondary">
                 Edit Product
               </DialogTitle>
             </DialogHeader>
@@ -876,7 +874,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
               />
               <Button
                 type="button"
-                variant="outline"
+                variant="outlineSecondary"
                 size="sm"
                 onClick={() => removeImage(index)}
               >
@@ -904,7 +902,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
           <Label>Metadata</Label>
           <Button
             type="button"
-            variant="outline"
+            variant="outlineSecondary"
             size="sm"
             onClick={addMetadata}
           >
@@ -927,7 +925,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
               />
               <Button
                 type="button"
-                variant="outline"
+                variant="outlineSecondary"
                 size="sm"
                 onClick={() => removeMetadata(index)}
               >
@@ -962,7 +960,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
         <Button
           type="button"
           disabled={loading}
-          variant="outline"
+          variant="outlineSecondary"
           onClick={onCancel}
         >
           Cancel

@@ -24,7 +24,7 @@ const Index = () => {
         <section id="new">
           <ProductGrid />
         </section>
-        <Testimonials />
+        {/* <Testimonials /> */}
         <section id="contact">
           <CtaSection />
         </section>
