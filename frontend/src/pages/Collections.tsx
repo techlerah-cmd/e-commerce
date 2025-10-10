@@ -213,7 +213,7 @@ const Collections = () => {
 
                     <h3
                       className="font-serif-elegant text-2xl font-semibold mb-2"
-                      style={{ color: "hsl(var(--primary))" }}
+                      style={{ color: "hsl(var(--secondary))" }}
                     >
                       No Products Found
                     </h3>
@@ -229,7 +229,7 @@ const Collections = () => {
 
                     {(searchTerm || filter) && (
                       <Button
-                        variant="outline"
+                        variant="outlineSecondary"
                         className="btn-outline-luxury"
                         onClick={() => {
                           setSearchTerm("");
@@ -253,17 +253,22 @@ const Collections = () => {
                         className="group cursor-pointer"
                         onClick={() => navigate(`/product/${p.id}`)}
                       >
-                        {/* card wrapper for consistent spacing and background (keeps card look) */}
+                        {/* card wrapper */}
                         <div className="relative overflow-hidden">
-                          {/* IMAGE - fills the card */}
-                          <div className="relative w-full h-80 md:h-[26rem] lg:h-[30rem]">
+                          {/* IMAGE SECTION */}
+                          <div className="relative w-full h-72 sm:h-80 md:h-[26rem] lg:h-[30rem]">
                             <img
                               src={p.image}
                               alt={p.title}
-                              className="absolute inset-0 w-full h-full object-cover duration-600 "
+                              className="
+              absolute inset-0 w-full h-full 
+              object-contain sm:object-cover 
+              transition-all duration-700 ease-out
+              group-hover:scale-[1.02]
+            "
                             />
 
-                            {/* overall subtle dark overlay so text/readability is consistent */}
+                            {/* dark overlay for consistency */}
                             <div
                               className="absolute inset-0 pointer-events-none"
                               style={{
@@ -273,7 +278,7 @@ const Collections = () => {
                               }}
                             />
 
-                            {/* Centered white badge (like screenshot) */}
+                            {/* OUT OF STOCK BADGE */}
                             {p.stock === 0 && (
                               <div className="absolute left-1/2 bottom-6 transform -translate-x-1/2 w-10/12 md:w-8/12 lg:w-1/2">
                                 <div className="bg-white/95 px-4 py-3 text-center rounded-sm shadow-sm">
@@ -290,13 +295,13 @@ const Collections = () => {
                             )}
                           </div>
 
-                          {/* TEXT AREA - keep the same roomy spacing as screenshot */}
+                          {/* TEXT AREA */}
                           <div className="px-6 py-2 pb-4 text-center">
                             <h3
                               className="font-serif-elegant text-lg md:text-xl lg:text-2xl font-semibold mb-3"
                               style={{
                                 color: "hsl(var(--ast-global-color-2))",
-                              }} // burgundy title
+                              }}
                             >
                               {p.title}
                             </h3>
@@ -312,10 +317,9 @@ const Collections = () => {
                               </div>
                               {p.actual_price > p.price && (
                                 <div
-                                  className="text-sm mt-1"
+                                  className="text-sm mt-1 line-through"
                                   style={{
                                     color: "hsl(var(--muted-foreground))",
-                                    textDecoration: "line-through",
                                   }}
                                 >
                                   {formatPrice(p.actual_price)}
@@ -323,19 +327,17 @@ const Collections = () => {
                               )}
                             </div>
 
-                            <div>
-                              {/* "READ MORE" link look */}
-                              <Button
-                                variant="outline"
-                                className="text-secondary border-transparent hover:bg-secondary hover:text-muted"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  navigate(`/product/${p.id}`);
-                                }}
-                              >
-                                Read more
-                              </Button>
-                            </div>
+                            {/* READ MORE BUTTON */}
+                            <Button
+                              variant="outline"
+                              className="text-secondary border-transparent hover:bg-secondary hover:text-muted"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/product/${p.id}`);
+                              }}
+                            >
+                              Read more
+                            </Button>
                           </div>
                         </div>
                       </div>
