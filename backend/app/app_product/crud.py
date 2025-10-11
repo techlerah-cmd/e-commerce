@@ -118,7 +118,8 @@ def get_list_of_product(db:Session,page,size,filter,search,category,is_admin=Fal
           actual_price=product.actual_price,
           price=product.price,
           image=first_image_url,
-          stock=product.stock
+          stock=product.stock,
+          category=product.category,
         )
       )
     return PaginationResponse[ProductListResponse](
