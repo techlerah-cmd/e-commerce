@@ -70,9 +70,11 @@ def update_product(db:Session,db_product,update_data:dict):
     setattr(db_product,key,value)
   return db_product
 
-def get_list_of_product(db:Session,page,size,filter,search,is_admin=False):
+def get_list_of_product(db:Session,page,size,filter,search,category,is_admin=False):
   skip = (page - 1) * size
   query = db.query(Product)
+  if(category):
+    query = query.filter(Product.category == category)
   if(not filter):
     query = query.order_by(Product.updated_at.desc())
   if(is_admin==False):
@@ -148,3 +150,4 @@ def get_all_products(db:Session):
   query = db.query(Product)
   products = query.all()
   return products
+

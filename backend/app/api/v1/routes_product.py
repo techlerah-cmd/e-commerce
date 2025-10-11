@@ -14,6 +14,7 @@ from app.app_users.models import User
 from typing import List
 from app.common.schemas import PaginationResponse
 app  = APIRouter()
+category_router = APIRouter()
 import json
 
 
@@ -39,6 +40,7 @@ def create_product(
       active:bool=Form(...),
       images: List[UploadFile] = File(None),
       db:Session=Depends(get_db),
+      category:str=Form(...),
       user:User=Depends(is_admin),
       product_metadata: str = Form("{}"),
       featured:bool=False,
@@ -58,6 +60,7 @@ def create_product(
   # create product
   product_data = {
     "title":title,
+    "category":category,
     "description":description,
     "code":code,
     "active":active,
@@ -106,6 +109,7 @@ def update_product(
     code: str = Form(...),
     active: bool = Form(...),
     stock: int = Form(...),
+    category: str = Form(...),
     images: Optional[List[UploadFile]] = File(None),
     deleted_images_ids: Optional[List[str]] = Form(None),  # full id
     db: Session = Depends(get_db),
@@ -125,6 +129,7 @@ def update_product(
         raise HTTPException(status_code=404, detail="Product not found")
     update_data = {
       "code":code,
+      "category":category,
       "title":title,
       "description":description,
       "price":price,
@@ -189,10 +194,11 @@ def get_product_list(
     size:int = Query(10,ge=1),
     filter:str =Query(""),
     search: Optional[str] = Query(None, description="Search in title or description"),
+    category:Optional[str]=Query(None),
     db:Session=Depends(get_db)
     ):
     print(size,page,search,filter)
-    return crud_product.get_list_of_product(db,page,size,filter,search)
+    return crud_product.get_list_of_product(db,page,size,filter,search,category)
 
 @app.get("/list/admin",response_model=PaginationResponse[ProductAdminListResponse])
 def get_product_list(

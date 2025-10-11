@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import List
 from uuid import UUID
 
+
 class ProductImageBase(BaseModel):
   id : UUID
   product_id : UUID
@@ -20,6 +21,7 @@ class ProductBase(BaseModel):
   description :str
   active : bool
   price : float
+  category:str
   actual_price : float
   created_at : datetime
   stock:int
@@ -43,6 +45,7 @@ class ProductCreate(BaseModel):
 class ProductListResponse(BaseModel):
   title: str
   code : str
+  category:str
   actual_price: float
   price: float
   image: str
@@ -55,6 +58,7 @@ class ProductAdminListResponse(ProductBase):
   title: str
   id:UUID
   code : str
+  category:str
   actual_price: float
   price: float
   stock : int 

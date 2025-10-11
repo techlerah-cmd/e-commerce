@@ -7,8 +7,12 @@ from app.common.mixin import IDMixin,CreatedUpdatedAtMixin
 from app.core.config import settings
 from sqlalchemy.dialects.postgresql import JSONB
 
+
+
+
 class Product(Base, IDMixin, CreatedUpdatedAtMixin):
     __tablename__ = "products"
+
     title = Column(String(255), nullable=False, index=True)
     stock = Column(Integer, default=1)
     code = Column(String(100))
@@ -18,6 +22,7 @@ class Product(Base, IDMixin, CreatedUpdatedAtMixin):
     active = Column(Boolean, default=True)
     product_metadata = Column(JSONB,nullable=True,default=[])
     featured = Column(Boolean, default=False)
+    category = Column(String,nullable=True)
     images = relationship("ProductImage", back_populates="product", cascade="all, delete-orphan")
     order_items = relationship("OrderItem", back_populates="product", cascade="all, delete-orphan")
     cart_items = relationship("CartItem", back_populates="product", cascade="all, delete-orphan")
