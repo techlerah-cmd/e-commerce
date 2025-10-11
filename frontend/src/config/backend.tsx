@@ -20,8 +20,8 @@ export const API_ENDPOINT = {
   ADMIN_DASHBOARD: `${API_URL}/admin/dashboard`,
   ADMIN_ORDER_LIST: (page, size, search, filter) =>
     `${API_URL}/order/admin/list?page=${page}&size=${size}&search=${search}&filter=${filter}`,
-  PRODUCT_LIST: (page, size, search, filter) =>
-    `${API_URL}/product/list?&page=${page}&size=${size}&search=${search}&filter=${filter}`,
+  PRODUCT_LIST: (page, size, search, filter,category) =>
+    `${API_URL}/product/list?&page=${page}&size=${size}&search=${search}&filter=${filter}&category=${category}`,
   GET_PRODUCT: (id) => `${API_URL}/product/show/${id}`,
   ADD_TO_CART: `${API_URL}/cart`,
   DELETE_CART_ITEM: (id) => `${API_URL}/cart/${id}`,

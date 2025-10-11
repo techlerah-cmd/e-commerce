@@ -34,7 +34,8 @@ const Collections = () => {
   const [products, setProducts] = useState<IProductList[]>([]);
   const { fetchType, fetching, isFetched, makeApiCall } = useAPICall();
   const { user } = useAuth();
-  const [filter, setFilter] = useState<string>("");
+  const [filter, setFilter] = useState<string>(""); // used for sort / built-in filters
+  const [category, setCategory] = useState<string>("all"); // NEW: horizontal categories
   const navigate = useNavigate();
   const [pagination, setPagination] = useState<IPagination>({
     has_next: false,
@@ -50,20 +51,19 @@ const Collections = () => {
   useEffect(() => {
     fetchProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, searchTerm, filter]);
+  }, [currentPage, searchTerm, filter, category]);
 
   const fetchProducts = async () => {
-    const response = await makeApiCall(
-      "GET",
-      API_ENDPOINT.PRODUCT_LIST(
-        currentPage,
-        pagination.size,
-        searchTerm,
-        filter
-      ),
-      {},
-      "application/json"
+    // API_ENDPOINT.PRODUCT_LIST(...) returns a URL string. We'll append category only if it's not "All".
+    const url = API_ENDPOINT.PRODUCT_LIST(
+      currentPage,
+      pagination.size,
+      searchTerm,
+      filter,
+      category != "all" ? "" : category
     );
+
+    const response = await makeApiCall("GET", url, {}, "application/json");
     if (response.status === 200) {
       setProducts(response.data.items || []);
       setPagination(response.data.pagination || pagination);
@@ -72,16 +72,19 @@ const Collections = () => {
 
   const handleSearch = () => {
     setSearchTerm(search);
+    setCurrentPage(1);
   };
 
   const handleSearchKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       setSearchTerm(search);
+      setCurrentPage(1);
     }
   };
 
   const handleClearSearch = () => {
     setSearch("");
+    setSearchTerm("");
   };
 
   const goToPreviousPage = () => {
@@ -90,6 +93,38 @@ const Collections = () => {
 
   const goToNextPage = () => {
     setCurrentPage((p) => p + 1);
+  };
+
+  // derive categories from products (keeps default "All")
+  const derivedCategories = [
+    "All",
+    "Saree",
+    "Silk",
+    "Cotton",
+    "Georgette",
+    "Banarasi",
+    "Kanjivaram",
+    "Chiffon",
+    "Tussar",
+    "Linen",
+    "Designer",
+    "Handloom",
+    "Printed",
+    "Embroidered",
+    "Party Wear",
+    "Casual",
+    "Traditional",
+    "Wedding",
+    "Festive",
+    "Office Wear",
+    "Half Saree",
+    "Paithani",
+  ];
+
+  // helper to change category — resets page & search if needed
+  const selectCategory = (c: string) => {
+    setCategory(c);
+    setCurrentPage(1);
   };
 
   return (
@@ -130,6 +165,8 @@ const Collections = () => {
 
               <div className="flex items-center gap-3" />
             </div>
+
+            {/* --- HORIZONTAL CATEGORY SCROLLER (NEW) --- */}
 
             <div className="mt-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
               <div className=" flex gap-2 ">
@@ -173,11 +210,18 @@ const Collections = () => {
 
               <div className="flex items-center gap-3">
                 <p className="text-nowrap pl-2 text-muted ">Filter :</p>
-                <Select value={filter} onValueChange={setFilter}>
+                <Select
+                  value={filter}
+                  onValueChange={(v) => {
+                    setFilter(v);
+                    setCurrentPage(1);
+                  }}
+                >
                   <SelectTrigger className="w-full bg-muted ">
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="default">Default</SelectItem>
                     <SelectItem value="featured">Featured</SelectItem>
                     <SelectItem value="new_arrivals">New arrivals</SelectItem>
                     <SelectItem value="lowest_first">
@@ -188,6 +232,31 @@ const Collections = () => {
                     </SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+            </div>
+            <div className="mt-6">
+              <div className="overflow-x-auto no-scrollbar py-2">
+                <div className="flex gap-3 items-center px-2">
+                  {derivedCategories.map((c) => {
+                    const active =
+                      c.toLocaleLowerCase() === category.toLocaleLowerCase();
+                    return (
+                      <Button
+                        key={c}
+                        variant={active ? "default" : "outlinePrimary"}
+                        size="sm"
+                        onClick={() => selectCategory(c.toLocaleLowerCase())}
+                        className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap focus:!outline-none focus:ring-2 focus:ring-offset-2 outline-none transition  ${
+                          active ? "scale-105 " : ""
+                        }`}
+                        aria-pressed={active}
+                        aria-label={`Filter by ${c}`}
+                      >
+                        {c}
+                      </Button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>
@@ -222,20 +291,22 @@ const Collections = () => {
                       className="font-sans-clean max-w-md mb-6"
                       style={{ color: "hsl(var(--muted-foreground))" }}
                     >
-                      {searchTerm || filter
+                      {searchTerm || filter || (category && category !== "all")
                         ? "We couldn't find any products matching your search criteria. Try adjusting your filters or search terms."
                         : "No products are currently available in our collection. Please check back later."}
                     </p>
 
-                    {(searchTerm || filter) && (
+                    {(searchTerm ||
+                      filter ||
+                      (category && category !== "All")) && (
                       <Button
                         variant="outlineSecondary"
                         onClick={() => {
                           setSearchTerm("");
                           setSearch("");
                           setFilter("");
+                          setCategory("all");
                         }}
-                       
                       >
                         Clear Filters
                       </Button>

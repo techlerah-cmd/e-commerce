@@ -45,6 +45,7 @@ import toast from "react-hot-toast";
 import { Loading } from "@/components/ui/Loading";
 import { IPagination, IProduct } from "@/types/apiTypes";
 import { useNavigate } from "react-router-dom";
+import { categories } from "@/data/category";
 
 const AddProduct = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -63,6 +64,7 @@ const AddProduct = () => {
     total: 0,
   }); // Assuming pagination data has a 'total' property
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
+
   const [form, setForm] = useState<IProduct>({
     title: "",
     description: "",
@@ -74,12 +76,16 @@ const AddProduct = () => {
     stock: 0,
     active: true,
     featured: false,
-  });
+    category: categories && categories.length > 0 ? categories[0] : "all",
+  } as IProduct);
+
   const { fetchType, fetching, isFetched, makeApiCall } = useAPICall();
   const [deletedImages, setDeletedImages] = useState<string[]>([]);
   const navigate = useNavigate();
+
   useEffect(() => {
     fetchProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, query]);
 
   const fetchProducts = async () => {
@@ -115,21 +121,21 @@ const AddProduct = () => {
 
   const handleClearSearch = () => {
     setSearchQuery("");
-    // loadProducts();
   };
 
   const goToPreviousPage = () => {
-    setCurrentPage(currentPage - 1);
+    setCurrentPage((p) => Math.max(1, p - 1));
   };
 
   const goToNextPage = () => {
-    setCurrentPage(currentPage + 1);
+    setCurrentPage((p) => p + 1);
   };
 
   const resetForm = () => {
     setForm({
       title: "",
       description: "",
+      code: "",
       price: 0,
       actual_price: 0,
       images: [],
@@ -137,34 +143,34 @@ const AddProduct = () => {
       stock: 0,
       active: true,
       featured: false,
-      code: "",
-    });
+      category: categories && categories.length > 0 ? categories[0] : "all",
+    } as IProduct);
     setDeletedImages([]);
   };
+
+  // helper to slugify category for backend: lowercase + replace spaces with hyphens
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const price = form.price;
-    const originalPrice = form.actual_price;
-    const stock = form.stock;
-    console.log(form.stock);
+    const price = Number(form.price);
+    const originalPrice = Number(form.actual_price);
+    const stock = Number(form.stock);
 
     if (
       !form.title ||
       !price ||
       !form.code ||
       !form.description ||
-      form.images.length === 0
+      (form.images && form.images.length === 0)
     ) {
       toast.error("Please fill in the required fields.");
       return;
     }
-
-    if (editingProduct) {
-      // Update existing product
-      const formdata = new FormData();
+    // Build formData common parts helper
+    const appendCommon = (formdata: FormData) => {
       formdata.append("title", form.title);
-      formdata.append("price", price.toString());
       formdata.append("code", form.code);
+      formdata.append("price", price.toString());
       formdata.append("actual_price", originalPrice.toString());
       formdata.append("description", form.description);
       formdata.append("stock", stock.toString());
@@ -172,16 +178,25 @@ const AddProduct = () => {
       formdata.append("featured", form.featured ? "true" : "false");
       formdata.append(
         "product_metadata",
-        JSON.stringify(form.product_metadata)
+        JSON.stringify(form.product_metadata || [])
       );
+      // category appended as normalized slug
+      formdata.append("category", form.category);
+    };
+
+    if (editingProduct) {
+      // Update existing product
+      const formdata = new FormData();
+      appendCommon(formdata);
+
       // Add deleted images (for backend to remove them)
       deletedImages.forEach((imageId) => {
         formdata.append("deleted_images_ids", imageId);
       });
 
       // Add new image files
-      form.images.forEach((item, idx) => {
-        if (item.isNew) {
+      form.images.forEach((item: any) => {
+        if (item.isNew && item.file) {
           formdata.append("images", item.file, item.file.name);
         }
       });
@@ -209,20 +224,12 @@ const AddProduct = () => {
     } else {
       // Add new product
       const formdata = new FormData();
-      formdata.append("title", form.title);
-      formdata.append("code", form.code);
-      formdata.append("price", price.toString());
-      formdata.append("actual_price", originalPrice.toString());
-      formdata.append("description", form.description);
-      formdata.append("stock", stock.toString());
-      formdata.append("active", form.active ? "true" : "false");
-      formdata.append("featured", form.featured ? "true" : "false");
-      formdata.append(
-        "product_metadata",
-        JSON.stringify(form.product_metadata)
-      );
-      form.images.forEach((item, idx) => {
-        formdata.append("images", item.file, item.file.name);
+      appendCommon(formdata);
+
+      form.images.forEach((item: any) => {
+        if (item.file) {
+          formdata.append("images", item.file, item.file.name);
+        }
       });
 
       const response = await makeApiCall(
@@ -245,9 +252,16 @@ const AddProduct = () => {
 
     resetForm();
   };
+
   const handleEdit = (product: IProduct) => {
     setEditingProduct(product);
-    setForm(product); // Set editingProduct state with the selected product
+    setForm({
+      ...product,
+      // ensure category present (fallback to store default)
+      category:
+        (product && (product as any).category) ||
+        (categories && categories.length > 0 ? categories[0] : "all"),
+    } as IProduct);
     setIsEditModalOpen(true);
   };
 
@@ -274,7 +288,7 @@ const AddProduct = () => {
     setForm({
       ...form,
       product_metadata: [
-        ...form.product_metadata,
+        ...(form.product_metadata || []),
         { key: "", value: "" },
       ] as any[],
     });
@@ -285,7 +299,7 @@ const AddProduct = () => {
     field: "key" | "value",
     value: string
   ) => {
-    const newMetadata = [...form.product_metadata];
+    const newMetadata = [...(form.product_metadata || [])];
     newMetadata[index] = { ...newMetadata[index], [field]: value };
     setForm({ ...form, product_metadata: newMetadata });
   };
@@ -323,7 +337,7 @@ const AddProduct = () => {
     setForm({
       ...form,
       images: [
-        ...form.images,
+        ...(form.images || []),
         ...compressedFiles.map((f) => ({ file: f, isNew: true })),
       ],
     });
@@ -334,7 +348,7 @@ const AddProduct = () => {
 
   const removeImage = (index: number) => {
     const imageToRemove = form.images[index];
-    if (!imageToRemove.isNew) {
+    if (!imageToRemove.isNew && imageToRemove.id) {
       setDeletedImages([...deletedImages, imageToRemove.id]);
     }
 
@@ -472,6 +486,12 @@ const AddProduct = () => {
                                   </span>
                                 )}
                                 {product.code && " "}
+                                {/* show category if available */}
+                                {product.category && (
+                                  <span className="text-xs text-muted-foreground ml-2">
+                                    ({product.category})
+                                  </span>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -812,6 +832,23 @@ const ProductForm: React.FC<ProductFormProps> = ({
         />
       </div>
 
+      {/* Category select (fixed list from store) */}
+      <div>
+        <Label htmlFor="category">Category</Label>
+        <select
+          id="category"
+          value={form.category}
+          onChange={(e) => setForm({ ...form, category: e.target.value })}
+          className="w-full px-3 py-2 rounded border bg-transparent focus:border-primary outline-none"
+        >
+          {categories.map((c) => (
+            <option className="bg-transparent" key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <Label htmlFor="price">Price (₹)</Label>
@@ -819,7 +856,9 @@ const ProductForm: React.FC<ProductFormProps> = ({
             id="price"
             type="number"
             value={form.price}
-            onChange={(e) => setForm({ ...form, price: e.target.value })}
+            onChange={(e) =>
+              setForm({ ...form, price: Number(e.target.value) })
+            }
             required
           />
         </div>
@@ -829,7 +868,9 @@ const ProductForm: React.FC<ProductFormProps> = ({
             id="originalPrice"
             type="number"
             value={form.actual_price}
-            onChange={(e) => setForm({ ...form, actual_price: e.target.value })}
+            onChange={(e) =>
+              setForm({ ...form, actual_price: Number(e.target.value) })
+            }
           />
         </div>
       </div>
@@ -840,7 +881,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
           id="stock"
           type="number"
           value={form.stock}
-          onChange={(e) => setForm({ ...form, stock: e.target.value })}
+          onChange={(e) => setForm({ ...form, stock: Number(e.target.value) })}
           required
         />
       </div>
@@ -860,7 +901,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
         <Label>Images</Label>
         <div className="space-y-2">
           {/* Existing Images (for editing) */}
-          {form.images.map((item, index) => (
+          {form.images.map((item: any, index: number) => (
             <div key={`url-${index}`} className="flex items-center gap-2">
               <img
                 src={item.isNew ? URL.createObjectURL(item.file) : item.url}

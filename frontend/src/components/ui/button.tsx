@@ -25,9 +25,13 @@ const buttonVariants = cva(
         outlineSecondary:
           "border-2 border-secondary text-secondary bg-transparent hover:bg-secondary hover:text-secondary-foreground transition-all duration-300",
 
+        // 🆕 Outline Primary (new)
+        outlinePrimary:
+          "border-2 border-primary text-primary bg-transparent hover:bg-primary hover:text-primary-foreground transition-all duration-300",
+
         // Subtle Muted Button
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-primary hover:border-secondary  hover:text-foreground shadow-sm",
+          "bg-secondary text-secondary-foreground hover:bg-primary hover:border-secondary hover:text-foreground shadow-sm",
 
         // Minimal transparent button
         ghost:

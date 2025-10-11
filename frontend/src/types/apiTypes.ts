@@ -26,6 +26,7 @@ export interface IProduct {
   description: string;
   active: boolean;
   price: number;
+  category:string;
   actual_price: number;
   created_at?: string; // or Date if you parse it
   stock: number;

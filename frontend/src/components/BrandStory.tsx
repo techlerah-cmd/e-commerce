@@ -104,7 +104,7 @@ const BrandStory = () => {
             </div>
 
             {/* Floating mini card */}
-            <div
+            {/* <div
               className={`absolute -bottom-6 -left-6 bg-card/90 backdrop-blur-md border border-border/50 rounded-xl p-6 shadow-luxury max-w-xs animate-story-card ${
                 cardVisible ? "visible" : ""
               }`}
@@ -120,7 +120,7 @@ const BrandStory = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Floating decor */}
             <div className="absolute -top-4 -right-4 w-8 h-8 rounded-full bg-accent/20 animate-float"></div>
