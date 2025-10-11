@@ -13,7 +13,7 @@ from fastapi_limiter import FastAPILimiter
 from fastapi_limiter.depends import RateLimiter
 from redis.asyncio import from_url as redis_from_url
 import traceback
-# Base.metadata.drop_all(bind=engine)
+Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Lerah FastAPI Backend")
