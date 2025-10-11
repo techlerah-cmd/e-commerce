@@ -209,7 +209,7 @@ def get_product_list(
     db:Session=Depends(get_db),
     user:User=Depends(is_admin)
     ):
-    return crud_product.get_list_of_product(db,page,size,sort_by_price,search,is_admin=True)
+    return crud_product.get_list_of_product(db,page,size,sort_by_price,search,None,is_admin=True)
 
 @app.get('/feed/products.tsv')
 def get_products_feed(db:Session=Depends(get_db),):
