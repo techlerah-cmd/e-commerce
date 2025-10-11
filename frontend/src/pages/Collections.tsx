@@ -29,6 +29,7 @@ import { API_ENDPOINT } from "@/config/backend";
 import { Search, Box } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Loading } from "@/components/ui/Loading";
+import { categories } from "@/data/category";
 
 const Collections = () => {
   const [products, setProducts] = useState<IProductList[]>([]);
@@ -96,30 +97,7 @@ const Collections = () => {
   };
 
   // derive categories from products (keeps default "All")
-  const derivedCategories = [
-    "All",
-    "Saree",
-    "Silk",
-    "Cotton",
-    "Georgette",
-    "Banarasi",
-    "Kanjivaram",
-    "Chiffon",
-    "Tussar",
-    "Linen",
-    "Designer",
-    "Handloom",
-    "Printed",
-    "Embroidered",
-    "Party Wear",
-    "Casual",
-    "Traditional",
-    "Wedding",
-    "Festive",
-    "Office Wear",
-    "Half Saree",
-    "Paithani",
-  ];
+
 
   // helper to change category — resets page & search if needed
   const selectCategory = (c: string) => {
@@ -237,7 +215,7 @@ const Collections = () => {
             <div className="mt-6">
               <div className="overflow-x-auto no-scrollbar py-2">
                 <div className="flex gap-3 items-center px-2">
-                  {derivedCategories.map((c) => {
+                  {categories.map((c) => {
                     const active =
                       c.toLocaleLowerCase() === category.toLocaleLowerCase();
                     return (
