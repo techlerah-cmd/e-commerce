@@ -76,7 +76,7 @@ const AddProduct = () => {
     stock: 0,
     active: true,
     featured: false,
-    category: categories && categories.length > 0 ? categories[0] : "all",
+    category: "all",
   } as IProduct);
 
   const { fetchType, fetching, isFetched, makeApiCall } = useAPICall();

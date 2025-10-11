@@ -61,7 +61,7 @@ const Collections = () => {
       pagination.size,
       searchTerm,
       filter,
-      category != "all" ? "" : category
+      category == "all" ? "" : category
     );
 
     const response = await makeApiCall("GET", url, {}, "application/json");
@@ -97,7 +97,6 @@ const Collections = () => {
   };
 
   // derive categories from products (keeps default "All")
-
 
   // helper to change category — resets page & search if needed
   const selectCategory = (c: string) => {
@@ -215,6 +214,19 @@ const Collections = () => {
             <div className="mt-6">
               <div className="overflow-x-auto no-scrollbar py-2">
                 <div className="flex gap-3 items-center px-2">
+                  <Button
+                    key={"all"}
+                    variant={category == "all" ? "default" : "outlinePrimary"}
+                    size="sm"
+                    onClick={() => selectCategory("all".toLocaleLowerCase())}
+                    className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap focus:!outline-none focus:ring-2 focus:ring-offset-2 outline-none transition  ${
+                      category == "all" ? "scale-105 " : ""
+                    }`}
+                    aria-pressed={category == "all"}
+                    aria-label={`Filter by All`}
+                  >
+                    {"All"}
+                  </Button>
                   {categories.map((c) => {
                     const active =
                       c.toLocaleLowerCase() === category.toLocaleLowerCase();
