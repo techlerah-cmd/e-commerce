@@ -315,15 +315,15 @@ const AddProduct = () => {
     if (!e.target.files) return;
 
     const filesArray = Array.from(e.target.files);
-
     const compressedFiles: File[] = [];
 
     for (const file of filesArray) {
       try {
         const options = {
-          maxSizeMB: 1, // target max size in MB
-          maxWidthOrHeight: 1024, // max width/height
+          maxSizeMB: 2, // allow up to ~2MB per image (higher size = better quality)
+          maxWidthOrHeight: 1600, // larger max dimensions (sharper images)
           useWebWorker: true,
+          initialQuality: 0.9, // increase compression quality (default ~0.8)
         };
         const compressedFile = await imageCompression(file, options);
         compressedFiles.push(compressedFile);
@@ -333,7 +333,7 @@ const AddProduct = () => {
       }
     }
 
-    // Add compressed images to form state
+    // Update form state with compressed images
     setForm({
       ...form,
       images: [
@@ -342,9 +342,10 @@ const AddProduct = () => {
       ],
     });
 
-    // Reset input value so same file can be uploaded again if needed
+    // Reset input so user can re-upload same file if needed
     e.target.value = "";
   };
+
 
   const removeImage = (index: number) => {
     const imageToRemove = form.images[index];
