@@ -73,24 +73,35 @@ const Header = () => {
                     </NavLink>
                   </SheetClose>
                 ))}
-                <SheetClose asChild key={"/my-orders"}>
-                  <NavLink
-                    to={"/my-orders"}
-                    className={({ isActive }) =>
-                      cn(
-                        "rounded-md px-4 py-2 text-sm transition-colors ",
-                        isActive && "bg-muted/70 font-medium"
-                      )
-                    }
-                    style={({ isActive }) => ({
-                      color: isActive
-                        ? "hsl(var(--primary))"
-                        : "hsl(var(--primary))",
-                    })}
-                  >
-                    My Orders
-                  </NavLink>
-                </SheetClose>
+                {isAuthenticated ? (
+                  <SheetClose asChild key={"/my-orders"}>
+                    <NavLink
+                      to={"/my-orders"}
+                      className={({ isActive }) =>
+                        cn(
+                          "rounded-md px-4 py-2 text-sm transition-colors ",
+                          isActive && "bg-muted/70 font-medium"
+                        )
+                      }
+                      style={({ isActive }) => ({
+                        color: isActive
+                          ? "hsl(var(--primary))"
+                          : "hsl(var(--primary))",
+                      })}
+                    >
+                      My Orders
+                    </NavLink>
+                  </SheetClose>
+                ) : (
+                  <Link to="/login">
+                    <Button
+                      variant="outlineSecondary"
+                      className=" sm:hidden mt-2"
+                    >
+                      Login
+                    </Button>
+                  </Link>
+                )}
               </nav>
             </SheetContent>
           </Sheet>
