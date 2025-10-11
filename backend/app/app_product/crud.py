@@ -73,8 +73,8 @@ def update_product(db:Session,db_product,update_data:dict):
 def get_list_of_product(db:Session,page,size,filter,search,category,is_admin=False):
   skip = (page - 1) * size
   query = db.query(Product)
-  if(category):
-    query = query.filter(Product.category == category)
+  if category:
+    query = query.filter(func.lower(Product.category) == category.lower())
   if(not filter):
     query = query.order_by(Product.updated_at.desc())
   if(is_admin==False):
