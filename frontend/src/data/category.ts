@@ -1,9 +1,14 @@
+
 export const categories = [
-  "Electronics",
-  "Fashion",
-  "Home & Kitchen",
-  "Books",
-  "Sports & Outdoors",
-  "Beauty & Personal Care",
-  "Toys & Games"
+  "Kanchipuram",
+  "Banarasi",
+  "Katansi",
+  "Organza",
+  "Silk saree",
+  "Fancy saree",
+  "Cotton saree",
+  "Pashmina Saree",
+  "Semi Mysore Crepe Silk",
+  "Bridal",
+  "Designers pick",
 ];

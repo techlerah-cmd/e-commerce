@@ -25,7 +25,7 @@ const ProductGrid = ({ hideViewAllButton = false }: ProductGridProps) => {
   const fetchProducts = async () => {
     const response = await makeApiCall(
       "GET",
-      API_ENDPOINT.PRODUCT_LIST(1, 4, "", ""),
+      API_ENDPOINT.PRODUCT_LIST(1, 4, "", "",""),
       {},
       "application/json"
     );
