@@ -42,7 +42,7 @@ const HeroSection = () => {
         className="fixed inset-0 -z-10 bg-center bg-cover bg-no-repeat pointer-events-none"
         style={{
           backgroundImage:
-            "url('https://i0.wp.com/siahbyahadishika.com/wp-content/uploads/2025/07/MATH5652-scaled.jpeg?fit=600%2C899&ssl=1')",
+            "url('https://lh3.googleusercontent.com/pw/AP1GczMyQ9PqBIPY7qIGqAdmcSkUSPv24v6llcUdRm0i6PIxPMxC0AKFDPpMW0PucsGg4YX9vXB6brR4NTLMREd-Twef0rzMUBTEvXmEyVsSyLikMOdyBg=w2400')",
         }}
       >
         {/* Overlays */}
