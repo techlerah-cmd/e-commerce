@@ -122,7 +122,7 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="font-sans-clean text-muted text-sm text-center md:text-left flex items-center gap-2">
               © {new Date().getFullYear()} LÈRAH. All rights
-              reserved. Crafted with{" "}
+              reserved
               <Heart className="w-4 h-4 text-accent fill-accent" /> for timeless
               elegance.
             </p>
