@@ -219,7 +219,10 @@ const AddProduct = () => {
         toast.success(`Successfully updated product.`);
         setIsEditModalOpen(false);
       } else {
-        toast.error("Failed to update product");
+        if (response.status == 400) {
+          toast.error(response.error);
+        } else toast.error("Failed to update product");
+        return;
       }
     } else {
       // Add new product
@@ -245,11 +248,13 @@ const AddProduct = () => {
         setIsAddModalOpen(false);
         toast.success(`Successfully created.`);
       } else {
-        toast.error("Failed to create product");
+        if (response.status == 400) {
+          toast.error(response.error);
+        } else toast.error("Failed to update product");
         return;
       }
     }
-
+    setEditingProduct(null);
     resetForm();
   };
 
@@ -346,7 +351,6 @@ const AddProduct = () => {
     e.target.value = "";
   };
 
-
   const removeImage = (index: number) => {
     const imageToRemove = form.images[index];
     if (!imageToRemove.isNew && imageToRemove.id) {
@@ -372,6 +376,7 @@ const AddProduct = () => {
                 className="btn-luxury"
                 onClick={() => {
                   resetForm();
+                  setEditingProduct(null);
                   setIsAddModalOpen(true);
                 }}
               >
