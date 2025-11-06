@@ -78,9 +78,11 @@ const ProductGrid = ({ hideViewAllButton = false }: ProductGridProps) => {
                       <span className="font-sans-clean text-lg font-bold text-[hsl(var(--ast-global-color-0))]">
                         {formatPrice(product.price)}
                       </span>
-                      <span className="font-sans-clean text-sm line-through text-[hsl(var(--ast-global-color-6))]">
-                        {product.actual_price}
-                      </span>
+                      {product.actual_price > product.price && (
+                        <span className="font-sans-clean text-sm line-through text-[hsl(var(--ast-global-color-6))]">
+                          {product.actual_price}
+                        </span>
+                      )}
                     </div>
 
                     <Button
