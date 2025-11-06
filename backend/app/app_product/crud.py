@@ -69,7 +69,6 @@ def update_product(db:Session,db_product,update_data:dict):
   for key,value in update_data.items():
     setattr(db_product,key,value)
   return db_product
-
 def get_list_of_product(
     db: Session,
     page: int,
@@ -77,9 +76,7 @@ def get_list_of_product(
     filter: str,
     search: str,
     category: str,
-    is_admin: bool = False,
-    range_from: float = None,
-    range_to: float = None
+    is_admin: bool = False
 ):
     skip = (page - 1) * size
     query = db.query(Product)
@@ -102,15 +99,7 @@ def get_list_of_product(
             )
         )
 
-    # --- Price range filter ---
-    if range_from is not None and range_to is not None:
-        query = query.filter(Product.price.between(range_from, range_to))
-    elif range_from is not None:
-        query = query.filter(Product.price >= range_from)
-    elif range_to is not None:
-        query = query.filter(Product.price <= range_to)
-
-    # --- Sorting filters ---
+    # --- Sorting / special filters ---
     if not filter:
         query = query.order_by(Product.updated_at.desc())
     elif filter == "featured":
@@ -121,6 +110,18 @@ def get_list_of_product(
         query = query.order_by(Product.price.asc())
     elif filter == "highest_first":
         query = query.order_by(Product.price.desc())
+    elif filter == "everyday_elegance":
+        # price range 1,000 - 5,000
+        query = query.filter(Product.price.between(1_000, 5_000))
+    elif filter == "occasion_charm":
+        # price range 5,000 - 10,000
+        query = query.filter(Product.price.between(5_000, 10_000))
+    elif filter == "the_bridal_edit":
+        # price range 10,000 - 200,000
+        query = query.filter(Product.price.between(10_000, 200_000))
+    elif filter == "designer_choice":
+        # price range greater than 200,000 (2 lakhs)
+        query = query.filter(Product.price >= 200_000)
 
     # --- Pagination ---
     total = query.count()
@@ -172,9 +173,3 @@ def get_list_of_product(
             has_prev=has_prev,
             total=total,
         )
-
-def get_all_products(db:Session):
-  query = db.query(Product)
-  products = query.all()
-  return products
-

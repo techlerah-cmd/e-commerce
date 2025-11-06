@@ -195,8 +195,6 @@ def get_product_list(
     filter:str =Query(""),
     search: Optional[str] = Query(None, description="Search in title or description"),
     category:Optional[str]=Query(None),
-    range_from:Optional[int]=Query(None),
-    range_to:Optional[int]=Query(None),
     db:Session=Depends(get_db)
     ):
     print(size,page,search,filter)
