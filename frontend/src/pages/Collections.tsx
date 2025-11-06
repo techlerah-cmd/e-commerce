@@ -35,10 +35,12 @@ const Collections = () => {
   const [products, setProducts] = useState<IProductList[]>([]);
   const { fetchType, fetching, isFetched, makeApiCall } = useAPICall();
   const { user } = useAuth();
-  const [filter, setFilter] = useState<string>(""); // used for sort / built-in filters
+  const { state } = useLocation();
+  const [filter, setFilter] = useState<string>(() => {
+    return state && state.filter ? state.filter : "";
+  });
   const [category, setCategory] = useState<string>("all"); // NEW: horizontal categories
   const navigate = useNavigate();
-  const { state } = useLocation();
   const [pagination, setPagination] = useState<IPagination>({
     has_next: false,
     has_prev: false,
@@ -46,11 +48,7 @@ const Collections = () => {
     size: 20,
     total: 0,
   });
-  useEffect(() => {
-    if (state && state.filter) {
-      setFilter(state.filter);
-    }
-  }, [state]);
+
   const [search, setSearch] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
