@@ -70,82 +70,108 @@ def update_product(db:Session,db_product,update_data:dict):
     setattr(db_product,key,value)
   return db_product
 
-def get_list_of_product(db:Session,page,size,filter,search,category,is_admin=False):
-  skip = (page - 1) * size
-  query = db.query(Product)
-  if category:
-    query = query.filter(func.lower(Product.category) == category.lower())
-  if(not filter):
-    query = query.order_by(Product.updated_at.desc())
-  if(is_admin==False):
-    query = query.filter(Product.active==True)
+def get_list_of_product(
+    db: Session,
+    page: int,
+    size: int,
+    filter: str,
+    search: str,
+    category: str,
+    is_admin: bool = False,
+    range_from: float = None,
+    range_to: float = None
+):
+    skip = (page - 1) * size
+    query = db.query(Product)
 
-  if search:
-    query = query.filter(
-      or_(
-        Product.title.ilike(f"%{search}%"),
-        Product.description.ilike(f"%{search}%"),
-        Product.code.ilike(f"%{search}%"),
-      )
-    )
-  if filter == "featured":
-    query = query.filter(Product.featured == True)
-  elif filter == "new_arrivals":
-    query = query.filter(Product.created_at >= datetime.now() - timedelta(days=30))
-  elif filter == "lowest_first":
-    query = query.order_by(Product.price.asc())
-  elif filter == "highest_first":
-    query = query.order_by(Product.price.desc())
-  
-  total = query.count()
-  print(skip,size,total)
-  products = query.offset(skip).limit(size).all()
-  items = []
-  has_next = skip + size < total
-  has_prev = page > 1
-  if(not is_admin):
-    print(len(products),products)
+    # --- Category filter ---
+    if category:
+        query = query.filter(func.lower(Product.category) == category.lower())
 
-    for product in products:
+    # --- Only active for non-admins ---
+    if not is_admin:
+        query = query.filter(Product.active == True)
 
-
-      first_image_url = product.images[0].url if product.images else "https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg"
-      items.append(
-        ProductListResponse(
-          id=product.id,
-          title=product.title,
-          code=product.code,
-          actual_price=product.actual_price,
-          price=product.price,
-          image=first_image_url,
-          stock=product.stock,
-          category=product.category,
+    # --- Search filter ---
+    if search:
+        query = query.filter(
+            or_(
+                Product.title.ilike(f"%{search}%"),
+                Product.description.ilike(f"%{search}%"),
+                Product.code.ilike(f"%{search}%"),
+            )
         )
-      )
-    return PaginationResponse[ProductListResponse](
-    items=items,
-    page=page,
-    size=size,
-    has_next=has_next,
-    has_prev=has_prev,
-    total=total,
-  )
-  else:
-    for product in products:
-      
-      total_sold = sum(item.qty for item in product.order_items)
-      item_response = ProductAdminListResponse.from_orm(product)
-      item_response.total_sold = total_sold
-      items.append(item_response)
-    return PaginationResponse[ProductAdminListResponse](
-    items=items,
-    page=page,
-    size=size,
-    has_next=has_next,
-    has_prev=has_prev,
-    total=total,
-  )
 
+    # --- Price range filter ---
+    if range_from is not None and range_to is not None:
+        query = query.filter(Product.price.between(range_from, range_to))
+    elif range_from is not None:
+        query = query.filter(Product.price >= range_from)
+    elif range_to is not None:
+        query = query.filter(Product.price <= range_to)
+
+    # --- Sorting filters ---
+    if not filter:
+        query = query.order_by(Product.updated_at.desc())
+    elif filter == "featured":
+        query = query.filter(Product.featured == True)
+    elif filter == "new_arrivals":
+        query = query.filter(Product.created_at >= datetime.now() - timedelta(days=30))
+    elif filter == "lowest_first":
+        query = query.order_by(Product.price.asc())
+    elif filter == "highest_first":
+        query = query.order_by(Product.price.desc())
+
+    # --- Pagination ---
+    total = query.count()
+    products = query.offset(skip).limit(size).all()
+    has_next = skip + size < total
+    has_prev = page > 1
+    items = []
+
+    # --- User vs Admin response ---
+    if not is_admin:
+        for product in products:
+            first_image_url = (
+                product.images[0].url
+                if product.images
+                else "https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg"
+            )
+            items.append(
+                ProductListResponse(
+                    id=product.id,
+                    title=product.title,
+                    code=product.code,
+                    actual_price=product.actual_price,
+                    price=product.price,
+                    image=first_image_url,
+                    stock=product.stock,
+                    category=product.category,
+                )
+            )
+        return PaginationResponse[ProductListResponse](
+            items=items,
+            page=page,
+            size=size,
+            has_next=has_next,
+            has_prev=has_prev,
+            total=total,
+        )
+    else:
+        for product in products:
+            total_sold = sum(item.qty for item in product.order_items)
+            item_response = ProductAdminListResponse.from_orm(product)
+            item_response.total_sold = total_sold
+            items.append(item_response)
+
+        return PaginationResponse[ProductAdminListResponse](
+            items=items,
+            page=page,
+            size=size,
+            has_next=has_next,
+            has_prev=has_prev,
+            total=total,
+        )
 
 def get_all_products(db:Session):
   query = db.query(Product)

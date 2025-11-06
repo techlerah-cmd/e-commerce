@@ -51,7 +51,7 @@ const Policy = () => {
       content: (
         <div className="space-y-4 text-muted-foreground">
           <p>
-            At Lerah Royal Elegance, we are committed to protecting your privacy
+            At LÈRAH, we are committed to protecting your privacy
             and ensuring the security of your personal information. This Privacy
             Policy explains how we collect, use, and safeguard your data.
           </p>
@@ -117,7 +117,7 @@ const Policy = () => {
       content: (
         <div className="space-y-4 text-muted-foreground">
           <p>
-            Welcome to Lerah Royal Elegance. By accessing and using our website
+            Welcome to LÈRAH. By accessing and using our website
             and services, you agree to be bound by these Terms of Service.
             Please read them carefully.
           </p>
@@ -168,7 +168,7 @@ const Policy = () => {
             Limitation of Liability
           </h4>
           <p>
-            Lerah Royal Elegance shall not be liable for any indirect,
+            LÈRAH shall not be liable for any indirect,
             incidental, special, or consequential damages arising out of or in
             connection with your use of our services.
           </p>
@@ -181,7 +181,7 @@ const Policy = () => {
       content: (
         <div className="space-y-4 text-muted-foreground">
           <p>
-            At Lerah Royal Elegance, we want you to be satisfied with your
+            At LÈRAH, we want you to be satisfied with your
             purchase. Our exchange policy allows you to exchange items for a
             different size, color, or style.
           </p>
@@ -240,8 +240,7 @@ const Policy = () => {
       content: (
         <div className="space-y-4 text-muted-foreground">
           <p>
-            We offer fast and reliable shipping to ensure your Lerah Royal
-            Elegance purchases arrive safely and on time. All orders are shipped
+            We offer fast and reliable shipping to ensure your LÈRAH purchases arrive safely and on time. All orders are shipped
             for free, regardless of order value.
           </p>
 
