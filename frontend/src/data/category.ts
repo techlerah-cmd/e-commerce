@@ -11,4 +11,5 @@ export const categories = [
   "Semi Mysore Crepe Silk",
   "Bridal",
   "Designers pick",
+  "Satin Silk",
 ];
