@@ -19,7 +19,7 @@ import {
 import { formatDistanceToNow, differenceInDays } from "date-fns";
 
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { formatPrice, type Product } from "@/data/products";
 import { getAllProductsCombined } from "@/lib/adminStore";
 import { useAuth } from "@/contexts/AuthContext";
@@ -38,6 +38,7 @@ const Collections = () => {
   const [filter, setFilter] = useState<string>(""); // used for sort / built-in filters
   const [category, setCategory] = useState<string>("all"); // NEW: horizontal categories
   const navigate = useNavigate();
+  const { state } = useLocation();
   const [pagination, setPagination] = useState<IPagination>({
     has_next: false,
     has_prev: false,
@@ -45,6 +46,11 @@ const Collections = () => {
     size: 20,
     total: 0,
   });
+  useEffect(() => {
+    if (state && state.filter) {
+      setFilter(state.filter);
+    }
+  }, [state]);
   const [search, setSearch] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -195,7 +201,7 @@ const Collections = () => {
                   }}
                 >
                   <SelectTrigger className="w-full bg-muted ">
-                    <SelectValue placeholder="Sort by" />
+                    <SelectValue placeholder="Filter by" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="default">Default</SelectItem>
@@ -204,8 +210,17 @@ const Collections = () => {
                     <SelectItem value="lowest_first">
                       Price: Low to High
                     </SelectItem>
-                    <SelectItem value="highest_first">
-                      Price: High to Low
+                    <SelectItem value="everyday_elegance">
+                      Collection : Everyday Elegance
+                    </SelectItem>
+                    <SelectItem value="occasion_charm">
+                      Collection : Occasion Charm
+                    </SelectItem>
+                    <SelectItem value="the_bridal_edit">
+                      Collection : The Bridal Edit
+                    </SelectItem>
+                    <SelectItem value="designer_choice">
+                      Collection : Designer’s Choice
                     </SelectItem>
                   </SelectContent>
                 </Select>

@@ -7,6 +7,7 @@ const collections = [
   {
     id: 1,
     name: "Everyday Elegance",
+    filter: "everyday_elegance",
     description:
       "Light, graceful sarees for daily wear and small celebrations.",
     priceRange: "₹1,000 – ₹5,000",
@@ -16,6 +17,7 @@ const collections = [
   {
     id: 2,
     name: "Occasion Charm",
+    filter: "occasion_charm",
     description: "Perfect for festive gatherings, office events, or gifting.",
     priceRange: "₹5,000 – ₹10,000",
     image:
@@ -24,6 +26,7 @@ const collections = [
   {
     id: 3,
     name: "The Bridal Edit",
+    filter: "the_bridal_edit",
     description:
       "Curated for brides and weddings — luxurious, heirloom-worthy sarees.",
     priceRange: "₹10,000 – ₹2,00,000",
@@ -33,6 +36,7 @@ const collections = [
   {
     id: 4,
     name: "Designer’s Choice",
+    filter: "designer_choice",
     description: "Rare weaves, exclusive crafts, and premium masterpieces.",
     priceRange: "Premium Selection",
     image:
@@ -106,7 +110,13 @@ const FeaturedCollections = () => {
 
                 <div className="flex gap-3">
                   <Button
-                    onClick={() => navigate("/collections")}
+                    onClick={() =>
+                      navigate("/collections", {
+                        state: {
+                          filter: collection.filter,
+                        },
+                      })
+                    }
                     className="btn-luxury text-sm md:text-base px-4 py-2"
                   >
                     Explore
