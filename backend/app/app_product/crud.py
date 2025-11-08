@@ -11,6 +11,8 @@ from datetime import timedelta
 from sqlalchemy import func
 from app.app_order.models import OrderItem
 import re
+from decimal import Decimal
+
 from typing import List
 def get_product_by_code(db:Session,code):
   return db.query(Product).filter(Product.code == code).first()
@@ -18,29 +20,20 @@ def get_product_by_code(db:Session,code):
 
 def get_related_products(
     db: Session,
-    product_id: int,
+    product_id: str,
     limit: int = 4
-) -> List[ProductListResponse]:
-
-    # load the base product
+) -> List[dict]:
     product = db.query(Product).filter(Product.id == product_id).one_or_none()
     if not product:
         return []
 
-    # prepare lower-case reference values
     collection_val = (product.collection or "").lower()
     category_val = (product.category or "").lower()
 
-    # build a short list of meaningful title words (avoid tiny words)
-    # limit number of words to avoid huge SQL
     title_words = re.findall(r"\w+", product.title or "")
-    # keep words > 2 chars and limit to first 6 significant words
     title_words = [w for w in title_words if len(w) > 2][:6]
 
-    # scoring expression:
-    # collection match -> weight 50
-    # category match   -> weight 20
-    # each title-word match -> weight 1
+    # scoring expression
     score_expr = case(
         [(func.lower(Product.collection) == collection_val, 50)],
         else_=0
@@ -50,48 +43,47 @@ def get_related_products(
         else_=0
     )
     for w in title_words:
-        # each matching word in title gives +1
         score_expr = score_expr + case(
             [(Product.title.ilike(f"%{w}%"), 1)],
             else_=0
         )
 
-    # query candidates: only visible products and exclude the current product
     q = (
         db.query(Product, score_expr.label("score"))
         .filter(Product.active == True)
         .filter(Product.id != product.id)
     )
-
-    # optionally, you can prefer same collection first by ordering by score desc, then updated_at
     q = q.order_by(desc("score"), Product.updated_at.desc()).limit(limit)
 
     results = q.all()  # returns list of (Product, score)
 
-    # build response objects (same mapping as your list endpoint)
-    items: List[ProductListResponse] = []
+    items = []
     for candidate, score in results:
         first_image_url = (
             candidate.images[0].url
             if candidate.images
             else "https://lightwidget.com/wp-content/uploads/localhost-file-not-found.jpg"
         )
+
+        # convert any Decimal to float for JSON serialization
+        actual_price = float(candidate.actual_price) if isinstance(candidate.actual_price, Decimal) else candidate.actual_price
+        price = float(candidate.price) if isinstance(candidate.price, Decimal) else candidate.price
+
         items.append({
             "id": candidate.id,
             "title": candidate.title,
             "code": candidate.code,
-            "actual_price": candidate.actual_price,
-            "price": candidate.price,
+            "actual_price": actual_price,
+            "price": price,
             "image": first_image_url,
             "stock": candidate.stock,
             "category": candidate.category,
             "collection": candidate.collection,
-            "score": int(score) if score is not None else 0,
         })
 
     return items
 
-    
+
 
 def get_product_by_id(db: Session, id, is_admin: bool):
     query = db.query(Product).filter(Product.id == id)
