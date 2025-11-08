@@ -33,8 +33,8 @@ def get_product(
     related_products = crud_product.get_related_products(db, product_id, 4)
     
     # encode ORM to dict
-    product_data = jsonable_encoder(db_product)
-    product_data["related_products"] = related_products
+    product_data  = ProductResponse.from_orm(db_product)
+    product_data.related_products = related_products
     
     return product_data
 @app.post('',response_model=ProductResponse)
