@@ -1,4 +1,3 @@
-
 export const categories = [
   "Kanchipuram",
   "Banarasi",
@@ -12,4 +11,11 @@ export const categories = [
   "Bridal",
   "Designers pick",
   "Satin Silk",
+];
+
+export const collections = [
+  "everyday_elegance",
+  "occasion_charm",
+  "the_bridal_edit",
+  "designer_choice",
 ];

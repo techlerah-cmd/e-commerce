@@ -349,9 +349,11 @@ const ProductDetail = () => {
                         In Stock
                       </span>
                     )}
-                    <p className="font-sans-clean text-muted-foreground leading-relaxed whitespace-pre-line">
-                      {product.description}
-                    </p>
+                    <p
+                      className="font-sans-clean text-muted-foreground leading-relaxed whitespace-pre-line"
+                      dangerouslySetInnerHTML={{ __html: product.description }}
+                    />
+                    {/* {product.description} */}
                     <Card>
                       <CardContent className="p-4">
                         <div className="flex gap-3 items-start">
@@ -482,6 +484,118 @@ const ProductDetail = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+            </section>
+            <section className="px-4 py-10 sm:px-6 lg:px-8 bg-muted ">
+              <div className="mx-auto max-w-7xl">
+                <div className="mb-6 flex items-center justify-between">
+                  <h2 className="font-serif-elegant text-2xl font-semibold text-secondary">
+                    Related Products
+                  </h2>
+                </div>
+
+                {product.related_products.length === 0 ? (
+                  <p className="text-muted-foreground">
+                    No related products found.
+                  </p>
+                ) : (
+                  <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                    {product.related_products.map((p) => (
+                      <div
+                        key={p.id}
+                        className="group cursor-pointer"
+                        onClick={() => navigate(`/product/${p.id}`)}
+                      >
+                        {/* CARD WRAPPER */}
+                        <div className="relative overflow-hidden">
+                          {/* PRODUCT IMAGE (FULL COVER) */}
+                          <div className="relative w-full h-56 sm:h-72 md:h-[26rem] lg:h-[30rem]">
+                            <img
+                              src={p.image}
+                              alt={p.title}
+                              className="
+                absolute inset-0 w-full h-full 
+                object-cover 
+                transition-transform duration-700 ease-out
+              "
+                            />
+
+                            {/* Subtle dark overlay for readability */}
+                            <div
+                              className="absolute inset-0 pointer-events-none"
+                              style={{
+                                backgroundColor:
+                                  "hsl(var(--foreground, 0 0% 8%) / 0.18)",
+                                mixBlendMode: "multiply",
+                              }}
+                            />
+
+                            {/* OUT OF STOCK LABEL */}
+                            {p.stock === 0 && (
+                              <div className="absolute left-1/2 bottom-6 transform -translate-x-1/2 w-10/12 md:w-8/12 lg:w-1/2">
+                                <div className="bg-white/95 px-4 py-3 text-center rounded-sm shadow-sm">
+                                  <span
+                                    className="block font-semibold uppercase tracking-wider text-xs md:text-sm"
+                                    style={{
+                                      color: "hsl(var(--ast-global-color-2))",
+                                    }}
+                                  >
+                                    Out of stock
+                                  </span>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* TEXT CONTENT */}
+                          <div className="px-4 sm:px-6 py-2 pb-4 text-center">
+                            <h3
+                              className="font-serif-elegant text-sm sm:text-lg md:text-xl lg:text-2xl font-semibold mb-2"
+                              style={{
+                                color: "hsl(var(--ast-global-color-2))",
+                              }}
+                            >
+                              {p.title}
+                            </h3>
+
+                            <div className="mb-2 flex justify-center gap-1">
+                              <div
+                                className="text-sm sm:text-base md:text-lg font-semibold"
+                                style={{
+                                  color: "hsl(var(--ast-global-color-2))",
+                                }}
+                              >
+                                {formatPrice(p.price)}
+                              </div>
+                              {p.actual_price > p.price && (
+                                <div
+                                  className="text-xs sm:text-sm mt-1 line-through"
+                                  style={{
+                                    color: "hsl(var(--muted-foreground))",
+                                  }}
+                                >
+                                  {formatPrice(p.actual_price)}
+                                </div>
+                              )}
+                            </div>
+
+                            {/* READ MORE BUTTON */}
+                            <Button
+                              variant="outline"
+                              className="text-secondary border-transparent hover:bg-secondary hover:text-muted text-xs sm:text-sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/product/${p.id}`);
+                              }}
+                            >
+                              Read more
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </section>
           </>
