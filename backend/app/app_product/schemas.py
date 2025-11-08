@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import List
 from uuid import UUID
-
+from typing import Optional
 
 class ProductImageBase(BaseModel):
   id : UUID
@@ -36,6 +36,7 @@ class ProductBase(BaseModel):
 class ProductResponse(ProductBase):
   review_count: int | None =  None
   avg_rating: float | None =  None
+  related_products: Optional[List["ProductListResponse"]] = None  # <- add this
   class Config:
     orm_mode = True
     from_attributes=True
