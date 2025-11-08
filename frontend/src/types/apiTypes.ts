@@ -26,7 +26,7 @@ export interface IProduct {
   description: string;
   active: boolean;
   price: number;
-  category:string;
+  category: string;
   actual_price: number;
   created_at?: string; // or Date if you parse it
   stock: number;
@@ -36,6 +36,8 @@ export interface IProduct {
   featured: boolean;
   review_count?: number;
   avg_rating?: number;
+  collection?: string;
+  related_products?: IProductList[];
 }
 
 export interface IProductList {

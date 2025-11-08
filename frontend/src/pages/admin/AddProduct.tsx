@@ -7,7 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import imageCompression from "browser-image-compression";
-
+import 'react-quill/dist/quill.snow.css'
+import ReactQuill from 'react-quill'
 import {
   Dialog,
   DialogContent,
@@ -45,7 +46,7 @@ import toast from "react-hot-toast";
 import { Loading } from "@/components/ui/Loading";
 import { IPagination, IProduct } from "@/types/apiTypes";
 import { useNavigate } from "react-router-dom";
-import { categories } from "@/data/category";
+import { categories, collections } from "@/data/category";
 
 const AddProduct = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -56,6 +57,7 @@ const AddProduct = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [query, setQuery] = useState("");
+  
   const [pagination, setPagination] = useState<IPagination>({
     has_next: false,
     has_prev: false,
@@ -77,6 +79,7 @@ const AddProduct = () => {
     active: true,
     featured: false,
     category: "all",
+    collection: "everyday_elegance",
   } as IProduct);
 
   const { fetchType, fetching, isFetched, makeApiCall } = useAPICall();
@@ -144,6 +147,7 @@ const AddProduct = () => {
       active: true,
       featured: false,
       category: categories && categories.length > 0 ? categories[0] : "all",
+      collection: "everyday_elegance",
     } as IProduct);
     setDeletedImages([]);
   };
@@ -176,6 +180,10 @@ const AddProduct = () => {
       formdata.append("stock", stock.toString());
       formdata.append("active", form.active ? "true" : "false");
       formdata.append("featured", form.featured ? "true" : "false");
+      formdata.append(
+        "collection",
+        form.collection
+      );
       formdata.append(
         "product_metadata",
         JSON.stringify(form.product_metadata || [])
@@ -816,6 +824,9 @@ const ProductForm: React.FC<ProductFormProps> = ({
   removeImage,
   loading,
 }) => {
+  const modules = {
+    toolbar: ["bold", "underline"],
+  };
   return (
     <form className="space-y-4" onSubmit={onSubmit}>
       <div>
@@ -828,7 +839,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
         />
       </div>
 
-      <div>
+      {/* <div>
         <Label htmlFor="description">Description</Label>
         <Textarea
           id="description"
@@ -836,7 +847,14 @@ const ProductForm: React.FC<ProductFormProps> = ({
           value={form.description}
           onChange={(e) => setForm({ ...form, description: e.target.value })}
         />
-      </div>
+      </div> */}
+      <ReactQuill
+        value={form.description}
+        onChange={(text) => setForm({ ...form, description: text })}
+        modules={modules}
+        theme="snow"
+        placeholder="Write product description"
+      />
 
       {/* Category select (fixed list from store) */}
       <div>
@@ -848,6 +866,21 @@ const ProductForm: React.FC<ProductFormProps> = ({
           className="w-full px-3 py-2 rounded border bg-transparent focus:border-primary outline-none"
         >
           {categories.map((c) => (
+            <option className="bg-transparent" key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <Label htmlFor="category">Collection</Label>
+        <select
+          id="category"
+          value={form.collection}
+          onChange={(e) => setForm({ ...form, collection: e.target.value })}
+          className="w-full px-3 py-2 rounded border bg-transparent focus:border-primary outline-none"
+        >
+          {collections.map((c) => (
             <option className="bg-transparent" key={c} value={c}>
               {c}
             </option>
