@@ -19,6 +19,7 @@ class Product(Base, IDMixin, CreatedUpdatedAtMixin):
     price = Column(DECIMAL(10,5))
     actual_price = Column(DECIMAL(10,5))
     description = Column(Text)
+    collection = Column(String(200),default="everyday_elegance")
     active = Column(Boolean, default=True)
     product_metadata = Column(JSONB,nullable=True,default=[])
     featured = Column(Boolean, default=False)
@@ -30,7 +31,7 @@ class ProductImage(Base):
     __tablename__ = "product_images"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     product_id = Column(UUID(as_uuid=True), ForeignKey("products.id", ondelete="CASCADE"), index=True)
-    path = Column(String(500), nullable=False)  # store only relative path
+    path = Column(String(500), nullable=False)  
     alt = Column(String(255),default="Product Image")
     product = relationship("Product", back_populates="images",uselist=False)
     @property

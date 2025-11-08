@@ -27,8 +27,8 @@ def get_product(
     db_product = crud_product.get_product_by_id(db, product_id,is_admin=True)
     if not db_product:
         raise HTTPException(status_code=404, detail="Product not found")
-
-    return db_product
+    related_products = crud_product.get_related_products(db,product_id,4)
+    return {**db_product,"related_products":related_products}
 
 @app.post('',response_model=ProductResponse)
 def create_product(
@@ -44,7 +44,8 @@ def create_product(
       user:User=Depends(is_admin),
       product_metadata: str = Form("{}"),
       featured:bool=False,
-      stock:int=Form(...)
+      collection:str=Form(...),
+      stock:int=Form(...),
       ):
   #  check any other product the same code
   try:
@@ -68,7 +69,8 @@ def create_product(
     "price":price,
     "product_metadata":product_metadata_obj,
     "featured":featured,
-    "stock":stock
+    "stock":stock,
+    "collection":collection
   }
   db_product = crud_product.create_product(db,product_data)
   db.add(db_product)
@@ -116,6 +118,7 @@ def update_product(
     user: User = Depends(is_admin),
     product_metadata: str = Form("{}"),  # receive as string
     featured: bool = Form(...),
+    collection:str= Form(...)
 ):
     
     try:
@@ -137,7 +140,8 @@ def update_product(
       "active":active,
       "product_metadata":product_metadata_obj,
       "featured":featured,
-      "stock":stock
+      "stock":stock,
+      "collection":collection
     }
     db_product = crud_product.update_product(db,db_product,update_data)
     print(deleted_images_ids)
