@@ -12,24 +12,31 @@ from app.common.utils import generate_otp
 from app.lib.resend import send_reset_link
 from app.app_users.models import User
 from typing import List
+from fastapi.encoders import jsonable_encoder
+
 from app.common.schemas import PaginationResponse
 app  = APIRouter()
 category_router = APIRouter()
 import json
 
 
-@app.get("/show/{product_id}", response_model=ProductResponse)
+
+@app.get("/show/{product_id}")
 def get_product(
     product_id: str,
     db: Session = Depends(get_db),
 ):
-    # fetch product
-    db_product = crud_product.get_product_by_id(db, product_id,is_admin=True)
+    db_product = crud_product.get_product_by_id(db, product_id, is_admin=True)
     if not db_product:
         raise HTTPException(status_code=404, detail="Product not found")
-    related_products = crud_product.get_related_products(db,product_id,4)
-    return {**db_product,"related_products":related_products}
-
+    
+    related_products = crud_product.get_related_products(db, product_id, 4)
+    
+    # encode ORM to dict
+    product_data = jsonable_encoder(db_product)
+    product_data["related_products"] = related_products
+    
+    return product_data
 @app.post('',response_model=ProductResponse)
 def create_product(
       title:str=Form(...),
