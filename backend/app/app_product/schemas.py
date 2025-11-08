@@ -36,7 +36,6 @@ class ProductBase(BaseModel):
 class ProductResponse(ProductBase):
   review_count: int | None =  None
   avg_rating: float | None =  None
-  related_products :  List | None
   class Config:
     orm_mode = True
     from_attributes=True
