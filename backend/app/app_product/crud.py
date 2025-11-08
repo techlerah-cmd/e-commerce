@@ -35,16 +35,16 @@ def get_related_products(
 
     # scoring expression
     score_expr = case(
-        [(func.lower(Product.collection) == collection_val, 50)],
-        else_=0
-    )
+    (func.lower(Product.collection) == collection_val, 50),
+    else_=0
+)
     score_expr = score_expr + case(
-        [(func.lower(Product.category) == category_val, 20)],
-        else_=0
-    )
+    (func.lower(Product.category) == category_val, 20),
+    else_=0
+)
     for w in title_words:
         score_expr = score_expr + case(
-            [(Product.title.ilike(f"%{w}%"), 1)],
+            (Product.title.ilike(f"%{w}%"), 1),
             else_=0
         )
 
