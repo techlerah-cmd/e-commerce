@@ -1,66 +1,72 @@
-# schemas.py
 from pydantic import BaseModel
 from datetime import datetime
-from typing import List, Optional, Any
+from typing import List
 from uuid import UUID
 
+
 class ProductImageBase(BaseModel):
-    id: UUID
-    product_id: Optional[UUID] = None
-    path: Optional[str] = None
-    alt: Optional[str] = None
-    url: str
-
-    class Config:
+  id : UUID
+  product_id : UUID
+  path : str
+  alt : str
+  url : str
+  class Config:
         orm_mode = True
-
+        from_attributes = True
 
 class ProductBase(BaseModel):
-    id: UUID
-    title: str
-    code: str
-    description: str
-    active: bool
-    price: float
-    category: str
-    actual_price: float
-    created_at: datetime
-    stock: int
-    # metadata can be arbitrary dict or list
-    product_metadata: Optional[Any] = None
-    images: List[ProductImageBase] = []
-    featured: bool = False
-    collection: Optional[str] = None
-
-    class Config:
+  id : UUID
+  title :str
+  code : str
+  description :str
+  active : bool
+  price : float
+  category:str
+  actual_price : float
+  created_at : datetime
+  stock:int
+  product_metadata :dict | List
+  images: List[ProductImageBase]
+  featured:bool
+  collection: str | None
+  class Config:
         orm_mode = True
-
-
-class ProductListResponse(BaseModel):
-    id: UUID
-    title: str
-    code: str
-    category: str
-    actual_price: float
-    price: float
-    image: str
-    stock: int
-    collection: Optional[str] = None
-
-    class Config:
-        orm_mode = True
-
+        from_attributes = True
 
 class ProductResponse(ProductBase):
-    review_count: Optional[int] = None
-    avg_rating: Optional[float] = None
+  review_count: int | None =  None
+  avg_rating: float | None =  None
+  related_products :  List | None
+  class Config:
+    orm_mode = True
+    from_attributes=True
 
-    class Config:
-        orm_mode = True
+class ProductCreate(BaseModel):
+  pass
 
+class ProductListResponse(BaseModel):
+  title: str
+  code : str
+  category:str
+  actual_price: float
+  price: float
+  image: str
+  stock : int
+  collection: str | None
+  id : UUID
+  class Config:
+    orm_mode = True
 
 class ProductAdminListResponse(ProductBase):
-    total_sold: Optional[int] = None
-
-    class Config:
-        orm_mode = True
+  title: str
+  id:UUID
+  code : str
+  category:str
+  actual_price: float
+  price: float
+  stock : int 
+  collection: str | None
+  total_sold: int | None =None
+  class Config:
+    orm_mode = True
+    from_attributes=True
