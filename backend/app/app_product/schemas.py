@@ -28,6 +28,7 @@ class ProductBase(BaseModel):
   product_metadata :dict | List
   images: List[ProductImageBase]
   featured:bool
+  collection: str | None
   class Config:
         orm_mode = True
         from_attributes = True
@@ -35,6 +36,7 @@ class ProductBase(BaseModel):
 class ProductResponse(ProductBase):
   review_count: int | None =  None
   avg_rating: float | None =  None
+  related_products :  List | None
   class Config:
     orm_mode = True
     from_attributes=True
@@ -50,6 +52,7 @@ class ProductListResponse(BaseModel):
   price: float
   image: str
   stock : int
+  collection: str | None
   id : UUID
   class Config:
     orm_mode = True
@@ -62,6 +65,7 @@ class ProductAdminListResponse(ProductBase):
   actual_price: float
   price: float
   stock : int 
+  collection: str | None
   total_sold: int | None =None
   class Config:
     orm_mode = True
