@@ -54,8 +54,6 @@ class ProductListResponse(BaseModel):
 class ProductResponse(ProductBase):
     review_count: Optional[int] = None
     avg_rating: Optional[float] = None
-    # related products should be a list of summary objects (or None)
-    related_products: Optional[List[ProductListResponse]] = None
 
     class Config:
         orm_mode = True
