@@ -45,7 +45,7 @@ const ProductDetail = () => {
 
   useEffect(() => {
     fetchProduct();
-  }, []);
+  }, [id]);
   useEffect(() => {
     if (!product || product.images.length <= 1) return;
 
@@ -181,7 +181,7 @@ const ProductDetail = () => {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-secondary">
+      <main className="min-h-screen   bg-muted">
         {fetching && fetchType != "addToCart" && (
           <div className="py-4 min-h-screen">
             <Loading />
