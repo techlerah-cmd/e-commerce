@@ -41,11 +41,13 @@ const HeroSection = () => {
         aria-hidden
         className="fixed inset-0 -z-10 bg-center bg-cover bg-no-repeat pointer-events-none"
         style={{
-          backgroundImage:
-            "url('https://lh3.googleusercontent.com/pw/AP1GczMyQ9PqBIPY7qIGqAdmcSkUSPv24v6llcUdRm0i6PIxPMxC0AKFDPpMW0PucsGg4YX9vXB6brR4NTLMREd-Twef0rzMUBTEvXmEyVsSyLikMOdyBg=w2400')",
+          backgroundImage: "url('assets/images/main_page.JPG')",
         }}
       >
-        {/* Overlays */}
+        {/* Stronger dark overlay for text readability */}
+        <div className="absolute inset-0 bg-[hsla(0,0%,0%,0.40)] " />
+
+        {/* existing overlays (kept) */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.25),transparent_60%)]" />
         <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--primary))/60] via-[hsl(var(--primary))/30] to-transparent mix-blend-multiply" />
         <div className="absolute inset-0 opacity-30 pointer-events-none">
@@ -65,19 +67,21 @@ const HeroSection = () => {
             }`}
             style={{ fontSize: "clamp(1.75rem, 5vw, 3.5rem)" }}
           >
-            <span className="block text-[1.05em] sm:text-[0.95em] md:text-[1em] mb-1 text-secondary">
-              With every drape
-            </span>
+            <span className="block text-white">With every drape</span>
+
             <span className="block text-[1.15em] sm:text-[1.2em] md:text-[1.6em] text-gradient-gold">
               walk with the majesty of a lioness.
             </span>
           </h1>
 
           <p
-            className={`font-sans-clean text-[hsl(var(--foreground))/90] mb-6 max-w-2xl leading-relaxed animate-fade-up animation-delay-200 ${
+            className={`font-sans-clean text-white/90 mb-6 max-w-2xl leading-relaxed animate-fade-up animation-delay-200 ${
               isHeroVisible ? "visible" : ""
             }`}
-            style={{ fontSize: "clamp(0.95rem, 2.2vw, 1.125rem)" }}
+            style={{
+              fontSize: "clamp(0.95rem, 2.2vw, 1.125rem)",
+              textShadow: "0 6px 18px rgba(0,0,0,0.6)",
+            }}
           >
             Discover the perfect blend of tradition and modern sophistication.
             Each saree tells a story of heritage, crafted with love and

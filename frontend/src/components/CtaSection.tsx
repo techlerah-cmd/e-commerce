@@ -30,7 +30,7 @@ const CtaSection = () => {
       <div className="max-w-4xl mx-auto text-center">
         {/* Main CTA */}
         <div className="mb-16">
-          <h2 className="font-serif-elegant text-4xl md:text-5xl font-bold text-primary-foreground mb-6">
+          <h2 className="font-serif-elegant text-4xl md:text-5xl font-bold text-white mb-6">
             Begin Your <span className="text-gradient-gold">Elegance</span>{" "}
             Journey
           </h2>

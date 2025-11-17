@@ -2,7 +2,12 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -13,11 +18,11 @@ export default {
       },
     },
     extend: {
-      fontFamily: {
-        'serif': ['Playfair Display', 'serif'],
-        'sans': ['Inter', 'sans-serif'],
-        'serif-elegant': ['Playfair Display', 'serif'],
-        'sans-clean': ['Inter', 'sans-serif'],
+      extend: {
+        fontFamily: {
+          header: ['"Tenor Sans"', "sans-serif"],
+          body: ["Outfit", "sans-serif"],
+        },
       },
       colors: {
         border: "hsl(var(--border))",
@@ -82,28 +87,28 @@ export default {
         },
         "fade-in": {
           "0%": { opacity: "0", transform: "translateY(10px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" }
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
-        "float": {
+        float: {
           "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-10px)" }
+          "50%": { transform: "translateY(-10px)" },
         },
-        "glow": {
-          "from": { boxShadow: "0 0 20px hsl(51 100% 50% / 0.3)" },
-          "to": { boxShadow: "0 0 30px hsl(51 100% 50% / 0.6)" }
+        glow: {
+          from: { boxShadow: "0 0 20px hsl(51 100% 50% / 0.3)" },
+          to: { boxShadow: "0 0 30px hsl(51 100% 50% / 0.6)" },
         },
-        "shimmer": {
+        shimmer: {
           "0%": { transform: "translateX(-100%)" },
-          "100%": { transform: "translateX(100%)" }
+          "100%": { transform: "translateX(100%)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.3s ease-out",
-        "float": "float 3s ease-in-out infinite",
-        "glow": "glow 2s ease-in-out infinite alternate",
-        "shimmer": "shimmer 2s infinite",
+        float: "float 3s ease-in-out infinite",
+        glow: "glow 2s ease-in-out infinite alternate",
+        shimmer: "shimmer 2s infinite",
       },
     },
   },
