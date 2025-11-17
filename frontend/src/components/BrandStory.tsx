@@ -28,21 +28,6 @@ const BrandStory = () => {
       id="story"
     >
       {/* 🌄 FIXED BACKGROUND IMAGE (same as HeroSection) */}
-      <div
-        aria-hidden
-        className="fixed inset-0 -z-10 bg-center bg-cover bg-no-repeat pointer-events-none"
-        style={{
-          backgroundImage:
-            "url('https://i0.wp.com/siahbyahadishika.com/wp-content/uploads/2025/07/MATH5652-scaled.jpeg?fit=600%2C899&ssl=1')",
-        }}
-      >
-        {/* Overlay effects for readability */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.35),transparent_70%)]"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/60 via-primary/30 to-transparent mix-blend-multiply"></div>
-        <div className="absolute inset-0 opacity-30 pointer-events-none">
-          <div className="absolute -inset-x-40 top-0 h-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-gradient-pan" />
-        </div>
-      </div>
 
       {/* ✨ Background decorative floating lights */}
       <div className="absolute inset-0 pointer-events-none">
@@ -63,11 +48,11 @@ const BrandStory = () => {
                 isStoryVisible ? "visible" : ""
               }`}
             >
-              <h2 className="font-serif-elegant text-4xl md:text-5xl font-bold text-primary-foreground mb-6">
+              <h2 className="font-serif-elegant text-4xl md:text-5xl font-bold text-white mb-6">
                 How <span className="text-gradient-gold">Lerah</span> Found Its
                 Soul?
               </h2>
-              <div className="space-y-4">
+              <div className="space-y-4 text-gray-200">
                 {[
                   "Like every great love story, ours too began with a wedding — our own.",
                   "In the search for the perfect saree, we discovered a world of artisans who weave not just fabric, but heritage and soul into every thread.",
@@ -76,7 +61,7 @@ const BrandStory = () => {
                 ].map((text, idx) => (
                   <p
                     key={idx}
-                    className={`font-sans-clean text-lg text-primary-foreground/90 leading-relaxed animate-text-reveal ${
+                    className={`font-sans-clean text-lg text-gray-200 leading-relaxed animate-text-reveal ${
                       textVisible ? "visible" : ""
                     }`}
                     style={{ transitionDelay: `${idx * 200}ms` }}
@@ -96,7 +81,7 @@ const BrandStory = () => {
           >
             <div className="aspect-square rounded-2xl overflow-hidden relative shadow-xl">
               <img
-                src="https://i0.wp.com/siahbyahadishika.com/wp-content/uploads/2025/07/MATH5693-scaled.jpeg?fit=600%2C899&ssl=1"
+                src="assets/images/main_page.JPG"
                 alt="Beige & Blush detail"
                 className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
               />

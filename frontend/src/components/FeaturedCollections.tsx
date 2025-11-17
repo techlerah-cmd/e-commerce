@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -11,8 +10,7 @@ const collections = [
     description:
       "Light, graceful sarees for daily wear and small celebrations.",
     priceRange: "₹1,000 – ₹5,000",
-    image:
-      "https://i0.wp.com/siahbyahadishika.com/wp-content/uploads/2025/07/MATH5691-scaled.jpeg?fit=600%2C899&ssl=1",
+    image: "assets/images/everyday_cover.JPG",
   },
   {
     id: 2,
@@ -20,8 +18,7 @@ const collections = [
     filter: "occasion_charm",
     description: "Perfect for festive gatherings, office events, or gifting.",
     priceRange: "₹5,000 – ₹10,000",
-    image:
-      "https://i0.wp.com/siahbyahadishika.com/wp-content/uploads/2025/07/MATH5656-scaled.jpeg?fit=600%2C899&ssl=1",
+    image: "assets/images/occashion_charm_main.JPG",
   },
   {
     id: 3,
@@ -30,8 +27,7 @@ const collections = [
     description:
       "Curated for brides and weddings — luxurious, heirloom-worthy sarees.",
     priceRange: "₹10,000 – ₹2,00,000",
-    image:
-      "https://i0.wp.com/siahbyahadishika.com/wp-content/uploads/2025/07/MATH5639-scaled.jpeg?fit=600%2C899&ssl=1",
+    image: "assets/images/bridal_edit.JPG",
   },
   {
     id: 4,
@@ -39,8 +35,7 @@ const collections = [
     filter: "designer_choice",
     description: "Rare weaves, exclusive crafts, and premium masterpieces.",
     priceRange: "Premium Selection",
-    image:
-      "https://i0.wp.com/siahbyahadishika.com/wp-content/uploads/2025/07/MATH5686-scaled.jpeg?fit=600%2C899&ssl=1",
+    image: "assets/images/designer_main.JPG",
   },
 ];
 
@@ -81,26 +76,27 @@ const FeaturedCollections = () => {
             }`}
           >
             <div className="w-full h-80 md:h-[28rem] lg:h-[32rem] relative">
+              {/* Image */}
               <img
                 src={collection.image}
                 alt={collection.name}
-                className="absolute inset-0 w-full h-full object-cover object-center"
+                className="absolute inset-0 w-full h-full object-cover object-center z-[1]"
                 loading="lazy"
               />
 
-              {/* Subtle Black Overlay for Text Visibility */}
-              <div className="absolute inset-0 bg-black/30" />
+              {/* Black overlay */}
+              <div className="absolute inset-0 bg-black/40 z-[2]" />
 
               {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--ast-global-color-8))/60] via-[hsl(var(--ast-global-color-7))/30] to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--ast-global-color-8))/70] via-[hsl(var(--ast-global-color-7))/40] to-transparent z-[3]" />
 
               {/* Content overlay */}
-              <div className="absolute inset-0 flex flex-col justify-end items-start p-4 md:p-6 lg:p-8 text-primary">
+              <div className="absolute inset-0 flex flex-col justify-end items-start p-4 md:p-6 lg:p-8 text-primary z-[4]">
                 <div className="mb-3 inline-flex items-center rounded-full border-[hsl(var(--ast-global-color-2))] px-3 py-1 text-xs font-medium text-primary bg-secondary/80 backdrop-blur-sm">
                   {collection.priceRange}
                 </div>
 
-                <h3 className="font-serif-elegant  text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight mb-2">
+                <h3 className="font-serif-elegant text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight mb-2">
                   {collection.name}
                 </h3>
 
@@ -112,9 +108,7 @@ const FeaturedCollections = () => {
                   <Button
                     onClick={() =>
                       navigate("/collections", {
-                        state: {
-                          filter: collection.filter,
-                        },
+                        state: { filter: collection.filter },
                       })
                     }
                     className="btn-luxury text-sm md:text-base px-4 py-2"
