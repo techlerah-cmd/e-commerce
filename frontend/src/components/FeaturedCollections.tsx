@@ -80,7 +80,7 @@ const FeaturedCollections = () => {
               <img
                 src={collection.image}
                 alt={collection.name}
-                className="absolute inset-0 w-full h-full object-cover object-center z-[1]"
+                className="absolute inset-0 w-full h-full object-cover object-top z-[1]"
                 loading="lazy"
               />
 
