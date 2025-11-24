@@ -83,7 +83,7 @@ const BrandStory = () => {
               <img
                 src="assets/images/main_page.JPG"
                 alt="Beige & Blush detail"
-                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105 object-top"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
             </div>

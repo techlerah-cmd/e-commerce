@@ -39,7 +39,7 @@ const HeroSection = () => {
       {/* FIXED BACKGROUND IMAGE */}
       <div
         aria-hidden
-        className="fixed inset-0 -z-10 bg-center bg-cover bg-no-repeat pointer-events-none"
+        className="fixed inset-0 -z-10  bg-cover bg-no-repeat pointer-events-none bg-top"
         style={{
           backgroundImage: "url('assets/images/main_page.JPG')",
         }}
