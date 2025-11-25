@@ -115,7 +115,7 @@ def update_transaction_status(transaction_id:str,data:TransactionUpdate,db:Sessi
 
 
 @app.post("/razorpay-webhook")
-async def razorpay_webhook(request: Request, db: Session = Depends(get_db), background_tasks: BackgroundTasks = Depends()):
+async def razorpay_webhook(request: Request,background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     """Step 2: Razorpay Webhook → verify signature, confirm payment or mark failed"""
     try:
         # 1️⃣ Get raw body and headers
