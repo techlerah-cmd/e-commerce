@@ -14,8 +14,9 @@ from app.common.schemas import PaginationResponse
 from fastapi_limiter.depends import RateLimiter
 import hmac
 import hashlib
+from fastapi import BackgroundTasks
 
-
+from app.lib.resend import send_order_confirmation_email
 razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_SECRET))
 
 app = APIRouter()
@@ -114,7 +115,7 @@ def update_transaction_status(transaction_id:str,data:TransactionUpdate,db:Sessi
 
 
 @app.post("/razorpay-webhook")
-async def razorpay_webhook(request: Request, db: Session = Depends(get_db)):
+async def razorpay_webhook(request: Request, db: Session = Depends(get_db), background_tasks: BackgroundTasks = Depends()):
     """Step 2: Razorpay Webhook → verify signature, confirm payment or mark failed"""
     try:
         # 1️⃣ Get raw body and headers
@@ -146,6 +147,21 @@ async def razorpay_webhook(request: Request, db: Session = Depends(get_db)):
 
             crud_order.mark_payment_success(db, razorpay_order_id, payment_id)
             crud_order.clear_cart(db, razorpay_order_id)
+            db_transaction = crud_order.get_transaction_by_id(db, razorpay_order_id)
+            print(db_transaction)
+            if db_transaction:
+                db_order = crud_order.get_order_by_id(db, db_transaction.order_id)
+                if db_order and db_order.user and db_order.user.email:
+                    products = crud_order._order_items_to_products(db_order)
+                    # send in background; currency INR by default
+                    background_tasks.add_task(
+                        send_order_confirmation_email,
+                        db_order.user.email,
+                        str(db_order.order_number or db_order.id),
+                        products,
+                        "INR",
+                        None  # optional order_url: will be constructed in function if None
+                    )
 
         elif event == "payment.failed":
             razorpay_order_id = data["payment"]["entity"]["order_id"]
