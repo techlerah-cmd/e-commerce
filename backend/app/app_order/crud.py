@@ -8,9 +8,11 @@ from sqlalchemy import or_
 from app.app_product.crud import get_product_by_id
 from app.app_users.models import Address
 from app.common.schemas import PaginationResponse
-
+from decimal import Decimal
 def get_order_by_id(db:Session,id:int):
     return db.query(Order).filter(Order.id == id).first()
+def get_transaction_by_transaction_id(db: Session, transaction_id: str):
+    return db.query(OrderTransaction).filter(OrderTransaction.transaction_id == transaction_id).first()
 
 def delete_order_by_id(db:Session,id:int):
     db_order = get_order_by_id(db,id)
@@ -218,3 +220,22 @@ def get_list_of_orders(db:Session,user_id,page,size,sort_by_date,search):
         has_prev=has_prev,
         total=total,
     )
+
+
+def _order_items_to_products(order):
+    """
+    Convert order.items (OrderItem objects) to list of dicts expected by send_order_confirmation_email:
+    {"name", "quantity", "unit_price", "total_price"}.
+    """
+    products = []
+    for it in order.items:
+        # unit_price and total_price are Numeric/Decimal in DB; convert to float for email formatting
+        unit_price = float(it.unit_price) if isinstance(it.unit_price, (Decimal,)) else float(it.unit_price or 0)
+        total_price = float(it.total_price) if isinstance(it.total_price, (Decimal,)) else float(it.total_price or unit_price * it.qty)
+        products.append({
+            "name": it.name or "Unknown",
+            "quantity": int(it.qty or 1),
+            "unit_price": unit_price,
+            "total_price": total_price,
+        })
+    return products
