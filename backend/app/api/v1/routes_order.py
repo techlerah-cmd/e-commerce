@@ -121,7 +121,9 @@ async def razorpay_webhook(request: Request,background_tasks: BackgroundTasks, d
         # 1️⃣ Get raw body and headers
         body = await request.body()
         signature = request.headers.get("x-razorpay-signature")
-
+        print(signature)
+        print(request.headers
+              )
         if not signature:
             raise HTTPException(status_code=400, detail="Missing Razorpay signature")
 

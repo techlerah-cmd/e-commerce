@@ -63,6 +63,9 @@ async def global_rate_limit(request: Request, call_next):
     return response
 
 
+@app.get("/health", tags=["health"])
+def health():
+    return {"status": "ok"}
 
 app.include_router(
   routes_users.app,
