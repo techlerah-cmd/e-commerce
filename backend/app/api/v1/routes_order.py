@@ -122,8 +122,7 @@ async def razorpay_webhook(request: Request,background_tasks: BackgroundTasks, d
         body = await request.body()
         signature = request.headers.get("x-razorpay-signature")
         print(signature)
-        print(request.headers
-              )
+        print(request.headers)
         if not signature:
             raise HTTPException(status_code=400, detail="Missing Razorpay signature")
 
@@ -157,13 +156,12 @@ async def razorpay_webhook(request: Request,background_tasks: BackgroundTasks, d
                     products = crud_order._order_items_to_products(db_order)
                     # send in background; currency INR by default
                     background_tasks.add_task(
-                        send_order_confirmation_email,
-                        db_order.user.email,
-                        str(db_order.order_number or db_order.id),
-                        products,
-                        "INR",
-                        None  # optional order_url: will be constructed in function if None
-                    )
+                    send_order_confirmation_email,
+                    db_order.user.email,
+                    str(db_order.order_number or db_order.id),
+                    products,
+                    None  # optional order_url; or omit entirely to let function generate it
+                )
 
         elif event == "payment.failed":
             razorpay_order_id = data["payment"]["entity"]["order_id"]
