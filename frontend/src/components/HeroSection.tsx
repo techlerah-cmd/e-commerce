@@ -41,7 +41,7 @@ const HeroSection = () => {
         aria-hidden
         className="
     fixed inset-0 -z-10 pointer-events-none 
-    bg-[position:0_-100px]
+    bg-[position:0_-50px]
 sm:bg-[position:0_-200px]
 md:bg-[position:0_-300px]
 lg:bg-[position:0_-450px]
