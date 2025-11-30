@@ -37,13 +37,18 @@ const HeroSection = () => {
   return (
     <>
       {/* FIXED BACKGROUND IMAGE */}
-      <div
-        aria-hidden
-        className="fixed inset-0 -z-10  bg-cover bg-no-repeat pointer-events-none bg-top"
-        style={{
-          backgroundImage: "url('assets/images/main_page.JPG')",
-        }}
-      >
+        <div
+  aria-hidden
+  className="
+    fixed inset-0 -z-10 pointer-events-none bg-top bg-no-repeat
+    bg-cover
+    md:bg-[length:130%] 
+    lg:bg-[length:150%]
+  "
+  style={{
+    backgroundImage: "url('assets/images/main_page.JPG')",
+  }}
+>
         {/* Stronger dark overlay for text readability */}
         <div className="absolute inset-0 bg-[hsla(0,0%,0%,0.40)] " />
 
