@@ -22,7 +22,7 @@ const collections = [
   },
   {
     id: 3,
-    name: "The Bridal Edit",
+    name: "The Bridal Edit - Sumangali Pattu",
     filter: "the_bridal_edit",
     description:
       "Curated for brides and weddings — luxurious, heirloom-worthy sarees.",
