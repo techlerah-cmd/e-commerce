@@ -1,3 +1,12 @@
+
+import os, time
+os.environ["TZ"] = "Asia/Kolkata"
+time.tzset()
+
+
+from datetime import datetime
+print(datetime.now())
+
 from fastapi import FastAPI,Depends,Request,Response
 from fastapi.responses import JSONResponse
 
