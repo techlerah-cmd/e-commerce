@@ -1,3 +1,12 @@
+
+import os, time
+os.environ["TZ"] = "Asia/Kolkata"
+time.tzset()
+
+
+from datetime import datetime
+print(datetime.now())
+
 from fastapi import FastAPI,Depends,Request,Response
 from fastapi.responses import JSONResponse
 
@@ -63,6 +72,9 @@ async def global_rate_limit(request: Request, call_next):
     return response
 
 
+@app.get("/health", tags=["health"])
+def health():
+    return {"status": "ok"}
 
 app.include_router(
   routes_users.app,

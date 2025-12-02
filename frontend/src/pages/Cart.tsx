@@ -314,7 +314,7 @@ const Cart = () => {
                           </div>
 
                           <div className="text-right space-y-1">
-                            <div className="font-semibold text-[hsl(var(--accent))] text-lg">
+                            <div className="font-semibold text-black text-lg">
                               {formatPrice(item.price)}
                             </div>
                             <div className="text-xs text-[hsl(var(--muted-foreground))]">

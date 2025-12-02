@@ -11,6 +11,7 @@ export const categories = [
   "Bridal",
   "Designers pick",
   "Satin Silk",
+  "Tissue Silk",
 ];
 
 export const collections = [

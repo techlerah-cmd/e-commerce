@@ -22,12 +22,13 @@ const collections = [
   },
   {
     id: 3,
-    name: "The Bridal Edit",
+    name: "The Bridal Edit - Sumangali Pattu",
     filter: "the_bridal_edit",
     description:
       "Curated for brides and weddings — luxurious, heirloom-worthy sarees.",
     priceRange: "₹10,000 – ₹2,00,000",
     image: "assets/images/bridal_edit.JPG",
+    objectPosition: "md:object-[0_-400px] object-[0_-180px]", // << add offset you want
   },
   {
     id: 4,
@@ -80,7 +81,10 @@ const FeaturedCollections = () => {
               <img
                 src={collection.image}
                 alt={collection.name}
-                className="absolute inset-0 w-full h-full object-cover object-top z-[1]"
+                className={`
+    absolute inset-0 w-full h-full object-cover z-[1]
+    ${collection.objectPosition || "object-top"}
+  `}
                 loading="lazy"
               />
 
