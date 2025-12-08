@@ -71,7 +71,7 @@ const Collections = () => {
     const response = await makeApiCall("GET", url, {}, "application/json");
     if (response.status === 200) {
       setProducts(response.data.items || []);
-      setPagination(response.data.pagination || pagination);
+      setPagination(response.data);
     }
   };
 
