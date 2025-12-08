@@ -9,7 +9,7 @@ const collections = [
     filter: "everyday_elegance",
     description:
       "Light, graceful sarees for daily wear and small celebrations.",
-    priceRange: "₹500 – ₹5,000",
+    priceRange: "₹1,000 – ₹5,000",
     image: "assets/images/everyday_cover.JPG",
   },
   {

@@ -9,7 +9,10 @@ dist/
 .next/
 out/
 build/
-
+media/
+data/
+data
+media
 # Local environment files
 .env
 .env.local

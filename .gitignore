@@ -62,3 +62,4 @@ __pycache__/
 
 # Vite
 vite.config.ts.timestamp*
+.env.save
