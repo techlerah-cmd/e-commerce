@@ -10,7 +10,7 @@ const collections = [
     description:
       "Light, graceful sarees for daily wear and small celebrations.",
     priceRange: "₹500 – ₹5,000",
-    image: "assets/images/everyday_cover.JPG",
+    image: "assets/images/everyday_cover.webp",
   },
   {
     id: 2,
@@ -18,7 +18,7 @@ const collections = [
     filter: "occasion_charm",
     description: "Perfect for festive gatherings, office events, or gifting.",
     priceRange: "₹5,000 – ₹10,000",
-    image: "assets/images/occashion_charm_main.JPG",
+    image: "assets/images/occashion_charm_main.webp",
   },
   {
     id: 3,
@@ -27,7 +27,7 @@ const collections = [
     description:
       "Curated for brides and weddings — luxurious, heirloom-worthy sarees.",
     priceRange: "₹10,000 – ₹2,00,000",
-    image: "assets/images/bridal_edit.JPG",
+    image: "assets/images/bridal_edit.webp",
     objectPosition: "md:object-[0_-400px] object-[0_-180px]", // << add offset you want
   },
   {
@@ -36,7 +36,7 @@ const collections = [
     filter: "designer_choice",
     description: "Rare weaves, exclusive crafts, and premium masterpieces.",
     priceRange: "Premium Selection",
-    image: "assets/images/designer_main.JPG",
+    image: "assets/images/designer_main.webp",
   },
 ];
 

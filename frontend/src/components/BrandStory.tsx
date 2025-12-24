@@ -81,7 +81,7 @@ const BrandStory = () => {
           >
             <div className="aspect-square rounded-2xl overflow-hidden relative shadow-xl">
               <img
-                src="assets/images/main_page.JPG"
+                src="assets/images/main_page.webp"
                 alt="Beige & Blush detail"
                 className="w-full h-full object-cover transition-transform duration-700 hover:scale-105 object-top"
               />

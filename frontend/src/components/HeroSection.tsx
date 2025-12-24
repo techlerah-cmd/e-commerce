@@ -53,7 +53,7 @@ xl:bg-[position:0_-550px]
 
   "
         style={{
-          backgroundImage: "url('assets/images/main_page.JPG')",
+          backgroundImage: "url('assets/images/main_page.webp')",
         }}
       >
         {/* Stronger dark overlay for text readability */}

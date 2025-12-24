@@ -34,7 +34,7 @@ const Footer = () => {
               {/* Social Links */}
               <div className="flex gap-4">
                 <a
-                  href="https://www.instagram.com/lerah_by_lekshmiandrejath?igsh=Y2lla3Q0ZXludGVw&utm_source=qr"
+                  href="https://www.instagram.com/lerah.in?igsh=Y2lla3Q0ZXludGVw&utm_source=qr"
                   target="_blank"
                   className="w-10 h-10 rounded-full bg-accent text-muted flex items-center justify-center hover:bg-accent-glow transition-colors duration-300"
                   aria-label="Follow us on Instagram"
@@ -121,11 +121,8 @@ const Footer = () => {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="font-sans-clean text-muted text-sm text-center md:text-left flex items-center gap-2">
-              © {new Date().getFullYear()} LÈRAH. All rights
-              reserved
-              
+              © {new Date().getFullYear()} LÈRAH. All rights reserved
             </p>
-            
           </div>
         </div>
       </div>
