@@ -185,14 +185,14 @@ const LoginPage = () => {
                   <div className="flex-grow border-t border-gray-300"></div>
                 </div>
                 <div ref={containerRef} className="w-full">
-      <GoogleLogin
-        onSuccess={handleGoogleLogin}
-        onError={() => console.log("Login Failed")}
-        useOneTap={false}
-        auto_select={false}
-        width={googleWidth}  {/* ← now responsive */}
-      />
-    </div>
+                  <GoogleLogin
+                    onSuccess={handleGoogleLogin}
+                    onError={() => console.log("Login Failed")}
+                    useOneTap={false}
+                    auto_select={false}
+                    width={googleWidth}  
+                  />
+                </div>
               </form>
             </CardContent>
           </Card>
