@@ -191,6 +191,13 @@ const LoginPage = () => {
                     />
                   </div>
                 </div>
+                <GoogleLogin
+  onSuccess={handleGoogleLogin}
+  onError={() => console.log("Login Failed")}
+  useOneTap={false}
+  auto_select={false}
+  width="368"
+/>
               </form>
             </CardContent>
           </Card>
