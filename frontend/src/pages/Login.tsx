@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import {
   Card,
@@ -23,11 +23,24 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   const { makeApiCall, fetching, fetchType } = useAPICall();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [googleWidth, setGoogleWidth] = useState(368);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  useEffect(() => {
+    const updateWidth = () => {
+      if (containerRef.current) {
+        setGoogleWidth(containerRef.current.offsetWidth);
+      }
+    };
 
+    updateWidth(); // on mount
+    window.addEventListener("resize", updateWidth); // on resize
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -171,33 +184,15 @@ const LoginPage = () => {
                   </span>
                   <div className="flex-grow border-t border-gray-300"></div>
                 </div>
-                <div className="w-full sm:w-auto">
-                  <div className="w-full">
-                    {" "}
-                    {/* container forces the width */}
-                    <GoogleLogin
-                      onSuccess={handleGoogleLogin}
-                      onError={() => console.log("Login Failed")}
-                      useOneTap={false}
-                      auto_select={false}
-                      // pass container props so wrapper can be full width
-                      containerProps={{
-                        className: "w-full google-login-container",
-                        style: {
-                          width: "100%",
-                          backgroundColor: "white",
-                        },
-                      }}
-                    />
-                  </div>
-                </div>
-                <GoogleLogin
-  onSuccess={handleGoogleLogin}
-  onError={() => console.log("Login Failed")}
-  useOneTap={false}
-  auto_select={false}
-  width="368"
-/>
+                <div ref={containerRef} className="w-full">
+      <GoogleLogin
+        onSuccess={handleGoogleLogin}
+        onError={() => console.log("Login Failed")}
+        useOneTap={false}
+        auto_select={false}
+        width={googleWidth}  {/* ← now responsive */}
+      />
+    </div>
               </form>
             </CardContent>
           </Card>
